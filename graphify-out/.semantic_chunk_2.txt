@@ -1,0 +1,17 @@
+C:\laragon\www\compro\.agents\skills\laravel-best-practices\rules\queue-jobs.md
+C:\laragon\www\compro\.agents\skills\laravel-best-practices\rules\routing.md
+C:\laragon\www\compro\.agents\skills\laravel-best-practices\rules\scheduling.md
+C:\laragon\www\compro\.agents\skills\laravel-best-practices\rules\security.md
+C:\laragon\www\compro\.agents\skills\laravel-best-practices\rules\style.md
+C:\laragon\www\compro\.agents\skills\laravel-best-practices\rules\testing.md
+C:\laragon\www\compro\.agents\skills\laravel-best-practices\rules\validation.md
+C:\laragon\www\compro\.agents\skills\livewire-development\SKILL.md
+C:\laragon\www\compro\.agents\skills\livewire-development\reference\javascript-hooks.md
+C:\laragon\www\compro\.agents\skills\pest-testing\SKILL.md
+C:\laragon\www\compro\.agents\skills\tailwindcss-development\SKILL.md
+C:\laragon\www\compro\.github\dependabot.yml
+C:\laragon\www\compro\.github\workflows\tests.yml
+C:\laragon\www\compro\AGENTS.md
+C:\laragon\www\compro\public\robots.txt
+C:\laragon\www\compro\public\apple-touch-icon.png
+C:\laragon\www\compro\public\favicon.svg
