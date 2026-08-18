@@ -1,6 +1,6 @@
 <x-layouts::auth :title="__('Log in')">
-    <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Log in to your account')" :description="__('Enter your email and password below to log in')" />
+    <div class="flex flex-col gap-6 text-[#1d1d1f]">
+        <x-auth-header :title="__('Masuk ke dashboard')" :description="__('Kelola konten website Kedubes Studio dari satu tempat.')" />
 
         <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
@@ -39,17 +39,17 @@
                 />
 
                 @if (Route::has('password.request'))
-                    <flux:link class="absolute top-0 text-sm end-0" :href="route('password.request')" wire:navigate>
+                    <flux:link class="absolute top-0 text-sm font-medium text-[#4b3fe0] end-0" :href="route('password.request')" wire:navigate>
                         {{ __('Forgot your password?') }}
                     </flux:link>
                 @endif
             </div>
 
             <!-- Remember Me -->
-            <flux:checkbox name="remember" :label="__('Remember me')" :checked="old('remember')" />
+            <flux:checkbox name="remember" :label="__('Remember me')" :checked="old('remember')" class="text-[#1d1d1f]" />
 
             <div class="flex items-center justify-end">
-                <flux:button variant="primary" type="submit" class="w-full" data-test="login-button">
+                <flux:button variant="primary" type="submit" class="w-full !bg-[#4b3fe0] !text-white hover:!bg-[#3f35bf]" data-test="login-button">
                     {{ __('Log in') }}
                 </flux:button>
             </div>

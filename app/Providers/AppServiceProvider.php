@@ -31,7 +31,9 @@ class AppServiceProvider extends ServiceProvider
         View::composer([
             'components.app-logo',
             'components.app-logo-icon',
+            'components.layouts.auth.simple',
             'components.desktop-user-menu',
+            'layouts.auth.simple',
             'layouts.admin',
             'partials.head',
         ], function (ViewContract $view): void {

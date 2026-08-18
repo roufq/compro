@@ -11,6 +11,18 @@ test('login screen can be rendered', function () {
     $response->assertOk();
 });
 
+test('login screen uses Kedubes branded auth layout', function () {
+    $response = $this->get(route('login'));
+
+    $response
+        ->assertOk()
+        ->assertSee('data-test="auth-brand-shell"', escape: false)
+        ->assertSee('data-test="auth-form-card"', escape: false)
+        ->assertSeeText('Studio Kreatif Bertenaga AI')
+        ->assertSeeText('Masuk ke dashboard')
+        ->assertSeeText('Kelola konten website Kedubes Studio dari satu tempat.');
+});
+
 test('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
 
