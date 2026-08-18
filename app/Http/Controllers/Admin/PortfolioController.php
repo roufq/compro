@@ -62,7 +62,16 @@ class PortfolioController extends Controller
             'description' => ['nullable', 'string'],
             'category' => ['required', 'string', 'max:100'],
             'type' => ['required', Rule::in(['gambar', 'video'])],
-            'image' => [Rule::requiredIf($request->string('type')->is('gambar') && ! $request->route('portfolio')), 'nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'image' => [
+                Rule::requiredIf(
+                    $request->string('type')->is('gambar')
+                    && ! $request->route('portfolio')?->image_path
+                ),
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:4096',
+            ],
             'youtube_url' => [
                 Rule::requiredIf($request->string('type')->is('video')),
                 'nullable',

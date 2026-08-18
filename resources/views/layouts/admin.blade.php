@@ -118,6 +118,23 @@
   .icon-btn:hover{background:var(--bg-soft);color:var(--text);}
   .empty-note{padding:40px 22px;text-align:center;color:var(--text-faint);font-size:13px;}
 
+  .admin-modal{
+    width:min(760px,calc(100% - 32px));max-height:calc(100dvh - 32px);margin:auto;padding:0;
+    overflow:hidden;border:1px solid var(--line);border-radius:var(--radius-lg);background:#fff;color:var(--text);
+    box-shadow:0 24px 70px rgba(0,0,0,.22);
+  }
+  .admin-modal::backdrop{background:rgba(29,29,31,.48);backdrop-filter:blur(4px);}
+  .admin-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 22px;border-bottom:1px solid var(--line);}
+  .admin-modal-head h3{font-size:17px;}
+  .admin-modal-head p{margin-top:3px;color:var(--text-muted);font-size:12.5px;}
+  .admin-modal-close{width:32px;height:32px;flex:none;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--text-muted);font-size:18px;}
+  .admin-modal-body{max-height:calc(100dvh - 112px);padding:22px;overflow-y:auto;}
+  .current-media{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--bg-soft);}
+  .current-media img{width:112px;height:78px;flex:none;border-radius:8px;background:#fff;object-fit:contain;}
+  .current-media strong{display:block;font-size:13px;}
+  .current-media span{display:block;margin-top:3px;color:var(--text-faint);font-size:11.5px;}
+  .admin-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid var(--line);}
+
   .alert{padding:12px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;margin-bottom:18px;}
   .alert-success{background:var(--green-soft);color:var(--green);}
   .alert-error{background:#fdf1f1;color:#c0392b;}
@@ -139,6 +156,13 @@
     .topbar{align-items:flex-start;gap:12px;}
     .btn-view-site{padding:8px 12px;white-space:nowrap;}
     .card-head,.card-body{padding:16px;}
+    .admin-modal{width:calc(100% - 20px);max-height:calc(100dvh - 20px);border-radius:16px;}
+    .admin-modal-head,.admin-modal-body{padding:16px;}
+    .admin-modal-body{max-height:calc(100dvh - 86px);}
+    .current-media{align-items:flex-start;flex-direction:column;}
+    .current-media img{width:100%;height:180px;}
+    .admin-modal-actions{align-items:stretch;flex-direction:column-reverse;}
+    .admin-modal-actions button{justify-content:center;width:100%;}
   }
 </style>
 @stack('styles')

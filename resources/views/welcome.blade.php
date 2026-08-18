@@ -85,8 +85,9 @@
   }
   nav.links .nav-cta,nav.links .nav-cta:hover{color:#fff;}
   .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 26px var(--violet-glow);}
-  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:0;padding:6px;}
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:0;padding:8px;}
   .burger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s;}
+  .burger:focus-visible{outline:2px solid var(--violet);outline-offset:4px;border-radius:6px;}
   /* ---------- HERO ---------- */
   .hero{padding:168px 0 90px;position:relative;z-index:1;}
   .hero-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;text-align:center;}
@@ -337,12 +338,19 @@
     .grid{columns:3 220px;}
   }
   @media (max-width:760px){
-    nav.links{position:fixed;top:66px;left:0;right:0;bottom:0;background:var(--ink);
-      flex-direction:column;padding:40px 28px;gap:26px;transform:translateX(100%);transition:transform .35s var(--ease);
-      border-top:1px solid var(--line);}
-    nav.links.open{transform:translateX(0);}
-    nav.links a{font-size:20px;}
+    nav.links{position:absolute;top:100%;left:0;width:100vw;height:calc(100vh - 71px);height:calc(100dvh - 71px);
+      flex-direction:column;align-items:stretch;justify-content:flex-start;padding:24px 28px 36px;gap:8px;
+      overflow-y:auto;background:#fff;border-top:1px solid var(--line);box-shadow:0 18px 36px rgba(0,0,0,.08);
+      visibility:hidden;pointer-events:none;transform:translateX(100%);transition:transform .35s var(--ease),visibility .35s;}
+    nav.links.open{visibility:visible;pointer-events:auto;transform:translateX(0);}
+    nav.links a{width:100%;padding:15px 18px;border-radius:14px;font-size:18px;font-weight:600;text-align:center;}
+    nav.links a:not(.nav-cta):hover{background:var(--ink-2);}
+    nav.links .nav-cta{margin-top:12px;padding:15px 18px;}
     .burger{display:flex;}
+    .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .burger[aria-expanded="true"] span:nth-child(2){opacity:0;}
+    .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    body.nav-open{overflow:hidden;}
     .hero{padding-top:130px;}
     .hero-mosaic{grid-template-columns:repeat(3,1fr);grid-auto-rows:60px;}
     .svc-grid{grid-template-columns:1fr;}
@@ -355,6 +363,9 @@
   @media (max-width:480px){
     .grid{columns:1;}
     .hero-actions{flex-direction:column;align-items:stretch;}
+    .hero-mosaic{grid-template-columns:1fr;padding:0 28px;}
+    .hero-mosaic .tile.a,.hero-mosaic .tile.b,.hero-mosaic .tile.c,
+    .hero-mosaic .tile.d,.hero-mosaic .tile.e,.hero-mosaic .tile.f{grid-column:1/-1;}
     .lb-art.is-image{height:min(64vh,520px);min-height:240px;padding:10px;}
   }
 
@@ -391,7 +402,7 @@
       <a href="#testimoni">Testimoni</a>
       <a href="#kontak" class="nav-cta">Ajukan Proyek</a>
     </nav>
-    <button class="burger" id="burger" aria-label="Buka menu"><span></span><span></span><span></span></button>
+    <button class="burger" id="burger" type="button" aria-label="Buka menu" aria-controls="navLinks" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </header>
 
@@ -630,8 +641,25 @@
 <script>
   const burger = document.getElementById('burger');
   const navLinks = document.getElementById('navLinks');
-  burger.addEventListener('click', () => navLinks.classList.toggle('open'));
-  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+  const setMenuOpen = (isOpen) => {
+    navLinks.classList.toggle('open', isOpen);
+    document.body.classList.toggle('nav-open', isOpen);
+    burger.setAttribute('aria-expanded', String(isOpen));
+    burger.setAttribute('aria-label', isOpen ? 'Tutup menu' : 'Buka menu');
+  };
+
+  burger.addEventListener('click', () => setMenuOpen(!navLinks.classList.contains('open')));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenuOpen(false)));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      setMenuOpen(false);
+    }
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 760) {
+      setMenuOpen(false);
+    }
+  });
 
   // data portofolio dikirim langsung dari database Laravel
   const items = {{ Js::from($portfolioItems) }};

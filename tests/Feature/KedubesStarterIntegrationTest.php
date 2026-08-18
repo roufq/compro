@@ -54,6 +54,12 @@ test('home renders company profile content from the database', function () {
         ->assertSee('class="lightbox-image"', escape: false)
         ->assertSee('nav.links{display:flex;gap:34px;align-items:center;background:transparent;}', escape: false)
         ->assertSee('nav.links .nav-cta,nav.links .nav-cta:hover{color:#fff;}', escape: false)
+        ->assertSee('position:absolute;top:100%;left:0;width:100vw;height:calc(100vh - 71px);height:calc(100dvh - 71px);', escape: false)
+        ->assertSee('visibility:hidden;pointer-events:none;transform:translateX(100%);', escape: false)
+        ->assertSee('aria-controls="navLinks" aria-expanded="false"', escape: false)
+        ->assertSee("document.body.classList.toggle('nav-open', isOpen);", escape: false)
+        ->assertSee('.hero-mosaic{grid-template-columns:1fr;padding:0 28px;}', escape: false)
+        ->assertSee('.hero-mosaic .tile.d,.hero-mosaic .tile.e,.hero-mosaic .tile.f{grid-column:1/-1;}', escape: false)
         ->assertSee('.hero-media-meta .hero-play{position:absolute;left:50%;top:50%;', escape: false)
         ->assertSee('transform:translate(-50%,-50%);', escape: false)
         ->assertSee('color:var(--violet-deep);opacity:1;background:rgba(255,255,255,.94);', escape: false)
@@ -186,6 +192,91 @@ test('content saved from the admin dashboard appears on the welcome page', funct
         ->assertSeeText('Layanan dari Dashboard')
         ->assertSee('Portofolio dari Dashboard')
         ->assertSeeText('Klien dari Dashboard');
+});
+
+test('admin can edit an existing portfolio from the portfolio gallery', function () {
+    $admin = User::factory()->create();
+    $portfolio = Portfolio::create([
+        'title' => 'Judul Lama',
+        'description' => 'Deskripsi lama.',
+        'category' => 'video',
+        'type' => 'video',
+        'youtube_url' => 'https://youtu.be/dQw4w9WgXcQ',
+        'order' => 2,
+    ]);
+
+    $this->actingAs($admin)
+        ->get(route('admin.portofolio.index'))
+        ->assertSuccessful()
+        ->assertSee('data-test="edit-portfolio-'.$portfolio->id.'"', escape: false)
+        ->assertSee('data-test="portfolio-edit-modal-'.$portfolio->id.'"', escape: false)
+        ->assertSee('Media Saat Ini')
+        ->assertSee($portfolio->thumbnail_url)
+        ->assertSee(route('admin.portofolio.update', $portfolio));
+
+    $this->actingAs($admin)
+        ->put(route('admin.portofolio.update', $portfolio), [
+            'title' => 'Judul Baru',
+            'description' => 'Deskripsi baru.',
+            'category' => 'kampanye',
+            'type' => 'video',
+            'youtube_url' => 'https://youtu.be/9bZkp7q19f0',
+            'order' => 1,
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertSessionHas('status', 'Karya berhasil diperbarui.');
+
+    expect($portfolio->refresh())
+        ->title->toBe('Judul Baru')
+        ->description->toBe('Deskripsi baru.')
+        ->category->toBe('kampanye')
+        ->youtube_url->toBe('https://youtu.be/9bZkp7q19f0')
+        ->order->toBe(1);
+
+    $this->get('/')
+        ->assertSuccessful()
+        ->assertSeeText('Judul Baru');
+});
+
+test('changing a video portfolio to an image requires an uploaded image', function () {
+    $admin = User::factory()->create();
+    $portfolio = Portfolio::create([
+        'title' => 'Video Lama',
+        'category' => 'video',
+        'type' => 'video',
+        'youtube_url' => 'https://youtu.be/dQw4w9WgXcQ',
+    ]);
+
+    $this->actingAs($admin)
+        ->from(route('admin.portofolio.index'))
+        ->put(route('admin.portofolio.update', $portfolio), [
+            'title' => 'Menjadi Gambar',
+            'category' => 'gambar',
+            'type' => 'gambar',
+            'order' => 0,
+        ])
+        ->assertRedirect(route('admin.portofolio.index'))
+        ->assertSessionHasErrors('image');
+});
+
+test('portfolio edit modal displays the currently stored image', function () {
+    Storage::fake('public');
+    $admin = User::factory()->create();
+    $imagePath = UploadedFile::fake()->image('gambar-awal.jpg')->store('portfolio', 'public');
+    $portfolio = Portfolio::create([
+        'title' => 'Karya Bergambar',
+        'category' => 'branding',
+        'type' => 'gambar',
+        'image_path' => $imagePath,
+    ]);
+
+    $this->actingAs($admin)
+        ->get(route('admin.portofolio.index'))
+        ->assertSuccessful()
+        ->assertSee('data-test="portfolio-edit-modal-'.$portfolio->id.'"', escape: false)
+        ->assertSee('Gambar yang sedang digunakan')
+        ->assertSee($portfolio->thumbnail_url)
+        ->assertSee('data-original-src="'.$portfolio->thumbnail_url.'"', escape: false);
 });
 
 test('all admin routes require authentication', function () {
