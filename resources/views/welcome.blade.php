@@ -382,6 +382,10 @@
 </head>
 <body>
 
+@php
+  $gmailComposeUrl = $settings->email ? 'https://mail.google.com/mail/?view=cm&fs=1&to='.rawurlencode($settings->email) : '#kontak';
+@endphp
+
 <div class="bg-glow"><span class="g1"></span><span class="g2"></span><span class="g3"></span></div>
 
 <!-- ================= NAV ================= -->
@@ -574,7 +578,7 @@
       <svg class="cta-seal" viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="27" stroke="#b8791f" stroke-width="1.4" stroke-dasharray="2 3"/><circle cx="30" cy="30" r="20" stroke="#7b6ef6" stroke-width="1.4"/></svg>
       <h2>Ajukan paspor kreativitas Anda sekarang</h2>
       <p>Ceritakan proyek Anda dan dapatkan konsep visual pertama dalam 48 jam.</p>
-      <a href="mailto:{{ $settings->email }}" class="btn btn-primary">Hubungi Kami →</a>
+      <a href="{{ $gmailComposeUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Hubungi Kami →</a>
     </div>
   </div>
 </section>
@@ -604,7 +608,7 @@
         </div>
         <div class="foot-col">
           <h5>Kontak</h5>
-          @if ($settings->email)<a href="mailto:{{ $settings->email }}">{{ $settings->email }}</a>@endif
+          @if ($settings->email)<a href="{{ $gmailComposeUrl }}" target="_blank" rel="noopener noreferrer">{{ $settings->email }}</a>@endif
           @if ($settings->phone)<a href="tel:{{ $settings->phone }}">{{ $settings->phone }}</a>@endif
           @if ($settings->address)<a href="#">{{ $settings->address }}</a>@endif
         </div>

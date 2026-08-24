@@ -194,6 +194,30 @@ test('content saved from the admin dashboard appears on the welcome page', funct
         ->assertSeeText('Klien dari Dashboard');
 });
 
+test('hubungi kami button opens gmail compose with the email configured from the admin dashboard', function () {
+    $admin = User::factory()->create();
+
+    $this->actingAs($admin)
+        ->get(route('admin.konten'))
+        ->assertSuccessful()
+        ->assertSeeText('Email Tombol Hubungi Kami');
+
+    $this->actingAs($admin)
+        ->put(route('admin.konten.update'), [
+            'company_name' => 'Kedubes Dashboard',
+            'email' => 'kontak@kedubes.test',
+        ])
+        ->assertSessionHasNoErrors();
+
+    $this->get('/')
+        ->assertSuccessful()
+        ->assertSee('href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=kontak%40kedubes.test"', escape: false)
+        ->assertSee('>kontak@kedubes.test</a>', escape: false)
+        ->assertSee('target="_blank"', escape: false)
+        ->assertSee('rel="noopener noreferrer"', escape: false)
+        ->assertSeeText('Hubungi Kami');
+});
+
 test('admin can edit an existing portfolio from the portfolio gallery', function () {
     $admin = User::factory()->create();
     $portfolio = Portfolio::create([

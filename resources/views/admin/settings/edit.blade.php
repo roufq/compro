@@ -56,7 +56,7 @@
         </div>
 
         <div class="field2">
-          <label>Email</label>
+          <label>Email Tombol Hubungi Kami</label>
           <input type="email" name="email" value="{{ old('email', $settings->email) }}">
         </div>
 
