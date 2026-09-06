@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KEDUBES STUDIO — AI Professional Production Studio</title>
+<meta name="description" content="Kedubes Studio — studio produksi AI profesional untuk commercial, animasi, dan original IP. Not just prompting, we're directing.">
+<meta name="theme-color" content="#0D47A1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='26' r='24' fill='%230D47A1'/%3E%3Cpath d='M14 34 L38 22 L38 40 Z' fill='%23FFD600'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kedubes Studio — AI Professional Production Studio">
+<meta property="og:description" content="Not just prompting, we're directing. Commercial, animasi, dan original IP berbasis AI.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#FFFFFF;
+    --panel:#F5F8FF;
+    --panel-2:#EAF0FF;
+    --line:rgba(13,71,161,0.14);
+    --text-1:#0B1B33;
+    --text-2:#5A6785;
+    --text-3:#95A0BC;
+    --blue:#0D47A1;
+    --blue-deep:#082E6B;
+    --accent:#FFD600;
+    --black:#0A0E1A;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--void);color:var(--text-1);font-family:'Poppins',sans-serif;overflow-x:hidden;line-height:1.6;}
+  h1,h2,h3{font-family:'Baloo 2',sans-serif;font-weight:700;letter-spacing:-0.01em;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 32px;}
+  ::selection{background:var(--accent);color:var(--black);}
+  img{max-width:100%;display:block;}
+
+  .tag{
+    font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;color:var(--blue);
+    text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;display:inline-block;
+    background:var(--panel-2);padding:6px 14px;border-radius:100px;
+  }
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  .reveal.d1{transition-delay:.08s;}
+  .reveal.d2{transition-delay:.16s;}
+  .reveal.d3{transition-delay:.24s;}
+
+  /* ===== NAVBAR ===== */
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;max-width:1200px;margin:0 auto;}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo svg{width:36px;height:36px;flex-shrink:0;}
+  .logo-text{display:flex;flex-direction:column;line-height:1;}
+  .logo-text .kd{font-family:'Luckiest Guy',cursive;font-size:18px;color:var(--blue);}
+  .logo-text .st{font-family:'Poppins';font-weight:700;font-size:8.5px;letter-spacing:0.22em;color:var(--text-2);}
+  .nav-links{display:flex;gap:28px;font-size:14px;font-weight:600;color:var(--text-2);}
+  .nav-links a{position:relative;padding-bottom:3px;}
+  .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--accent);transition:width .25s ease;}
+  .nav-links a:hover{color:var(--blue);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{padding:10px 20px;border-radius:100px;font-size:13px;font-weight:700;background:var(--blue);color:#fff;}
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .burger span{width:22px;height:2.5px;background:var(--blue);display:block;border-radius:2px;}
+  .mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;z-index:49;background:#fff;padding:32px;flex-direction:column;gap:22px;font-size:18px;font-weight:600;}
+  .mobile-menu.open{display:flex;}
+
+  section{padding:88px 0;position:relative;}
+  .alt-bg{background:var(--panel);}
+  .sec-head{max-width:640px;margin:0 auto 40px;text-align:center;}
+  .sec-head h2{font-size:clamp(24px,3.4vw,34px);margin-bottom:10px;}
+  .sec-head p{color:var(--text-2);font-size:15px;}
+
+  /* ===== HERO VISUAL ===== */
+  .hero{padding:44px 0 0;}
+  .hero-visual{
+    max-width:980px;margin:0 auto;border-radius:24px;overflow:hidden;position:relative;
+    aspect-ratio:16/8.2;box-shadow:0 30px 70px -24px rgba(13,71,161,0.4);
+    background:
+      radial-gradient(circle at 50% 46%, #FFF7D6 0%, #FFE9A0 8%, #FFD54F 16%, rgba(255,213,79,0.25) 26%, transparent 40%),
+      linear-gradient(180deg, #050B1E 0%, #0A1B45 40%, #123B7A 68%, #1857C4 100%);
+  }
+  .hero-stars{position:absolute;inset:0;background-image:
+      radial-gradient(1.5px 1.5px at 20px 30px, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 90px 80px, #fff, transparent),
+      radial-gradient(1px 1px at 160px 40px, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 230px 100px, #fff, transparent),
+      radial-gradient(1px 1px at 300px 20px, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 380px 70px, #fff, transparent),
+      radial-gradient(1px 1px at 60px 120px, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 450px 50px, #fff, transparent);
+    background-repeat:repeat-x;background-size:500px 160px;opacity:0.8;
+  }
+  .hero-boat{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:11%;z-index:2;filter:drop-shadow(0 6px 10px rgba(0,0,0,0.35));animation:bobBoat 4s ease-in-out infinite;}
+  @keyframes bobBoat{0%,100%{transform:translate(-50%,-50%) translateY(0);}50%{transform:translate(-50%,-50%) translateY(-6px);}}
+  .hero-water{position:absolute;left:0;right:0;bottom:0;height:34%;
+    background:linear-gradient(180deg, rgba(24,87,196,0.2), rgba(5,11,30,0.9));
+  }
+  .hero-water::before{
+    content:'';position:absolute;inset:0;
+    background-image:repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 40px);
+    animation:waterMove 6s linear infinite;
+  }
+  @keyframes waterMove{from{background-position:0 0;}to{background-position:-200px 0;}}
+  .hero-glow-line{position:absolute;left:50%;bottom:0;top:46%;width:6%;transform:translateX(-50%);
+    background:linear-gradient(180deg, rgba(255,229,143,0.55), rgba(255,229,143,0));
+    filter:blur(2px);z-index:1;
+  }
+  .hero-badge{
+    position:absolute;bottom:18px;left:18px;z-index:3;display:flex;align-items:center;gap:8px;
+    background:rgba(5,11,30,0.55);color:#fff;padding:8px 16px;border-radius:100px;
+    font-size:12px;font-weight:700;letter-spacing:0.04em;
+  }
+  .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulseA 1.6s infinite;}
+  @keyframes pulseA{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(1.3);}}
+  .hero-caption{text-align:center;margin-top:18px;font-family:'Luckiest Guy';color:var(--blue);font-size:15px;letter-spacing:0.02em;}
+
+  /* ===== BEYOND THE IMAGINATION ===== */
+  .imagine-grid{display:grid;grid-template-columns:0.8fr 1.2fr;gap:56px;align-items:center;}
+  .imagine-grid h2{font-size:clamp(28px,3.6vw,40px);line-height:1.15;color:var(--blue);}
+  .imagine-grid p{color:var(--text-2);font-size:15.5px;}
+
+  /* ===== TRUSTED BY ===== */
+  .trusted-logos{
+    display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 34px;
+  }
+  .trusted-logos span{
+    font-family:'Baloo 2';font-weight:700;font-size:15px;color:var(--text-3);opacity:0.85;
+    padding:6px 4px;transition:.2s;
+  }
+  .trusted-logos span:hover{color:var(--blue);opacity:1;}
+
+  /* ===== PORTFOLIO ===== */
+  .filter-bar{display:flex;gap:10px;justify-content:center;margin-bottom:36px;flex-wrap:wrap;}
+  .filter-btn{font-family:'Poppins';font-weight:600;font-size:13px;padding:9px 18px;border-radius:100px;border:1px solid var(--line);color:var(--text-2);background:transparent;cursor:pointer;transition:.2s;}
+  .filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+  .filter-btn:hover:not(.active){border-color:var(--blue);color:var(--blue);}
+  .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .p-item{aspect-ratio:16/10;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;border:1px solid var(--line);}
+  .p-item .fill{width:100%;height:100%;transition:transform .4s ease;display:flex;align-items:flex-end;padding:12px;}
+  .p-item:hover .fill{transform:scale(1.05);}
+  .p-item .badge-name{font-family:'Luckiest Guy';font-size:20px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.4);}
+  .p-item .overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,20,40,0.85));display:flex;flex-direction:column;justify-content:flex-end;padding:14px;opacity:0;transition:.2s;}
+  .p-item:hover .overlay{opacity:1;}
+  .p-item .cat{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px;}
+  .p-item .ttl{font-size:13px;font-weight:600;color:#fff;}
+  .load-more{display:block;margin:36px auto 0;}
+  .btn-ghost{padding:12px 26px;border-radius:100px;border:1.5px solid var(--blue);color:var(--blue);font-weight:700;font-size:14px;transition:.2s;background:transparent;cursor:pointer;}
+  .btn-ghost:hover{background:var(--blue);color:#fff;}
+
+  /* ===== OUR IP ===== */
+  .ip-grid{display:flex;justify-content:center;align-items:center;gap:60px;flex-wrap:wrap;}
+  .ip-card{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .ip-logo{font-family:'Baloo 2';font-weight:800;font-size:28px;letter-spacing:-0.02em;}
+  .ip-logo.teman{background:linear-gradient(90deg,#FF5F9E,#FFC800,#00C2A8);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .ip-logo.happy{background:linear-gradient(90deg,#FF7A00,#FFD600);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .ip-logo.jas{font-family:'Poppins';font-weight:700;font-size:18px;color:var(--text-2);border:1.5px dashed var(--line);padding:10px 18px;border-radius:10px;}
+  .ip-card span{font-size:12px;color:var(--text-3);}
+
+  /* ===== TEAM ===== */
+  .team-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
+  .team-item{text-align:center;}
+  .team-avatar{
+    aspect-ratio:1/1;border-radius:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;
+    font-family:'Baloo 2';font-weight:700;font-size:22px;color:#fff;
+  }
+  .team-item h4{font-size:13.5px;margin-bottom:2px;}
+  .team-item span{font-size:11.5px;color:var(--text-3);}
+  .team-note{text-align:center;font-size:12px;color:var(--text-3);margin-top:22px;font-style:italic;}
+
+  /* ===== CONTACT ===== */
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:stretch;}
+  .contact-info{display:flex;flex-direction:column;gap:20px;}
+  .info-row{display:flex;gap:14px;align-items:flex-start;}
+  .info-row .ic{width:40px;height:40px;border-radius:10px;background:var(--panel-2);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .info-row b{display:block;font-size:14px;margin-bottom:2px;}
+  .info-row span{font-size:13.5px;color:var(--text-2);}
+  .map-frame{border-radius:16px;overflow:hidden;border:1px solid var(--line);min-height:260px;background:var(--panel);display:flex;align-items:center;justify-content:center;}
+  .map-frame iframe{width:100%;height:100%;border:0;min-height:260px;}
+  .contact-buttons{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;}
+  .contact-btn{display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:13.5px;font-weight:600;transition:.2s;}
+  .contact-btn:hover{border-color:var(--blue);transform:translateY(-2px);}
+  .contact-btn .ic2{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .contact-btn.wa .ic2{background:#e7f9ef;color:#25D366;}
+  .contact-btn.ig .ic2{background:#fdeef6;color:#E1306C;}
+
+  /* ===== DOWNLOAD ===== */
+  .download-section{background:var(--blue);color:#fff;}
+  .download-section .sec-head p{color:rgba(255,255,255,0.75);}
+  .download-section .tag{background:rgba(255,255,255,0.14);color:var(--accent);}
+  .download-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .download-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:14px;transition:.2s;}
+  .download-card:hover{background:rgba(255,255,255,0.12);transform:translateY(-4px);}
+  .download-card .dic{width:40px;height:40px;border-radius:10px;background:var(--accent);color:var(--black);display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .download-card h3{font-size:16px;font-family:'Baloo 2';}
+  .download-card p{font-size:13px;color:rgba(255,255,255,0.7);flex-grow:1;}
+  .download-card .dl-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--accent);}
+  .download-card .dl-btn:hover{text-decoration:underline;}
+
+  /* ===== LIGHTBOX ===== */
+  .lightbox{position:fixed;inset:0;z-index:100;background:rgba(8,14,26,0.92);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:40px;}
+  .lightbox.open{display:flex;}
+  .lb-content{max-width:800px;width:100%;text-align:center;}
+  .lb-visual{width:100%;aspect-ratio:16/10;border-radius:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.14);}
+  .lb-close{position:absolute;top:28px;right:32px;font-size:28px;color:rgba(255,255,255,0.7);cursor:pointer;background:none;border:none;}
+  .lb-nav{position:absolute;top:50%;transform:translateY(-50%);font-size:28px;color:rgba(255,255,255,0.7);cursor:pointer;background:none;border:none;padding:10px;}
+  .lb-prev{left:20px;}.lb-next{right:20px;}
+  .lb-close:hover,.lb-nav:hover{color:#fff;}
+  .lb-cat{font-family:'Poppins';font-weight:700;font-size:12px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;}
+  .lb-title{font-size:20px;color:#fff;}
+
+  /* ===== FOOTER ===== */
+  footer{background:var(--black);color:rgba(255,255,255,0.7);padding:56px 0 26px;}
+  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+  .foot-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .foot-logo .kd{font-family:'Luckiest Guy';color:var(--accent);font-size:20px;}
+  .foot-logo .st{font-family:'Poppins';font-weight:700;font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.55);}
+  .foot-grid p{font-size:14px;max-width:300px;color:rgba(255,255,255,0.55);}
+  .foot-grid h4{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;}
+  .foot-grid ul{list-style:none;}
+  .foot-grid li{margin-bottom:10px;font-size:14px;}
+  .foot-grid li a:hover{color:var(--accent);}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,0.4);flex-wrap:wrap;gap:12px;border-top:1px solid rgba(255,255,255,0.1);padding-top:22px;}
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:1024px){
+    .portfolio-grid{grid-template-columns:repeat(2,1fr);}
+    .team-grid{grid-template-columns:repeat(3,1fr);}
+    .download-grid{grid-template-columns:repeat(2,1fr);}
+    .imagine-grid{grid-template-columns:1fr;gap:24px;text-align:center;}
+  }
+  @media(max-width:860px){
+    .nav-links{display:none;}
+    .burger{display:flex;}
+    .foot-grid{grid-template-columns:1fr 1fr;row-gap:28px;}
+    .contact-grid{grid-template-columns:1fr;}
+  }
+  @media(max-width:640px){
+    .wrap{padding:0 20px;}
+    nav{padding:12px 20px;}
+    section{padding:60px 0;}
+    .hero-visual{border-radius:16px;}
+    .portfolio-grid{grid-template-columns:1fr 1fr;}
+    .team-grid{grid-template-columns:repeat(2,1fr);}
+    .download-grid{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr;}
+    .ip-grid{gap:30px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}
+    .reveal{opacity:1;transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#" class="logo">
+      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="26" r="24" fill="#0D47A1"/>
+        <path d="M14 34 L38 22 L38 40 Z" fill="#FFD600"/>
+        <circle cx="20" cy="20" r="4" fill="#FFD600"/>
+        <rect x="24" y="16" width="8" height="2.4" rx="1.2" fill="#FFD600"/>
+      </svg>
+      <span class="logo-text"><span class="kd">KEDUBES</span><span class="st">STUDIO</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#about">About Us</a>
+      <a href="#portfolio">Projects</a>
+      <a href="#trusted">Clients</a>
+      <a href="#our-ip">IPs</a>
+      <a href="#contact">Contact Us</a>
+    </div>
+    <a href="#contact" class="nav-cta">Hubungi Kami</a>
+    <button class="burger" id="burger"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about">About Us</a>
+    <a href="#portfolio">Projects</a>
+    <a href="#trusted">Clients</a>
+    <a href="#our-ip">IPs</a>
+    <a href="#contact">Contact Us</a>
+  </div>
+</header>
+
+<main>
+  <!-- HERO VISUAL -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-visual reveal">
+        <div class="hero-stars"></div>
+        <div class="hero-glow-line"></div>
+        <svg class="hero-boat" viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 90 L60 55 L60 100 Z" fill="#0A1B45"/>
+          <path d="M60 55 L60 100 L110 90 Z" fill="#123B7A"/>
+          <circle cx="55" cy="48" r="7" fill="#050B1E"/>
+          <rect x="58" y="42" width="16" height="4" rx="2" fill="#050B1E"/>
+        </svg>
+        <div class="hero-water"></div>
+        <div class="hero-badge"><span class="dot"></span>Company Profile</div>
+      </div>
+      <p class="hero-caption reveal">Not Just Prompting, We're Directing.</p>
+    </div>
+  </section>
+
+  <!-- BEYOND THE IMAGINATION -->
+  <section id="about">
+    <div class="wrap imagine-grid">
+      <h2 class="reveal">Beyond The<br>Imagination</h2>
+      <p class="reveal d1">Kedubes Studio adalah studio produksi AI profesional yang berfokus pada commercial, animasi, dan pengembangan original IP. Kami memadukan teknologi generatif dengan arahan kreatif manusia di setiap tahap produksi — dari konsep, desain karakter, hingga hasil akhir siap tayang. Setiap karya dikerjakan dalam satu pipeline yang cepat namun tetap terkurasi, sehingga hasilnya konsisten secara visual dan matang secara cerita.</p>
+    </div>
+  </section>
+
+  <!-- TRUSTED BY -->
+  <section id="trusted" class="alt-bg">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="tag">Trusted By</span><h2>Dipercaya oleh</h2></div>
+      <div class="trusted-logos reveal">
+        <span>Pelita Kids</span><span>AiMaster.id</span><span>Jogja Coffee Week</span>
+        <span>Trans7</span><span>Trans TV</span><span>Garis10</span><span>Project 1453</span>
+        <span>JOB Tomori Pertamina</span><span>Navara Gold</span><span>Svarga Tour</span>
+        <span>UMY</span><span>CESGS</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="tag">Portofolio</span>
+        <h2>Karya yang sudah kami produksi</h2>
+        <p>Sebagian hasil produksi commercial, animasi, dan original IP kami.</p>
+      </div>
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-f="all">Semua</button>
+        <button class="filter-btn" data-f="character">Karakter</button>
+        <button class="filter-btn" data-f="cinematic">Cinematic</button>
+      </div>
+      <div class="portfolio-grid" id="portfolioGrid"></div>
+      <button class="btn-ghost load-more" id="loadMore">Muat Lebih Banyak</button>
+    </div>
+  </section>
+
+  <!-- OUR IP -->
+  <section id="our-ip" class="alt-bg">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="tag">Our IP</span><h2>Original IP kami</h2></div>
+      <div class="ip-grid reveal">
+        <div class="ip-card"><div class="ip-logo teman">Teman Ceria</div><span>Original IP</span></div>
+        <div class="ip-card"><div class="ip-logo happy">Happy Friends</div><span>Original IP</span></div>
+        <div class="ip-card"><div class="ip-logo jas">JAS — Jojo Acong Sitorus</div><span>Logo menyusul</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR TEAM -->
+  <section id="team">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="tag">Our Team</span><h2>Tim di balik karya</h2></div>
+      <div class="team-grid" id="teamGrid"></div>
+      <p class="team-note">*Foto & nama tim masih placeholder — silakan kirim data tim untuk diganti.</p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="alt-bg">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="tag">Contact Us</span><h2>Mari diskusikan proyek Anda</h2></div>
+      <div class="contact-grid reveal">
+        <div class="contact-info">
+          <div class="info-row">
+            <div class="ic">📍</div>
+            <div><b>Alamat Kantor</b><span><!-- TODO: isi alamat kantor -->Jl. Contoh Alamat No. 123, Yogyakarta, Indonesia</span></div>
+          </div>
+          <div class="info-row">
+            <div class="ic">✉️</div>
+            <div><b>Email</b><span><!-- TODO: isi email -->hello@kedubesstudio.com</span></div>
+          </div>
+          <div class="info-row">
+            <div class="ic">📞</div>
+            <div><b>Nomor Admin</b><span><!-- TODO: isi nomor admin -->+62 812-3456-7890</span></div>
+          </div>
+          <div class="contact-buttons">
+            <a href="https://wa.me/6281234567890" target="_blank" class="contact-btn wa"><div class="ic2">💬</div>WhatsApp</a>
+            <a href="https://instagram.com/kedubes.studio" target="_blank" class="contact-btn ig"><div class="ic2">📷</div>Instagram</a>
+          </div>
+        </div>
+        <div class="map-frame">
+          <!-- TODO: ganti src di bawah dengan embed Google Maps lokasi kantor asli -->
+          <iframe src="https://www.google.com/maps?q=Yogyakarta&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD (dipertahankan dari brief sebelumnya, ditaruh di akhir) -->
+  <section id="download" class="download-section">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="tag">Download</span>
+        <h2>Produk & aset kami</h2>
+        <p>Dapatkan produk digital kami melalui ScaleV.</p>
+      </div>
+      <div class="download-grid" id="downloadGrid"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo">
+          <svg width="34" height="34" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="30" cy="26" r="24" fill="#FFD600"/>
+            <path d="M14 34 L38 22 L38 40 Z" fill="#0A0E1A"/>
+          </svg>
+          <span class="kd">KEDUBES</span><span class="st">STUDIO</span>
+        </div>
+        <p>AI Professional Production Studio — Commercials, Animation, Original IPs.</p>
+      </div>
+      <div>
+        <h4>Navigasi</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#portfolio">Projects</a></li>
+          <li><a href="#our-ip">IPs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontak</h4>
+        <ul>
+          <li><a href="https://wa.me/6281234567890" target="_blank">WhatsApp</a></li>
+          <li><a href="https://instagram.com/kedubes.studio" target="_blank">Instagram</a></li>
+          <li><a href="mailto:hello@kedubesstudio.com">Email</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Kedubes Studio. Seluruh hak cipta dilindungi.</span>
+      <span>Not Just Prompting, We're Directing.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose">×</button>
+  <button class="lb-nav lb-prev" id="lbPrev">‹</button>
+  <button class="lb-nav lb-next" id="lbNext">›</button>
+  <div class="lb-content">
+    <div class="lb-visual" id="lbVisual"></div>
+    <div class="lb-cat" id="lbCat"></div>
+    <h3 class="lb-title" id="lbTitle"></h3>
+  </div>
+</div>
+
+<script>
+const grads = [
+  'linear-gradient(150deg,#1857C4,#0D47A1)','linear-gradient(150deg,#0D47A1,#082E6B)',
+  'linear-gradient(150deg,#2E63C7,#0D47A1)','linear-gradient(150deg,#FFDE45,#FFD600)',
+  'linear-gradient(150deg,#0D47A1,#0A1F44)','linear-gradient(150deg,#3A6FD6,#0D47A1)',
+  'linear-gradient(150deg,#FFD600,#E8B800)','linear-gradient(150deg,#0D47A1,#123A82)',
+  'linear-gradient(150deg,#5B8DEF,#0D47A1)','linear-gradient(150deg,#0A1F44,#050B1E)',
+  'linear-gradient(150deg,#FFC94D,#FF9E00)','linear-gradient(150deg,#123A82,#0D47A1)'
+];
+
+const portfolioItems = [
+  {t:'FiFi', c:'character'}, {t:'PIPO', c:'character'}, {t:'TUTU', c:'character'},
+  {t:'GAGA', c:'character'}, {t:'OLI', c:'character'}, {t:'Momo', c:'character'},
+  {t:'Deni', c:'character'}, {t:'Mimi', c:'character'}, {t:'BoBo', c:'character'},
+  {t:'KIKO', c:'character'}, {t:'Cinematic Scene 01', c:'cinematic'},
+  {t:'Kids Adventure', c:'cinematic'}, {t:'Pirate Voyage', c:'character'},
+  {t:'Family Portrait', c:'cinematic'}, {t:'Kisah Rasulullah', c:'cinematic'},
+];
+
+function portfolioItemHTML(it, idx){
+  const g = grads[idx % grads.length];
+  return `<div class="p-item" data-idx="${idx}">
+    <div class="fill" style="background:${g}"><span class="badge-name">${it.t}</span></div>
+    <div class="overlay"><div class="cat">${it.c==='character'?'CHARACTER IP':'CINEMATIC'}</div><div class="ttl">${it.t}</div></div>
+  </div>`;
+}
+const portfolioGrid = document.getElementById('portfolioGrid');
+let currentPortfolioList = portfolioItems;
+function renderPortfolio(list){
+  currentPortfolioList = list;
+  portfolioGrid.innerHTML = list.map((it,i)=>portfolioItemHTML(it,i)).join('');
+  attachPortfolioClicks();
+}
+renderPortfolio(portfolioItems);
+
+document.getElementById('filterBar').addEventListener('click', e=>{
+  const btn = e.target.closest('.filter-btn');
+  if(!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const f = btn.dataset.f;
+  renderPortfolio(f==='all' ? portfolioItems : portfolioItems.filter(it=>it.c===f));
+});
+document.getElementById('loadMore').addEventListener('click', ()=>{
+  renderPortfolio(currentPortfolioList.concat(portfolioItems.slice(0,3)));
+});
+
+const lightbox = document.getElementById('lightbox');
+const lbVisual = document.getElementById('lbVisual');
+const lbCat = document.getElementById('lbCat');
+const lbTitle = document.getElementById('lbTitle');
+let lbIdx = 0;
+function openLB(idx){
+  lbIdx = idx;
+  const it = currentPortfolioList[idx];
+  lbVisual.style.background = grads[idx % grads.length];
+  lbCat.textContent = it.c==='character' ? 'CHARACTER IP' : 'CINEMATIC';
+  lbTitle.textContent = it.t;
+  lightbox.classList.add('open');
+}
+function attachPortfolioClicks(){
+  document.querySelectorAll('.p-item').forEach(el=>{
+    el.addEventListener('click', ()=> openLB(parseInt(el.dataset.idx)));
+  });
+}
+document.getElementById('lbClose').addEventListener('click', ()=>lightbox.classList.remove('open'));
+lightbox.addEventListener('click', e=>{ if(e.target===lightbox) lightbox.classList.remove('open'); });
+document.getElementById('lbNext').addEventListener('click', ()=> openLB((lbIdx+1)%currentPortfolioList.length));
+document.getElementById('lbPrev').addEventListener('click', ()=> openLB((lbIdx-1+currentPortfolioList.length)%currentPortfolioList.length));
+
+// team placeholders
+const teamAvatarColors = ['#0D47A1','#1857C4','#FFD600','#082E6B','#3A6FD6','#0A1F44','#FFC94D','#123A82','#5B8DEF','#0D47A1'];
+const teamMembers = [
+  'Direktur Kreatif','AI Producer','Art Director','Character Designer','Storyboard Artist',
+  'Voice Director','3D Generalist','Motion Designer','Project Manager','Sound Designer'
+];
+const teamGrid = document.getElementById('teamGrid');
+teamGrid.innerHTML = teamMembers.map((role,i)=>{
+  const initials = 'T' + (i+1);
+  return `<div class="team-item reveal d${(i%3)+1}">
+    <div class="team-avatar" style="background:${teamAvatarColors[i]}">${initials}</div>
+    <h4>Nama ${i+1}</h4><span>${role}</span>
+  </div>`;
+}).join('');
+
+// download products
+const downloadProducts = [
+  {name:'Paket Preset Karakter AI', desc:'Kumpulan preset desain karakter siap pakai untuk produksi animasi.'},
+  {name:'Template Storyboard', desc:'Template storyboard digital untuk mempercepat proses pra-produksi.'},
+  {name:'Asset Pack — Original IP', desc:'Aset visual resmi dari koleksi Original IP Kedubes Studio.'},
+];
+const downloadGrid = document.getElementById('downloadGrid');
+downloadGrid.innerHTML = downloadProducts.map((p,i)=>{
+  return `<div class="download-card reveal d${(i%3)+1}">
+    <div class="dic">⬇</div><h3>${p.name}</h3><p>${p.desc}</p>
+    <a href="https://scalev.id/checkout/placeholder-${i+1}" target="_blank" class="dl-btn">Lihat Produk →</a>
+  </div>`;
+}).join('');
+
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+burger.addEventListener('click', ()=> mobileMenu.classList.toggle('open'));
+mobileMenu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> mobileMenu.classList.remove('open')));
+
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
+  });
+},{threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+document.querySelectorAll('.team-item.reveal').forEach(el=> io.observe(el));
+</script>
+
+</body>
+</html>

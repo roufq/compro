@@ -4,733 +4,644 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ $settings->company_name }} — {{ $settings->tagline }}</title>
-<meta name="description" content="{{ $settings->hero_description ?: 'Studio kreatif bertenaga AI untuk kebutuhan visual dan komunikasi brand.' }}">
+<meta name="description" content="{{ $settings->hero_description }}">
+<meta name="theme-color" content="#0D47A1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='26' r='24' fill='%230D47A1'/%3E%3Cpath d='M14 34 L38 22 L38 40 Z' fill='%23FFD600'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ $settings->company_name }} — {{ $settings->tagline }}">
+<meta property="og:description" content="{{ $settings->hero_description }}">
 @if ($settings->logo_url)
-<link rel="icon" href="{{ $settings->logo_url }}?v={{ $settings->updated_at?->timestamp ?? 1 }}" sizes="any">
-<link rel="apple-touch-icon" href="{{ $settings->logo_url }}?v={{ $settings->updated_at?->timestamp ?? 1 }}">
+<link rel="icon" href="{{ $settings->logo_url }}?v={{ $settings->updated_at?->timestamp ?? 1 }}">
 @endif
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#ffffff;
-    --ink-2:#f5f5f7;
-    --ink-3:#ffffff;
-    --ink-4:#eef0f5;
-    --violet:#6c5ce7;
-    --violet-deep:#4b3fe0;
-    --violet-glow:rgba(108,92,231,.22);
-    --gold:#b8791f;
-    --gold-soft:rgba(184,121,31,.12);
-    --text:#1d1d1f;
-    --text-muted:#6e6e73;
-    --text-faint:#8a8d93;
-    --line:rgba(0,0,0,.08);
-    --paper:#f6f3ea;
-    --radius-lg:28px;
-    --radius-md:18px;
-    --radius-sm:10px;
-    --maxw:1200px;
-    --ease:cubic-bezier(.16,.84,.44,1);
-    --shadow-card:0 2px 5px rgba(0,0,0,.04), 0 14px 34px rgba(0,0,0,.06);
-    --shadow-card-hover:0 8px 18px rgba(0,0,0,.06), 0 26px 50px rgba(0,0,0,.1);
+    --void:#FFFFFF;
+    --panel:#F5F8FF;
+    --panel-2:#EAF0FF;
+    --line:rgba(13,71,161,0.14);
+    --text-1:#0B1B33;
+    --text-2:#5A6785;
+    --text-3:#95A0BC;
+    --blue:#0D47A1;
+    --blue-deep:#082E6B;
+    --accent:#FFD600;
+    --black:#0A0E1A;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{
-    background:var(--ink);
-    color:var(--text);
-    font-family:'Inter',system-ui,sans-serif;
-    line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;letter-spacing:-.02em;line-height:1.08;}
-  .mono{font-family:'IBM Plex Mono',monospace;}
+  body{background:var(--void);color:var(--text-1);font-family:'Poppins',sans-serif;overflow-x:hidden;line-height:1.6;}
+  h1,h2,h3{font-family:'Baloo 2',sans-serif;font-weight:700;letter-spacing:-0.01em;}
   a{color:inherit;text-decoration:none;}
-  img,svg{display:block;max-width:100%;}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
-  section{position:relative;}
-  ::selection{background:var(--violet);color:#fff;}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 32px;}
+  ::selection{background:var(--accent);color:var(--black);}
+  img{max-width:100%;display:block;}
 
-  /* background ambience */
-  .bg-glow{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-  .bg-glow span{position:absolute;border-radius:50%;filter:blur(130px);opacity:.16;}
-  .bg-glow .g1{width:600px;height:600px;background:var(--violet);top:-220px;left:-150px;}
-  .bg-glow .g2{width:500px;height:500px;background:var(--gold);top:900px;right:-200px;opacity:.1;}
-  .bg-glow .g3{width:700px;height:700px;background:var(--violet-deep);bottom:-300px;left:20%;opacity:.12;}
+  .tag{
+    font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;color:var(--blue);
+    text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;display:inline-block;
+    background:var(--panel-2);padding:6px 14px;border-radius:100px;
+  }
 
-  /* ---------- NAV ---------- */
-  header.nav{
-    position:fixed;top:0;left:0;right:0;z-index:100;
-    backdrop-filter:blur(18px) saturate(180%);
-    background:rgba(255,255,255,.72);
-    border-bottom:1px solid var(--line);
-  }
-  .nav-inner{
-    max-width:var(--maxw);margin:0 auto;padding:16px 28px;
-    display:flex;align-items:center;justify-content:space-between;
-  }
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16.5px;letter-spacing:.01em;}
-  .brand .seal{width:32px;height:32px;flex:none;}
-  .brand small{display:block;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:9.5px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;}
-  nav.links{display:flex;gap:34px;align-items:center;background:transparent;}
-  nav.links a{font-size:14.5px;color:var(--text-muted);transition:color .2s;position:relative;}
-  nav.links a:hover{color:var(--text);}
-  .nav-cta{
-    background:linear-gradient(135deg,var(--violet),var(--violet-deep));
-    color:#fff;padding:10px 20px;border-radius:100px;font-size:14px;font-weight:600;
-    box-shadow:0 4px 18px var(--violet-glow);transition:transform .25s var(--ease), box-shadow .25s;
-  }
-  nav.links .nav-cta,nav.links .nav-cta:hover{color:#fff;}
-  .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 26px var(--violet-glow);}
-  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:0;padding:8px;}
-  .burger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s;}
-  .burger:focus-visible{outline:2px solid var(--violet);outline-offset:4px;border-radius:6px;}
-  /* ---------- HERO ---------- */
-  .hero{padding:168px 0 90px;position:relative;z-index:1;}
-  .hero-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;text-align:center;}
-  .eyebrow{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:7px 16px;border-radius:100px;border:1px solid var(--line);
-    background:#fff;box-shadow:var(--shadow-card);
-    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.12em;
-    color:var(--gold);text-transform:uppercase;margin-bottom:26px;
-  }
-  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);animation:pulse 2s infinite;}
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
-  .hero h1{
-    font-size:clamp(38px,6.4vw,84px);
-    max-width:920px;margin:0 auto 24px;
-    background:linear-gradient(180deg,#1d1d1f, #3a3a3d 70%, #55555a);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .hero h1 em{
-    font-style:normal;
-    background:linear-gradient(120deg,var(--gold),#d99a2b 45%, var(--violet));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .hero p.lead{
-    max-width:600px;margin:0 auto 40px;color:var(--text-muted);
-    font-size:clamp(16px,1.9vw,19px);
-  }
-  .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:88px;}
-  .btn{
-    padding:14px 28px;border-radius:100px;font-weight:600;font-size:15px;
-    display:inline-flex;align-items:center;gap:8px;transition:all .25s var(--ease);
-    cursor:pointer;border:1px solid transparent;
-  }
-  .btn-primary{
-    background:linear-gradient(135deg,var(--violet),var(--violet-deep));
-    color:#fff;box-shadow:0 6px 24px var(--violet-glow);
-  }
-  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 32px var(--violet-glow);}
-  .btn-ghost{background:#f5f5f7;border-color:var(--line);color:var(--text);}
-  .btn-ghost:hover{background:#ececef;border-color:rgba(0,0,0,.14);}
+  .reveal.animate{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.animate.in{opacity:1;transform:translateY(0);}
+  .reveal.d1{transition-delay:.08s;}
+  .reveal.d2{transition-delay:.16s;}
+  .reveal.d3{transition-delay:.24s;}
 
-  /* hero visual grid — mosaic teaser of generated works */
-  .hero-mosaic{
-    max-width:1080px;margin:0 auto;
-    display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:80px;gap:12px;
-    -webkit-mask-image:linear-gradient(to bottom, black 60%, transparent 100%);
-    mask-image:linear-gradient(to bottom, black 60%, transparent 100%);
-  }
-  .hero-mosaic .tile{border-radius:16px;position:relative;overflow:hidden;}
-  .hero-mosaic .tile.a{grid-column:span 2;grid-row:span 3;}
-  .hero-mosaic .tile.b{grid-column:span 2;grid-row:span 2;}
-  .hero-mosaic .tile.c{grid-column:span 2;grid-row:span 4;}
-  .hero-mosaic .tile.d{grid-column:span 2;grid-row:span 2;}
-  .hero-mosaic .tile.e{grid-column:span 2;grid-row:span 3;}
-  .hero-mosaic .tile.f{grid-column:span 2;grid-row:span 2;}
-  .hero-media-card{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;background:none;color:#fff;cursor:pointer;text-align:left;}
-  .hero-media-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .45s var(--ease);}
-  .hero-media-card:hover img{transform:scale(1.04);}
-  .hero-media-card::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(12,12,20,.72),transparent 58%);}
-  .hero-media-meta{position:absolute;inset:0;z-index:2;display:block;}
-  .hero-media-meta>span:first-child{position:absolute;left:14px;right:14px;bottom:13px;}
-  .hero-media-meta strong{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;line-height:1.25;text-shadow:0 1px 8px rgba(0,0,0,.35);}
-  .hero-media-meta span{display:block;margin-top:3px;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;}
-  .hero-media-meta .hero-play{position:absolute;left:50%;top:50%;display:grid;place-items:center;width:40px;height:40px;margin:0;border-radius:50%;color:var(--violet-deep);opacity:1;background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.98);box-shadow:0 6px 18px rgba(0,0,0,.26);backdrop-filter:blur(8px);transform:translate(-50%,-50%);transition:transform .2s var(--ease),color .2s,background .2s,box-shadow .2s;}
-  .hero-play svg{width:14px;height:14px;transform:translateX(1px);}
-  .hero-media-card:hover .hero-play{color:#fff;transform:translate(-50%,-50%) scale(1.06);background:var(--violet);box-shadow:0 8px 22px rgba(74,61,214,.34);}
+  /* ===== NAVBAR ===== */
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;max-width:1200px;margin:0 auto;}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo svg{width:36px;height:36px;flex-shrink:0;}
+  .logo-text{display:flex;flex-direction:column;line-height:1;}
+  .logo-text .kd{font-family:'Luckiest Guy',cursive;font-size:18px;color:var(--blue);}
+  .logo-text .st{font-family:'Poppins';font-weight:700;font-size:8.5px;letter-spacing:0.22em;color:var(--text-2);}
+  .nav-links{display:flex;gap:28px;font-size:14px;font-weight:600;color:var(--text-2);}
+  .nav-links a{position:relative;padding-bottom:3px;}
+  .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--accent);transition:width .25s ease;}
+  .nav-links a:hover{color:var(--blue);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{padding:10px 20px;border-radius:100px;font-size:13px;font-weight:700;background:var(--blue);color:#fff;}
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .burger span{width:22px;height:2.5px;background:var(--blue);display:block;border-radius:2px;}
+  .mobile-menu{display:none;position:absolute;top:100%;left:0;right:0;height:calc(100dvh - 76px);overflow-y:auto;z-index:49;background:#fff;padding:32px;flex-direction:column;gap:22px;font-size:18px;font-weight:600;}
+  .mobile-menu.open{display:flex;}
 
-  /* generated art texture tiles */
-  .art{position:absolute;inset:0;}
-  .art::after{
-    content:"";position:absolute;inset:0;opacity:.5;mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  .art-1{background:linear-gradient(135deg,#5a4bd8,#8f7bf8 40%,#b8791f);}
-  .art-2{background:linear-gradient(135deg,#0f2e4c,#2f6fb0 50%,#7b6ef6);}
-  .art-3{background:linear-gradient(135deg,#3a1f5c,#c14fa0 55%,#f3d688);}
-  .art-4{background:linear-gradient(135deg,#173a2e,#2f9e73 50%,#c8f26b);}
-  .art-5{background:linear-gradient(135deg,#4a1f2e,#e0577a 55%,#f7b6a3);}
-  .art-6{background:linear-gradient(135deg,#1a2140,#4d3fe0 45%,#9c8bff);}
-  .art-7{background:linear-gradient(135deg,#332107,#b8791f 50%,#fff2c9);}
-  .art-8{background:linear-gradient(135deg,#0e2436,#1c7a8c 50%,#7bf6d8);}
-  .art-9{background:linear-gradient(135deg,#3d1030,#a13cad 50%,#f6a1e0);}
-  .art-10{background:linear-gradient(135deg,#101a3d,#3f56c9 45%,#8ff6ff);}
-  .art-11{background:linear-gradient(135deg,#2c1a05,#b8752c 50%,#ffd9a0);}
-  .art-12{background:linear-gradient(135deg,#031b1a,#0f8a7a 50%,#c6ffdd);}
+  section{padding:88px 0;position:relative;}
+  .alt-bg{background:var(--panel);}
+  .sec-head{max-width:640px;margin:0 auto 40px;text-align:center;}
+  .sec-head h2{font-size:clamp(24px,3.4vw,34px);margin-bottom:10px;}
+  .sec-head p{color:var(--text-2);font-size:15px;}
 
-  /* ---------- STATS / STAMPS ---------- */
-  .stats{padding:60px 0 110px;position:relative;z-index:1;}
-  .stats .wrap{
-    display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
-    border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);
-    padding:40px 28px;
+  /* ===== HERO VISUAL ===== */
+  .hero{padding:44px 0 0;}
+  .hero-visual{
+    max-width:980px;margin:0 auto;border-radius:24px;overflow:hidden;position:relative;
+    aspect-ratio:16/8.2;box-shadow:0 30px 70px -24px rgba(13,71,161,0.4);
+    background:
+      radial-gradient(circle at 50% 46%, #FFF7D6 0%, #FFE9A0 8%, #FFD54F 16%, rgba(255,213,79,0.25) 26%, transparent 40%),
+      linear-gradient(180deg, #050B1E 0%, #0A1B45 40%, #123B7A 68%, #1857C4 100%);
   }
-  .stamp-card{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;}
-  .stamp-card .num{font-size:clamp(26px,3vw,38px);font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);}
-  .stamp-card .num span{color:var(--gold);}
-  .stamp-card .label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);}
+  .hero-stars{position:absolute;inset:0;background-image:
+      radial-gradient(1.5px 1.5px at 20px 30px, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 90px 80px, #fff, transparent),
+      radial-gradient(1px 1px at 160px 40px, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 230px 100px, #fff, transparent),
+      radial-gradient(1px 1px at 300px 20px, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 380px 70px, #fff, transparent),
+      radial-gradient(1px 1px at 60px 120px, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 450px 50px, #fff, transparent);
+    background-repeat:repeat-x;background-size:500px 160px;opacity:0.8;
+  }
+  .hero-boat{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:11%;z-index:2;filter:drop-shadow(0 6px 10px rgba(0,0,0,0.35));animation:bobBoat 4s ease-in-out infinite;}
+  @keyframes bobBoat{0%,100%{transform:translate(-50%,-50%) translateY(0);}50%{transform:translate(-50%,-50%) translateY(-6px);}}
+  .hero-water{position:absolute;left:0;right:0;bottom:0;height:34%;
+    background:linear-gradient(180deg, rgba(24,87,196,0.2), rgba(5,11,30,0.9));
+  }
+  .hero-water::before{
+    content:'';position:absolute;inset:0;
+    background-image:repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 40px);
+    animation:waterMove 6s linear infinite;
+  }
+  @keyframes waterMove{from{background-position:0 0;}to{background-position:-200px 0;}}
+  .hero-glow-line{position:absolute;left:50%;bottom:0;top:46%;width:6%;transform:translateX(-50%);
+    background:linear-gradient(180deg, rgba(255,229,143,0.55), rgba(255,229,143,0));
+    filter:blur(2px);z-index:1;
+  }
+  .hero-badge{
+    position:absolute;bottom:18px;left:18px;z-index:3;display:flex;align-items:center;gap:8px;
+    background:rgba(5,11,30,0.55);color:#fff;padding:8px 16px;border-radius:100px;
+    font-size:12px;font-weight:700;letter-spacing:0.04em;
+  }
+  .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulseA 1.6s infinite;}
+  @keyframes pulseA{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(1.3);}}
+  .hero-caption{text-align:center;margin-top:18px;font-family:'Luckiest Guy';color:var(--blue);font-size:15px;letter-spacing:0.02em;}
 
-  /* ---------- SECTION HEADS ---------- */
-  .section-head{max-width:640px;margin:0 auto 56px;text-align:center;}
-  .section-head .kicker{
-    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block;
-  }
-  .section-head h2{font-size:clamp(28px,4vw,44px);margin-bottom:16px;}
-  .section-head p{color:var(--text-muted);font-size:16.5px;}
+  /* ===== BEYOND THE IMAGINATION ===== */
+  .imagine-grid{display:grid;grid-template-columns:0.8fr 1.2fr;gap:56px;align-items:center;}
+  .imagine-grid h2{font-size:clamp(28px,3.6vw,40px);line-height:1.15;color:var(--blue);}
+  .imagine-grid p{color:var(--text-2);font-size:15.5px;}
 
-  /* ---------- SERVICES ---------- */
-  .services{padding:70px 0;position:relative;z-index:1;}
-  .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
-  .svc-card{
-    background:#fff;
-    border:1px solid var(--line);border-radius:var(--radius-md);
-    padding:28px 24px;transition:transform .3s var(--ease), box-shadow .3s, border-color .3s;
-    box-shadow:var(--shadow-card);
+  /* ===== TRUSTED BY ===== */
+  .trusted-logos{
+    display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 34px;
   }
-  .svc-card:hover{transform:translateY(-6px);border-color:rgba(108,92,231,.3);box-shadow:var(--shadow-card-hover);}
-  .svc-icon{
-    width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(135deg,var(--violet),var(--violet-deep));margin-bottom:20px;
+  .trusted-logos span{
+    font-family:'Baloo 2';font-weight:700;font-size:15px;color:var(--text-3);opacity:0.85;
+    padding:6px 4px;transition:.2s;
   }
-  .svc-card h3{font-size:18px;margin-bottom:10px;}
-  .svc-card p{color:var(--text-muted);font-size:14.5px;}
+  .trusted-logos span:hover{color:var(--blue);opacity:1;}
 
-  /* ---------- PORTFOLIO ---------- */
-  .portfolio{padding:100px 0 60px;position:relative;z-index:1;}
-  .filters{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:44px;}
-  .filter-btn{
-    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
-    padding:9px 18px;border-radius:100px;border:1px solid var(--line);color:var(--text-muted);
-    background:transparent;cursor:pointer;transition:all .2s;
-  }
-  .filter-btn:hover{color:var(--text);border-color:rgba(0,0,0,.22);}
-  .filter-btn.active{background:var(--text);color:#fff;border-color:var(--text);font-weight:600;}
+  /* ===== PORTFOLIO ===== */
+  .filter-bar{display:flex;gap:10px;justify-content:center;margin-bottom:36px;flex-wrap:wrap;}
+  .filter-btn{font-family:'Poppins';font-weight:600;font-size:13px;padding:9px 18px;border-radius:100px;border:1px solid var(--line);color:var(--text-2);background:transparent;cursor:pointer;transition:.2s;}
+  .filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+  .filter-btn:hover:not(.active){border-color:var(--blue);color:var(--blue);}
+  .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .p-item{aspect-ratio:16/10;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;border:1px solid var(--line);}
+  .p-item .fill{width:100%;height:100%;transition:transform .4s ease;display:flex;align-items:flex-end;padding:12px;}
+  .p-item:hover .fill{transform:scale(1.05);}
+  .p-item .badge-name{font-family:'Luckiest Guy';font-size:20px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.4);}
+  .p-item .overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,20,40,0.85));display:flex;flex-direction:column;justify-content:flex-end;padding:14px;opacity:0;transition:.2s;}
+  .p-item:hover .overlay{opacity:1;}
+  .p-item .cat{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px;}
+  .p-item .ttl{font-size:13px;font-weight:600;color:#fff;}
+  .load-more{display:block;margin:36px auto 0;}
+  .btn-ghost{padding:12px 26px;border-radius:100px;border:1.5px solid var(--blue);color:var(--blue);font-weight:700;font-size:14px;transition:.2s;background:transparent;cursor:pointer;}
+  .btn-ghost:hover{background:var(--blue);color:#fff;}
 
-  .grid{
-    columns:4 260px;column-gap:18px;
-  }
-  .card{
-    break-inside:avoid;margin-bottom:18px;border-radius:20px;overflow:hidden;position:relative;
-    cursor:pointer;border:1px solid var(--line);background:#fff;
-    transition:transform .35s var(--ease), box-shadow .35s;
-    box-shadow:var(--shadow-card);
-  }
-  .card:hover{transform:translateY(-5px);box-shadow:var(--shadow-card-hover);}
-  .card .art{border-radius:20px;}
-  .card .thumb{position:relative;width:100%;}
-  .card .badge{
-    position:absolute;top:12px;left:12px;z-index:2;
-    display:inline-flex;align-items:center;justify-content:center;min-height:26px;
-    font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;line-height:1;letter-spacing:.1em;text-transform:uppercase;color:#fff;
-    background:rgba(15,15,25,.78);backdrop-filter:blur(10px);box-shadow:0 4px 14px rgba(0,0,0,.22);
-    padding:6px 11px;border-radius:100px;border:1px solid rgba(255,255,255,.42);text-shadow:0 1px 3px rgba(0,0,0,.5);
-  }
-  .card .play{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;
-  }
-  .card .play span{
-    width:52px;height:52px;border-radius:50%;background:rgba(10,14,26,.55);backdrop-filter:blur(6px);
-    display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.3);
-  }
-  .card .meta{padding:14px 16px 16px;position:relative;z-index:2;}
-  .card .meta h4{font-size:14.5px;font-weight:600;margin-bottom:3px;}
-  .card .meta span{font-size:12px;color:var(--text-faint);}
-  .card .stamp-mini{position:absolute;bottom:14px;right:14px;width:44px;height:44px;opacity:.9;z-index:2;}
+  /* ===== OUR IP ===== */
+  .ip-grid{display:flex;justify-content:center;align-items:center;gap:60px;flex-wrap:wrap;}
+  .ip-card{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .ip-logo{font-family:'Baloo 2';font-weight:800;font-size:28px;letter-spacing:-0.02em;}
+  .ip-logo.teman{background:linear-gradient(90deg,#FF5F9E,#FFC800,#00C2A8);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .ip-logo.happy{background:linear-gradient(90deg,#FF7A00,#FFD600);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .ip-logo.jas{font-family:'Poppins';font-weight:700;font-size:18px;color:var(--text-2);border:1.5px dashed var(--line);padding:10px 18px;border-radius:10px;}
+  .ip-card span{font-size:12px;color:var(--text-3);}
 
-  /* lightbox */
-  .lightbox{
-    position:fixed;inset:0;z-index:200;background:rgba(245,245,247,.9);backdrop-filter:blur(12px);
-    display:none;align-items:center;justify-content:center;padding:30px;
+  /* ===== TEAM ===== */
+  .team-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
+  .team-item{text-align:center;}
+  .team-avatar{
+    aspect-ratio:1/1;border-radius:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;
+    font-family:'Baloo 2';font-weight:700;font-size:22px;color:#fff;
   }
+  .team-item h4{font-size:13.5px;margin-bottom:2px;}
+  .team-item span{font-size:11.5px;color:var(--text-3);}
+  .team-note{text-align:center;font-size:12px;color:var(--text-3);margin-top:22px;font-style:italic;}
+
+  /* ===== CONTACT ===== */
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:stretch;}
+  .contact-info{display:flex;flex-direction:column;gap:20px;}
+  .info-row{display:flex;gap:14px;align-items:flex-start;}
+  .info-row .ic{width:40px;height:40px;border-radius:10px;background:var(--panel-2);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .info-row b{display:block;font-size:14px;margin-bottom:2px;}
+  .info-row span{font-size:13.5px;color:var(--text-2);}
+  .map-frame{border-radius:16px;overflow:hidden;border:1px solid var(--line);min-height:260px;background:var(--panel);display:flex;align-items:center;justify-content:center;}
+  .map-frame iframe{width:100%;height:100%;border:0;min-height:260px;}
+  .contact-buttons{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;}
+  .contact-btn{display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:13.5px;font-weight:600;transition:.2s;}
+  .contact-btn:hover{border-color:var(--blue);transform:translateY(-2px);}
+  .contact-btn .ic2{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .contact-btn.wa .ic2{background:#e7f9ef;color:#25D366;}
+  .contact-btn.ig .ic2{background:#fdeef6;color:#E1306C;}
+
+  /* ===== DOWNLOAD ===== */
+  .download-section{background:var(--blue);color:#fff;}
+  .download-section .sec-head p{color:rgba(255,255,255,0.75);}
+  .download-section .tag{background:rgba(255,255,255,0.14);color:var(--accent);}
+  .download-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .download-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:14px;transition:.2s;}
+  .download-card:hover{background:rgba(255,255,255,0.12);transform:translateY(-4px);}
+  .download-card .dic{width:40px;height:40px;border-radius:10px;background:var(--accent);color:var(--black);display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .download-card h3{font-size:16px;font-family:'Baloo 2';}
+  .download-card p{font-size:13px;color:rgba(255,255,255,0.7);flex-grow:1;}
+  .download-card .dl-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--accent);}
+  .download-card .dl-btn:hover{text-decoration:underline;}
+
+  /* ===== LIGHTBOX ===== */
+  .lightbox{position:fixed;inset:0;z-index:100;background:rgba(8,14,26,0.92);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:40px;}
   .lightbox.open{display:flex;}
-  .lb-box{max-width:min(1100px,94vw);width:100%;max-height:92vh;background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.18);}
-  .lb-art{width:100%;position:relative;display:flex;align-items:center;justify-content:center;background:#f5f5f7;overflow:hidden;}
-  .lb-art.is-image{height:min(72vh,720px);min-height:320px;padding:18px;}
-  .lb-art.is-video{aspect-ratio:16/9;}
-  .lightbox-image{display:block;width:100%;height:100%;object-fit:contain;}
-  .lb-info{padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;}
-  .lb-info h3{font-size:20px;margin-bottom:6px;}
-  .lb-info p{color:var(--text-muted);font-size:14px;}
-  .lb-close{
-    width:38px;height:38px;border-radius:50%;background:#f5f5f7;border:1px solid var(--line);
-    display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;color:var(--text);font-size:18px;
-  }
+  .lb-content{max-width:800px;width:100%;text-align:center;}
+  .lb-visual{width:100%;aspect-ratio:16/10;border-radius:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.14);}
+  .lb-close{position:absolute;top:28px;right:32px;font-size:28px;color:rgba(255,255,255,0.7);cursor:pointer;background:none;border:none;}
+  .lb-nav{position:absolute;top:50%;transform:translateY(-50%);font-size:28px;color:rgba(255,255,255,0.7);cursor:pointer;background:none;border:none;padding:10px;}
+  .lb-prev{left:20px;}.lb-next{right:20px;}
+  .lb-close:hover,.lb-nav:hover{color:#fff;}
+  .lb-cat{font-family:'Poppins';font-weight:700;font-size:12px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;}
+  .lb-title{font-size:20px;color:#fff;}
 
-  /* ---------- PROCESS ---------- */
-  .process{padding:120px 0;position:relative;z-index:1;}
-  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;position:relative;}
-  .steps::before{
-    content:"";position:absolute;top:34px;left:5%;right:5%;height:1px;
-    background:repeating-linear-gradient(90deg,var(--line) 0 8px, transparent 8px 16px);
-    z-index:0;
-  }
-  .step{position:relative;z-index:1;text-align:center;padding:0 8px;}
-  .step .stamp-wrap{width:68px;height:68px;margin:0 auto 20px;}
-  .step h4{font-size:15px;margin-bottom:8px;}
-  .step p{font-size:13px;color:var(--text-muted);}
-  .step .idx{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);display:block;margin-bottom:6px;}
+  /* ===== FOOTER ===== */
+  footer{background:var(--black);color:rgba(255,255,255,0.7);padding:56px 0 26px;}
+  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+  .foot-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .foot-logo .kd{font-family:'Luckiest Guy';color:var(--accent);font-size:20px;}
+  .foot-logo .st{font-family:'Poppins';font-weight:700;font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.55);}
+  .foot-grid p{font-size:14px;max-width:300px;color:rgba(255,255,255,0.55);}
+  .foot-grid h4{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;}
+  .foot-grid ul{list-style:none;}
+  .foot-grid li{margin-bottom:10px;font-size:14px;}
+  .foot-grid li a:hover{color:var(--accent);}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,0.4);flex-wrap:wrap;gap:12px;border-top:1px solid rgba(255,255,255,0.1);padding-top:22px;}
 
-  /* ---------- TESTIMONIALS ---------- */
-  .testi{padding:90px 0;position:relative;z-index:1;}
-  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  .testi-card{
-    background:#fff;border:1px solid var(--line);border-radius:var(--radius-md);
-    padding:26px 24px;display:flex;flex-direction:column;gap:16px;
-    box-shadow:var(--shadow-card);
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:1024px){
+    .portfolio-grid{grid-template-columns:repeat(2,1fr);}
+    .team-grid{grid-template-columns:repeat(3,1fr);}
+    .download-grid{grid-template-columns:repeat(2,1fr);}
+    .imagine-grid{grid-template-columns:1fr;gap:24px;text-align:center;}
   }
-  .testi-card .quote{font-size:15px;color:var(--text);line-height:1.65;}
-  .testi-card .stars{color:var(--gold);font-size:13px;letter-spacing:2px;}
-  .testi-who{display:flex;align-items:center;gap:10px;margin-top:auto;}
-  .testi-avatar{width:38px;height:38px;border-radius:50%;flex:none;}
-  .testi-who strong{font-size:13.5px;display:block;}
-  .testi-who span{font-size:12px;color:var(--text-faint);}
-
-  /* ---------- CTA ---------- */
-  .cta{padding:70px 0 130px;position:relative;z-index:1;}
-  .cta-box{
-    max-width:var(--maxw);margin:0 auto;padding:70px 40px;text-align:center;border-radius:36px;
-    background:radial-gradient(120% 160% at 50% 0%, rgba(108,92,231,.14), transparent 60%), #f5f5f7;
-    border:1px solid var(--line);position:relative;overflow:hidden;
-  }
-  .cta-box h2{font-size:clamp(28px,4.4vw,46px);max-width:560px;margin:0 auto 18px;}
-  .cta-box p{color:var(--text-muted);max-width:460px;margin:0 auto 34px;}
-  .cta-seal{position:absolute;top:-30px;right:-30px;width:180px;height:180px;opacity:.15;}
-
-  /* ---------- FOOTER ---------- */
-  footer{border-top:1px solid var(--line);padding:56px 0 34px;position:relative;z-index:1;}
-  .foot-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:44px;}
-  .foot-brand p{max-width:280px;color:var(--text-muted);font-size:14px;margin-top:14px;}
-  .foot-cols{display:flex;gap:60px;flex-wrap:wrap;}
-  .foot-col h5{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:16px;}
-  .foot-col a{display:block;font-size:14px;color:var(--text-muted);margin-bottom:11px;transition:color .2s;}
-  .foot-col a:hover{color:var(--text);}
-  .foot-bottom{
-    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
-    padding-top:26px;border-top:1px solid var(--line);font-size:12.5px;color:var(--text-faint);
-  }
-  .socials{display:flex;gap:12px;}
-  .socials a{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;transition:.2s;color:var(--text-muted);}
-  .socials a:hover{border-color:var(--violet);color:var(--violet);}
-
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width:980px){
-    .svc-grid{grid-template-columns:repeat(2,1fr);}
-    .stats .wrap{grid-template-columns:repeat(2,1fr);row-gap:30px;}
-    .testi-grid{grid-template-columns:1fr;}
-    .steps{grid-template-columns:repeat(5,1fr);}
-    .grid{columns:3 220px;}
-  }
-  @media (max-width:760px){
-    nav.links{position:absolute;top:100%;left:0;width:100vw;height:calc(100vh - 71px);height:calc(100dvh - 71px);
-      flex-direction:column;align-items:stretch;justify-content:flex-start;padding:24px 28px 36px;gap:8px;
-      overflow-y:auto;background:#fff;border-top:1px solid var(--line);box-shadow:0 18px 36px rgba(0,0,0,.08);
-      visibility:hidden;pointer-events:none;transform:translateX(100%);transition:transform .35s var(--ease),visibility .35s;}
-    nav.links.open{visibility:visible;pointer-events:auto;transform:translateX(0);}
-    nav.links a{width:100%;padding:15px 18px;border-radius:14px;font-size:18px;font-weight:600;text-align:center;}
-    nav.links a:not(.nav-cta):hover{background:var(--ink-2);}
-    nav.links .nav-cta{margin-top:12px;padding:15px 18px;}
+  @media(max-width:860px){
+    .nav-links{display:none;}
     .burger{display:flex;}
-    .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-    .burger[aria-expanded="true"] span:nth-child(2){opacity:0;}
-    .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-    body.nav-open{overflow:hidden;}
-    .hero{padding-top:130px;}
-    .hero-mosaic{grid-template-columns:repeat(3,1fr);grid-auto-rows:60px;}
-    .svc-grid{grid-template-columns:1fr;}
-    .steps{grid-template-columns:1fr;gap:30px;}
-    .steps::before{display:none;}
-    .grid{columns:2 160px;}
-    .cta-box{padding:50px 24px;border-radius:26px;}
-    .foot-top{flex-direction:column;}
+    .foot-grid{grid-template-columns:1fr 1fr;row-gap:28px;}
+    .contact-grid{grid-template-columns:1fr;}
   }
-  @media (max-width:480px){
-    .grid{columns:1;}
-    .hero-actions{flex-direction:column;align-items:stretch;}
-    .hero-mosaic{grid-template-columns:1fr;padding:0 28px;}
-    .hero-mosaic .tile.a,.hero-mosaic .tile.b,.hero-mosaic .tile.c,
-    .hero-mosaic .tile.d,.hero-mosaic .tile.e,.hero-mosaic .tile.f{grid-column:1/-1;}
-    .lb-art.is-image{height:min(64vh,520px);min-height:240px;padding:10px;}
+  @media(max-width:640px){
+    .wrap{padding:0 20px;}
+    nav{padding:12px 20px;}
+    section{padding:60px 0;}
+    .hero-visual{border-radius:16px;}
+    .portfolio-grid{grid-template-columns:1fr 1fr;}
+    .team-grid{grid-template-columns:repeat(2,1fr);}
+    .download-grid{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr;}
+    .ip-grid{gap:30px;}
   }
-
-  @media (prefers-reduced-motion:reduce){
-    *{animation:none!important;transition:none!important;}
-    html{scroll-behavior:auto;}
+  @media(prefers-reduced-motion:reduce){
+    *{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}
+    .reveal{opacity:1;transform:none;}
   }
-
-
-  /* video embed di lightbox */
-  .lb-art iframe{width:100%;height:100%;border:0;position:absolute;inset:0;}
-  .card .thumb img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+  [hidden]{display:none!important;}
+  section{scroll-margin-top:76px;}
+  .hero-image{width:100%;height:100%;object-fit:cover;}
+  .hero-video{width:100%;height:100%;border:0;object-fit:cover;pointer-events:none;}
+  .hero-caption{white-space:pre-line;}
+  h1.hero-caption{font-family:'Baloo 2',sans-serif;font-size:clamp(24px,4vw,40px);}
+  .logo-text{max-width:230px;gap:4px;}.logo-text .st{letter-spacing:.03em;line-height:1.3;}
+  .p-item .fill{background:linear-gradient(150deg,#1857C4,#082E6B);position:relative;}
+  .p-item .fill img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .p-item .badge-name{position:relative;text-align:left;}
+  .p-item:focus-visible .overlay{opacity:1;}
+  .lb-visual{overflow:hidden;}.lb-visual img,.lb-visual iframe{width:100%;height:100%;object-fit:contain;border:0;}
+  .trusted-logos img{max-width:130px;max-height:60px;object-fit:contain;}
+  .ip-card img{max-width:200px;max-height:100px;object-fit:contain;}
+  .team-avatar{background:var(--blue);overflow:hidden;}.team-avatar img{width:100%;height:100%;object-fit:cover;}
+  .legacy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;}
+  .legacy-card{border:1px solid var(--line);border-radius:16px;padding:24px;}
+  @media(max-width:640px){.logo-text{max-width:155px;}.logo-text .kd{font-size:15px;}.nav-cta{padding:8px 12px;font-size:11px;}.lightbox{padding:50px 35px;}.lb-prev{left:0;}.lb-next{right:0;}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}.reveal.animate{opacity:1;transform:none;}}
 </style>
 </head>
 <body>
-
 @php
-  $gmailComposeUrl = $settings->email ? 'https://mail.google.com/mail/?view=cm&fs=1&to='.rawurlencode($settings->email) : '#kontak';
+    $phoneDigits = preg_replace('/[^0-9]/', '', $settings->phone ?? '');
+    $whatsappNumber = str_starts_with($phoneDigits, '0') ? '62'.substr($phoneDigits, 1) : $phoneDigits;
+    $emailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to='.rawurlencode($settings->email ?? '');
 @endphp
 
-<div class="bg-glow"><span class="g1"></span><span class="g2"></span><span class="g3"></span></div>
-
-<!-- ================= NAV ================= -->
-<header class="nav">
-  <div class="nav-inner">
-    <div class="brand">
-      @if ($settings->logo_url)
-        <img src="{{ $settings->logo_url }}" alt="{{ $settings->company_name }}" class="seal" style="border-radius:8px;object-fit:cover;">
-      @else
-        <svg class="seal" viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="27" stroke="#b8791f" stroke-width="1.4" stroke-dasharray="2 3"/><circle cx="30" cy="30" r="20" stroke="#7b6ef6" stroke-width="1.4"/><path d="M30 16 L33 26 L44 26 L35 32 L38 43 L30 36 L22 43 L25 32 L16 26 L27 26 Z" fill="#b8791f"/></svg>
-      @endif
-      <div>{{ strtoupper($settings->company_name) }}<small>{{ $settings->tagline }}</small></div>
+<header>
+  <nav>
+    <a href="#" class="logo">
+      @if ($settings->logo_url)<img src="{{ $settings->logo_url }}" alt="{{ $settings->company_name }}" width="36" height="36">@else<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="26" r="24" fill="#0D47A1"/>
+        <path d="M14 34 L38 22 L38 40 Z" fill="#FFD600"/>
+        <circle cx="20" cy="20" r="4" fill="#FFD600"/>
+        <rect x="24" y="16" width="8" height="2.4" rx="1.2" fill="#FFD600"/>
+      </svg>@endif
+      <span class="logo-text"><span class="kd">{{ $settings->company_name }}</span><span class="st">{{ $settings->tagline }}</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#about">About Us</a>
+      <a href="#portfolio">Projects</a>
+      <a href="#trusted">Clients</a>
+      <a href="#our-ip">IPs</a>
+      <a href="#contact">Contact Us</a>
     </div>
-    <nav class="links" id="navLinks">
-      <a href="#layanan">Layanan</a>
-      <a href="#portofolio">Portofolio</a>
-      <a href="#proses">Proses</a>
-      <a href="#testimoni">Testimoni</a>
-      <a href="#kontak" class="nav-cta">Ajukan Proyek</a>
-    </nav>
-    <button class="burger" id="burger" type="button" aria-label="Buka menu" aria-controls="navLinks" aria-expanded="false"><span></span><span></span><span></span></button>
+    <a href="#contact" class="nav-cta">Hubungi Kami</a>
+    <button class="burger" id="burger" aria-label="Buka menu" aria-controls="mobileMenu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about">About Us</a>
+    <a href="#portfolio">Projects</a>
+    <a href="#trusted">Clients</a>
+    <a href="#our-ip">IPs</a>
+    <a href="#contact">Contact Us</a>
   </div>
 </header>
 
-<!-- ================= HERO ================= -->
-<section class="hero">
-  <div class="hero-inner">
-    <span class="eyebrow"><span class="dot"></span> Studio Kreatif Bertenaga AI</span>
-    <h1>{{ $settings->hero_title ?: 'Kreativitas tanpa batas, diperkuat kecerdasan buatan' }}</h1>
-    <p class="lead">{{ $settings->hero_description ?: 'Kami memadukan strategi kreatif, teknologi AI, dan sentuhan manusia untuk menghasilkan karya visual yang berkesan.' }}</p>
-    <div class="hero-actions">
-      <a href="#portofolio" class="btn btn-primary">Jelajahi Portofolio ↓</a>
-      <a href="#kontak" class="btn btn-ghost">Mulai Konsultasi</a>
+<main>
+  <!-- HERO VISUAL -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-visual reveal">
+        @if ($settings->hero_video_embed)
+        <iframe class="hero-video" src="{{ $settings->hero_video_embed }}" title="{{ $settings->hero_title }}" allow="autoplay; encrypted-media; picture-in-picture" loading="lazy"></iframe>
+        @elseif ($settings->hero_image_url)<img class="hero-image" src="{{ $settings->hero_image_url }}" alt="{{ $settings->hero_title }}">@else
+        <div class="hero-stars"></div>
+        <div class="hero-glow-line"></div>
+        <svg class="hero-boat" viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 90 L60 55 L60 100 Z" fill="#0A1B45"/>
+          <path d="M60 55 L60 100 L110 90 Z" fill="#123B7A"/>
+          <circle cx="55" cy="48" r="7" fill="#050B1E"/>
+          <rect x="58" y="42" width="16" height="4" rx="2" fill="#050B1E"/>
+        </svg>
+        <div class="hero-water"></div>
+        @endif
+        <div class="hero-badge"><span class="dot"></span>{{ $settings->company_name }}</div>
+      </div>
+      <h1 class="hero-caption reveal">{{ $settings->hero_title }}</h1>
+      <p class="hero-caption reveal">{{ $settings->tagline }}</p>
     </div>
-  </div>
-  <div class="hero-mosaic">
-    @php
-      $heroTileClasses = ['a', 'b', 'c', 'd', 'e', 'f'];
-      $heroPortfolios = $portfolios->take(6)->values();
-    @endphp
+  </section>
 
-    @foreach ($heroTileClasses as $heroIndex => $heroTileClass)
-      @php($heroPortfolio = $heroPortfolios->get($heroIndex))
-      <div class="tile {{ $heroTileClass }}">
-        <div class="art art-{{ $heroIndex + 1 }}">
-          @if ($heroPortfolio?->thumbnail_url)
-            <button
-              type="button"
-              class="hero-media-card"
-              data-portfolio-index="{{ $heroIndex }}"
-              aria-label="Buka {{ $heroPortfolio->title }}"
-            >
-              <img src="{{ $heroPortfolio->thumbnail_url }}" alt="{{ $heroPortfolio->title }}">
-              <span class="hero-media-meta">
-                <span>
-                  <strong>{{ $heroPortfolio->title }}</strong>
-                  <span>{{ $heroPortfolio->category }} · {{ $heroPortfolio->type }}</span>
-                </span>
-                @if ($heroPortfolio->isVideo())
-                  <span class="hero-play" aria-hidden="true">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                  </span>
-                @endif
-              </span>
-            </button>
-          @endif
+  <!-- BEYOND THE IMAGINATION -->
+  <section id="about">
+    <div class="wrap imagine-grid">
+      <h2 class="reveal">{{ $settings->about_title ?: "Beyond The Imagination" }}</h2>
+      <p class="reveal d1">{{ $settings->about_description ?: $settings->hero_description }}</p>
+    </div>
+  </section>
+
+  <!-- TRUSTED BY -->
+  <section id="trusted" class="alt-bg">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="tag">Trusted By</span><h2>Dipercaya oleh</h2></div>
+      <div class="trusted-logos reveal">
+        @forelse ($settings->clients ?? [] as $client)
+          <span>@if (!empty($client['image_url']))<img src="{{ $client['image_url'] }}" alt="{{ $client['name'] }}" loading="lazy">@else{{ $client['name'] }}@endif</span>
+        @empty
+          <p>Daftar klien akan segera ditampilkan.</p>
+        @endforelse
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="tag">Portofolio</span>
+        <h2>Karya yang sudah kami produksi</h2>
+        <p>Sebagian hasil produksi commercial, animasi, dan original IP kami.</p>
+      </div>
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-f="all">Semua</button>
+        @foreach ($portfolios->pluck('category')->unique() as $category)
+          <button class="filter-btn" data-f="{{ $category }}">{{ $category === 'character' ? 'Karakter' : ucfirst($category) }}</button>
+        @endforeach
+      </div>
+      <div class="portfolio-grid" id="portfolioGrid">
+        @forelse ($portfolios as $portfolio)
+          <button type="button" class="p-item" data-portfolio-index="{{ $loop->index }}" data-category="{{ $portfolio->category }}" aria-label="Lihat {{ $portfolio->title }}">
+            <div class="fill">
+              @if ($portfolio->thumbnail_url)<img src="{{ $portfolio->thumbnail_url }}" alt="{{ $portfolio->title }}" loading="lazy">@endif
+              <span class="badge-name">{{ $portfolio->title }}</span>
+            </div>
+            <div class="overlay"><div class="cat">{{ $portfolio->category }}</div><div class="ttl">{{ $portfolio->title }}</div></div>
+          </button>
+        @empty
+          <p>Portofolio akan segera ditampilkan.</p>
+        @endforelse
+      </div>
+      <button class="btn-ghost load-more" id="loadMore">Muat Lebih Banyak</button>
+    </div>
+  </section>
+
+  <!-- OUR IP -->
+  <section id="our-ip" class="alt-bg">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="tag">Our IP</span><h2>Original IP kami</h2></div>
+      <div class="ip-grid reveal">
+        @forelse ($settings->originalIpItems() as $ip)
+          <a class="ip-card" href="{{ route('original-ip.show', $ip['slug']) }}" aria-label="Lihat detail {{ $ip['name'] }}">
+            @if (!empty($ip['image_url']))<img src="{{ $ip['image_url'] }}" alt="{{ $ip['name'] }}" loading="lazy">@else<div class="ip-logo {{ $loop->index % 2 === 0 ? 'teman' : 'happy' }}">{{ $ip['name'] }}</div>@endif
+            <span>{{ $ip['description'] ?? 'Original IP' }}</span>
+            <span>Lihat detail →</span>
+          </a>
+        @empty
+          <p>Original IP akan segera ditampilkan.</p>
+        @endforelse
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR TEAM -->
+  <section id="team">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="tag">Our Team</span><h2>Tim di balik karya</h2></div>
+      <div class="team-grid" id="teamGrid">
+        @forelse ($settings->team_members ?? [] as $member)
+          <div class="team-item reveal">
+            <div class="team-avatar">@if (!empty($member['image_url']))<img src="{{ $member['image_url'] }}" alt="{{ $member['name'] }}" loading="lazy">@else{{ mb_substr($member['name'], 0, 1) }}@endif</div>
+            <h4>{{ $member['name'] }}</h4><span>{{ $member['role'] }}</span>
+          </div>
+        @empty
+          <p>Profil tim akan segera ditampilkan.</p>
+        @endforelse
+      </div>
+    </div>
+  </section>
+
+  @if ($services->isNotEmpty())
+  <section id="services" class="alt-bg"><div class="wrap">
+    <div class="sec-head"><span class="tag">Layanan</span><h2>Solusi produksi kreatif</h2></div>
+    <div class="legacy-grid">@foreach ($services as $service)<article class="legacy-card"><h3>{{ $service->title }}</h3><p>{{ $service->description }}</p></article>@endforeach</div>
+  </div></section>
+  @endif
+  @if ($testimonials->isNotEmpty())
+  <section id="testimonials"><div class="wrap">
+    <div class="sec-head"><span class="tag">Testimoni</span><h2>Cerita dari klien kami</h2></div>
+    <div class="legacy-grid">@foreach ($testimonials as $testimonial)<figure class="legacy-card"><blockquote>{{ $testimonial->quote }}</blockquote><figcaption><strong>{{ $testimonial->name }}</strong><p>{{ $testimonial->role }}</p></figcaption></figure>@endforeach</div>
+  </div></section>
+  @endif
+  <!-- CONTACT -->
+  <section id="contact" class="alt-bg">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="tag">Contact Us</span><h2>Mari diskusikan proyek Anda</h2></div>
+      <div class="contact-grid reveal">
+        <div class="contact-info">
+          <div class="info-row">
+            <div class="ic">📍</div>
+            <div><b>Alamat Kantor</b><span>{{ $settings->address ?: 'Alamat belum tersedia' }}</span></div>
+          </div>
+          <div class="info-row">
+            <div class="ic">✉️</div>
+            <div><b>Email</b><span>@if ($settings->email)<a href="{{ $emailUrl }}" target="_blank" rel="noopener noreferrer">{{ $settings->email }}</a>@else Email belum tersedia @endif</span></div>
+          </div>
+          <div class="info-row">
+            <div class="ic">📞</div>
+            <div><b>Nomor Admin</b><span>{{ $settings->phone ?: 'Nomor belum tersedia' }}</span></div>
+          </div>
+          <div class="contact-buttons">
+            @if ($whatsappNumber)<a href="https://wa.me/{{ $whatsappNumber }}" target="_blank" rel="noopener noreferrer" class="contact-btn wa"><div class="ic2">💬</div>WhatsApp</a>@endif
+            @if ($settings->instagram_url)<a href="{{ $settings->instagram_url }}" target="_blank" rel="noopener noreferrer" class="contact-btn ig"><div class="ic2">📷</div>Instagram</a>@endif
+          </div>
+        </div>
+        <div class="map-frame">
+          @if ($settings->map_query ?: $settings->address)
+          <iframe title="Lokasi kantor" src="https://www.google.com/maps?q={{ rawurlencode($settings->map_query ?: $settings->address) }}&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          @else<p>Lokasi kantor belum tersedia.</p>@endif
         </div>
       </div>
-    @endforeach
-  </div>
-</section>
+    </div>
+  </section>
 
-<!-- ================= STATS ================= -->
-<section class="stats">
-  <div class="wrap">
-    <div class="stamp-card"><div class="num"><span>500</span>+</div><div class="label">Karya Diciptakan</div></div>
-    <div class="stamp-card"><div class="num"><span>80</span>+</div><div class="label">Klien Terlayani</div></div>
-    <div class="stamp-card"><div class="num"><span>15</span></div><div class="label">Negara Terjangkau</div></div>
-    <div class="stamp-card"><div class="num"><span>24</span>/7</div><div class="label">Studio AI Aktif</div></div>
-  </div>
-</section>
-
-<!-- ================= SERVICES (dinamis dari database) ================= -->
-<section class="services" id="layanan">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="kicker">Layanan</span>
-      <h2>Satu studio, semua kebutuhan visual</h2>
-      <p>Dari ide mentah sampai file siap tayang — kami rancang alur kerja AI yang cepat tanpa mengorbankan kualitas.</p>
-    </div>
-    <div class="svc-grid">
-      @forelse ($services as $service)
-      <div class="svc-card">
-        <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-        <h3>{{ $service->title }}</h3>
-        <p>{{ $service->description }}</p>
+  <!-- DOWNLOAD (dipertahankan dari brief sebelumnya, ditaruh di akhir) -->
+  <section id="download" class="download-section">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="tag">Download</span>
+        <h2>Produk & aset kami</h2>
+        <p>Dapatkan produk digital kami melalui ScaleV.</p>
       </div>
-      @empty
-      <p style="color:var(--text-muted);">Belum ada layanan ditambahkan.</p>
-      @endforelse
-    </div>
-  </div>
-</section>
-
-<!-- ================= PORTFOLIO (dinamis dari database) ================= -->
-<section class="portfolio" id="portofolio">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="kicker">Portofolio</span>
-      <h2>Cap persetujuan untuk setiap karya</h2>
-      <p>Setiap proyek yang lolos studio kami mendapat "cap resmi" — jelajahi galeri lengkap gambar dan video hasil kolaborasi AI &amp; tim kreatif.</p>
-    </div>
-    <div class="filters" id="filters">
-      <button class="filter-btn active" data-filter="semua">Semua</button>
-      <button class="filter-btn" data-filter="gambar">Gambar</button>
-      <button class="filter-btn" data-filter="video">Video</button>
-      @foreach ($portfolios->pluck('category')->unique() as $cat)
-      <button class="filter-btn" data-filter="{{ $cat }}">{{ ucfirst($cat) }}</button>
-      @endforeach
-    </div>
-    <div class="grid" id="grid"></div>
-  </div>
-</section>
-
-<!-- ================= PROCESS ================= -->
-<section class="process" id="proses">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="kicker">Proses Kerja</span>
-      <h2>Perjalanan sebuah paspor kreativitas</h2>
-      <p>Lima tahap resmi, dari pengajuan hingga karya "berangkat" ke tangan Anda.</p>
-    </div>
-    <div class="steps">
-      <div class="step">
-        <div class="stamp-wrap"><svg viewBox="0 0 68 68"><circle cx="34" cy="34" r="30" fill="none" stroke="#b8791f" stroke-width="1.4" stroke-dasharray="2 3"/><text x="34" y="30" text-anchor="middle" fill="#b8791f" font-family="IBM Plex Mono" font-size="9" font-weight="600">VISA</text><text x="34" y="41" text-anchor="middle" fill="#8a8d93" font-family="IBM Plex Mono" font-size="7">01</text></svg></div>
-        <span class="idx">Tahap 01</span><h4>Pengajuan &amp; Konsultasi</h4><p>Ceritakan kebutuhan visual Anda, kami susun brief kreatif bersama.</p>
-      </div>
-      <div class="step">
-        <div class="stamp-wrap"><svg viewBox="0 0 68 68"><circle cx="34" cy="34" r="30" fill="none" stroke="#7b6ef6" stroke-width="1.4"/><text x="34" y="30" text-anchor="middle" fill="#7b6ef6" font-family="IBM Plex Mono" font-size="8" font-weight="600">RISET</text><text x="34" y="41" text-anchor="middle" fill="#8a8d93" font-family="IBM Plex Mono" font-size="7">02</text></svg></div>
-        <span class="idx">Tahap 02</span><h4>Riset &amp; Konsep</h4><p>Eksplorasi gaya visual dan referensi yang sesuai identitas brand.</p>
-      </div>
-      <div class="step">
-        <div class="stamp-wrap"><svg viewBox="0 0 68 68"><circle cx="34" cy="34" r="30" fill="none" stroke="#b8791f" stroke-width="1.4" stroke-dasharray="2 3"/><text x="34" y="30" text-anchor="middle" fill="#b8791f" font-family="IBM Plex Mono" font-size="7.5" font-weight="600">PRODUKSI</text><text x="34" y="41" text-anchor="middle" fill="#8a8d93" font-family="IBM Plex Mono" font-size="7">03</text></svg></div>
-        <span class="idx">Tahap 03</span><h4>Produksi AI</h4><p>Model AI kami menciptakan puluhan variasi gambar dan video.</p>
-      </div>
-      <div class="step">
-        <div class="stamp-wrap"><svg viewBox="0 0 68 68"><circle cx="34" cy="34" r="30" fill="none" stroke="#7b6ef6" stroke-width="1.4"/><text x="34" y="30" text-anchor="middle" fill="#7b6ef6" font-family="IBM Plex Mono" font-size="8" font-weight="600">REVISI</text><text x="34" y="41" text-anchor="middle" fill="#8a8d93" font-family="IBM Plex Mono" font-size="7">04</text></svg></div>
-        <span class="idx">Tahap 04</span><h4>Kurasi &amp; Revisi</h4><p>Pilih dan sempurnakan hasil terbaik bersama tim kreatif kami.</p>
-      </div>
-      <div class="step">
-        <div class="stamp-wrap"><svg viewBox="0 0 68 68"><circle cx="34" cy="34" r="30" fill="none" stroke="#b8791f" stroke-width="1.4" stroke-dasharray="2 3"/><text x="34" y="30" text-anchor="middle" fill="#b8791f" font-family="IBM Plex Mono" font-size="7.5" font-weight="600">LUNAS</text><text x="34" y="41" text-anchor="middle" fill="#8a8d93" font-family="IBM Plex Mono" font-size="7">05</text></svg></div>
-        <span class="idx">Tahap 05</span><h4>Pengiriman Karya</h4><p>File final dikirim, siap dipakai untuk kebutuhan Anda.</p>
+      <div class="download-grid" id="downloadGrid">
+        @forelse ($settings->products ?? [] as $product)
+          <div class="download-card reveal">
+            <div class="dic">↓</div><h3>{{ $product['name'] }}</h3><p>{{ $product['description'] ?? '' }}</p>
+            <a href="{{ $product['url'] }}" target="_blank" rel="noopener noreferrer" class="dl-btn">Lihat Produk →</a>
+          </div>
+        @empty
+          <p>Produk digital akan segera tersedia.</p>
+        @endforelse
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
 
-<!-- ================= TESTIMONIALS (dinamis dari database) ================= -->
-<section class="testi" id="testimoni">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="kicker">Testimoni</span>
-      <h2>Kata mereka yang sudah "berkunjung"</h2>
-    </div>
-    <div class="testi-grid">
-      @forelse ($testimonials as $t)
-      <div class="testi-card">
-        <div class="stars">{{ str_repeat('★', $t->rating) }}{{ str_repeat('☆', 5 - $t->rating) }}</div>
-        <p class="quote">"{{ $t->quote }}"</p>
-        <div class="testi-who">
-          @if ($t->avatar_url)
-            <img src="{{ $t->avatar_url }}" class="testi-avatar" style="object-fit:cover;">
-          @else
-            <div class="testi-avatar" style="background:linear-gradient(135deg,var(--violet),var(--gold));"></div>
-          @endif
-          <div><strong>{{ $t->name }}</strong><span>{{ $t->role }}</span></div>
-        </div>
-      </div>
-      @empty
-      <p style="color:var(--text-muted);">Belum ada testimoni.</p>
-      @endforelse
-    </div>
-  </div>
-</section>
-
-<!-- ================= CTA ================= -->
-<section class="cta" id="kontak">
-  <div class="wrap">
-    <div class="cta-box">
-      <svg class="cta-seal" viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="27" stroke="#b8791f" stroke-width="1.4" stroke-dasharray="2 3"/><circle cx="30" cy="30" r="20" stroke="#7b6ef6" stroke-width="1.4"/></svg>
-      <h2>Ajukan paspor kreativitas Anda sekarang</h2>
-      <p>Ceritakan proyek Anda dan dapatkan konsep visual pertama dalam 48 jam.</p>
-      <a href="{{ $gmailComposeUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Hubungi Kami →</a>
-    </div>
-  </div>
-</section>
-
-<!-- ================= FOOTER ================= -->
 <footer>
   <div class="wrap">
-    <div class="foot-top">
-      <div class="foot-brand">
-        <div class="brand">
-          @if ($settings->logo_url)
-            <img src="{{ $settings->logo_url }}" class="seal" style="border-radius:8px;object-fit:cover;">
-          @else
-            <svg class="seal" viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="27" stroke="#b8791f" stroke-width="1.4" stroke-dasharray="2 3"/><circle cx="30" cy="30" r="20" stroke="#7b6ef6" stroke-width="1.4"/><path d="M30 16 L33 26 L44 26 L35 32 L38 43 L30 36 L22 43 L25 32 L16 26 L27 26 Z" fill="#b8791f"/></svg>
-          @endif
-          <div>{{ strtoupper($settings->company_name) }}</div>
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo">
+          @if ($settings->logo_url)<img src="{{ $settings->logo_url }}" alt="{{ $settings->company_name }}" width="34" height="34">@else<svg width="34" height="34" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="30" cy="26" r="24" fill="#FFD600"/>
+            <path d="M14 34 L38 22 L38 40 Z" fill="#0A0E1A"/>
+          </svg>@endif
+          <span class="kd">{{ $settings->company_name }}</span>
         </div>
-        <p>{{ $settings->tagline }}. {{ $settings->address }}</p>
+        <p>{{ $settings->hero_description }}</p>
       </div>
-      <div class="foot-cols">
-        <div class="foot-col">
-          <h5>Navigasi</h5>
-          <a href="#layanan">Layanan</a>
-          <a href="#portofolio">Portofolio</a>
-          <a href="#proses">Proses</a>
-          <a href="#testimoni">Testimoni</a>
-        </div>
-        <div class="foot-col">
-          <h5>Kontak</h5>
-          @if ($settings->email)<a href="{{ $gmailComposeUrl }}" target="_blank" rel="noopener noreferrer">{{ $settings->email }}</a>@endif
-          @if ($settings->phone)<a href="tel:{{ $settings->phone }}">{{ $settings->phone }}</a>@endif
-          @if ($settings->address)<a href="#">{{ $settings->address }}</a>@endif
-        </div>
+      <div>
+        <h4>Navigasi</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#portfolio">Projects</a></li>
+          <li><a href="#our-ip">IPs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontak</h4>
+        <ul>
+          <li>@if ($whatsappNumber)<a href="https://wa.me/{{ $whatsappNumber }}" target="_blank" rel="noopener noreferrer">WhatsApp</a>@endif</li>
+          <li>@if ($settings->instagram_url)<a href="{{ $settings->instagram_url }}" target="_blank" rel="noopener noreferrer">Instagram</a>@endif</li>
+          @if ($settings->email)<li><a href="{{ $emailUrl }}" target="_blank" rel="noopener noreferrer">Email</a></li>@endif
+          @if ($settings->linkedin_url)<li><a href="{{ $settings->linkedin_url }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>@endif
+          @if ($settings->youtube_url)<li><a href="{{ $settings->youtube_url }}" target="_blank" rel="noopener noreferrer">YouTube</a></li>@endif
+        </ul>
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© {{ date('Y') }} {{ $settings->company_name }}. Semua karya dilindungi hak cipta.</span>
-      <div class="socials">
-        @if ($settings->instagram_url)
-        <a href="{{ $settings->instagram_url }}" target="_blank" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
-        @endif
-        @if ($settings->linkedin_url)
-        <a href="{{ $settings->linkedin_url }}" target="_blank" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="8.5" r="1" fill="currentColor"/><path d="M8 11v6M12 17v-4a2 2 0 0 1 4 0v4M12 13v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
-        @endif
-        @if ($settings->youtube_url)
-        <a href="{{ $settings->youtube_url }}" target="_blank" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="12" rx="4" stroke="currentColor" stroke-width="1.6"/><path d="M10.5 10l5 2.2-5 2.2z" fill="currentColor"/></svg></a>
-        @endif
-      </div>
+      <span>© {{ date('Y') }} {{ $settings->company_name }}. Seluruh hak cipta dilindungi.</span>
+      <span>{{ $settings->tagline }}</span>
     </div>
   </div>
 </footer>
 
-<!-- ================= LIGHTBOX ================= -->
-<div class="lightbox" id="lightbox">
-  <div class="lb-box">
-    <div class="lb-art" id="lbArt"></div>
-    <div class="lb-info">
-      <div><h3 id="lbTitle"></h3><p id="lbDesc"></p></div>
-      <button type="button" class="lb-close" id="lbClose" aria-label="Tutup pratinjau">✕</button>
-    </div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lbTitle" tabindex="-1">
+  <button class="lb-close" id="lbClose" aria-label="Tutup">×</button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Karya sebelumnya">‹</button>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Karya berikutnya">›</button>
+  <div class="lb-content">
+    <div class="lb-visual" id="lbVisual"></div>
+    <p id="lbDescription" style="color:white"></p>
+    <div class="lb-cat" id="lbCat"></div>
+    <h3 class="lb-title" id="lbTitle"></h3>
   </div>
 </div>
 
 <script>
-  const burger = document.getElementById('burger');
-  const navLinks = document.getElementById('navLinks');
-  const setMenuOpen = (isOpen) => {
-    navLinks.classList.toggle('open', isOpen);
-    document.body.classList.toggle('nav-open', isOpen);
-    burger.setAttribute('aria-expanded', String(isOpen));
-    burger.setAttribute('aria-label', isOpen ? 'Tutup menu' : 'Buka menu');
-  };
-
-  burger.addEventListener('click', () => setMenuOpen(!navLinks.classList.contains('open')));
-  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenuOpen(false)));
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      setMenuOpen(false);
-    }
-  });
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 760) {
-      setMenuOpen(false);
-    }
-  });
-
-  // data portofolio dikirim langsung dari database Laravel
-  const items = {{ Js::from($portfolioItems) }};
-  const escapeHtml = (value) => {
-    const element = document.createElement('div');
-    element.textContent = value ?? '';
-
-    return element.innerHTML;
-  };
-
-  const grid = document.getElementById('grid');
-  function renderGrid(filter){
-    grid.innerHTML = "";
-    items
-      .filter(it => filter === "semua" || it.category === filter || it.type === filter)
-      .forEach((it, i) => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        const title = escapeHtml(it.title);
-        const category = escapeHtml(it.category);
-        const img = it.thumb ? `<img src="${it.thumb}" alt="${title}">` : '';
-        card.innerHTML = `
-          <div class="thumb" style="height:${180 + (i % 3) * 60}px;">
-            ${img}
-            <span class="badge">${it.type === 'video' ? 'Video' : 'Gambar'}</span>
-            ${it.type === 'video' ? `<div class="play"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></div>` : ''}
-            <svg class="stamp-mini" viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" fill="none" stroke="#b8791f" stroke-width="1.2" stroke-dasharray="1.5 2.5" opacity=".8"/></svg>
-          </div>
-          <div class="meta"><h4>${title}</h4><span>${category.charAt(0).toUpperCase() + category.slice(1)}</span></div>
-        `;
-        card.addEventListener('click', () => openLightbox(it));
-        grid.appendChild(card);
-      });
+const portfolioItems = {{ Illuminate\Support\Js::from($portfolioItems) }};
+const portfolioButtons = [...document.querySelectorAll('[data-portfolio-index]')];
+const loadMore = document.getElementById('loadMore');
+let activeCategory = 'all';
+let visibleCount = 9;
+let filteredButtons = portfolioButtons;
+function filterPortfolio() {
+  filteredButtons = portfolioButtons.filter(button => activeCategory === 'all' || button.dataset.category === activeCategory);
+  portfolioButtons.forEach(button => { button.hidden = true; });
+  filteredButtons.slice(0, visibleCount).forEach(button => { button.hidden = false; });
+  loadMore.hidden = filteredButtons.length <= visibleCount;
+}
+document.getElementById('filterBar').addEventListener('click', event => {
+  const button = event.target.closest('.filter-btn');
+  if (!button) return;
+  document.querySelectorAll('.filter-btn').forEach(item => item.classList.toggle('active', item === button));
+  activeCategory = button.dataset.f;
+  visibleCount = 9;
+  filterPortfolio();
+});
+loadMore.addEventListener('click', () => { visibleCount += 9; filterPortfolio(); });
+filterPortfolio();
+const lightbox = document.getElementById('lightbox');
+const visual = document.getElementById('lbVisual');
+let selectedIndex = 0;
+let opener;
+function openLightbox(index) {
+  selectedIndex = index;
+  const item = portfolioItems[index];
+  visual.replaceChildren();
+  if (item.type === 'video' && item.embed) {
+    const frame = document.createElement('iframe');
+    frame.src = item.embed;
+    frame.title = item.title;
+    frame.allow = 'autoplay; encrypted-media; picture-in-picture';
+    frame.allowFullscreen = true;
+    visual.append(frame);
+  } else if (item.thumb) {
+    const img = document.createElement('img');
+    img.src = item.thumb;
+    img.alt = item.title;
+    img.className = 'lightbox-image';
+    visual.append(img);
   }
-  renderGrid('semua');
-
-  document.getElementById('filters').addEventListener('click', (e) => {
-    if(!e.target.classList.contains('filter-btn')) return;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    e.target.classList.add('active');
-    renderGrid(e.target.dataset.filter);
-  });
-
-  const lightbox = document.getElementById('lightbox');
-  const lbArt = document.getElementById('lbArt');
-  const lbTitle = document.getElementById('lbTitle');
-  const lbDesc = document.getElementById('lbDesc');
-  function openLightbox(it){
-    lbArt.className = `lb-art ${it.type === 'video' && it.embed ? 'is-video' : 'is-image'}`;
-    lbArt.innerHTML = it.type === 'video' && it.embed
-      ? `<iframe src="${it.embed}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
-      : (it.thumb ? `<img src="${it.thumb}" class="lightbox-image" alt="">` : '');
-    lbTitle.textContent = it.title;
-    lbDesc.textContent = it.desc || '';
-    lightbox.classList.add('open');
+  document.getElementById('lbTitle').textContent = item.title;
+  document.getElementById('lbCat').textContent = item.category;
+  document.getElementById('lbDescription').textContent = item.desc || '';
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('lbClose').focus();
+}
+function closeLightbox() {
+  lightbox.classList.remove('open');
+  visual.replaceChildren();
+  document.body.style.overflow = '';
+  opener?.focus();
+}
+portfolioButtons.forEach(button => button.addEventListener('click', () => {
+  opener = button;
+  openLightbox(Number(button.dataset.portfolioIndex));
+}));
+function stepLightbox(step) {
+  const indices = filteredButtons.map(button => Number(button.dataset.portfolioIndex));
+  if (indices.length) openLightbox(indices[(indices.indexOf(selectedIndex) + step + indices.length) % indices.length]);
+}
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+document.getElementById('lbPrev').addEventListener('click', () => stepLightbox(-1));
+document.getElementById('lbNext').addEventListener('click', () => stepLightbox(1));
+lightbox.addEventListener('click', event => { if (event.target === lightbox) closeLightbox(); });
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+function setMenu(open) {
+  mobileMenu.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', String(open));
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+burger.addEventListener('click', () => setMenu(!mobileMenu.classList.contains('open')));
+mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
+window.matchMedia('(min-width: 861px)').addEventListener('change', event => { if (event.matches) setMenu(false); });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') { if (lightbox.classList.contains('open')) closeLightbox(); setMenu(false); }
+  if (!lightbox.classList.contains('open')) return;
+  if (event.key === 'ArrowRight') stepLightbox(1);
+  if (event.key === 'ArrowLeft') stepLightbox(-1);
+  if (event.key === 'Tab') {
+    const controls = [...lightbox.querySelectorAll('button, iframe')];
+    const first = controls[0], last = controls[controls.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   }
-  document.querySelectorAll('[data-portfolio-index]').forEach((tile) => {
-    tile.addEventListener('click', () => openLightbox(items[Number(tile.dataset.portfolioIndex)]));
-  });
-  document.getElementById('lbClose').addEventListener('click', () => lightbox.classList.remove('open'));
-  lightbox.addEventListener('click', (e) => { if(e.target === lightbox){ lightbox.classList.remove('open'); lbArt.innerHTML=''; } });
-  document.addEventListener('keydown', (e) => { if(e.key === 'Escape'){ lightbox.classList.remove('open'); lbArt.innerHTML=''; } });
-
-  const header = document.querySelector('header.nav');
-  window.addEventListener('scroll', () => {
-    header.style.boxShadow = window.scrollY > 10 ? '0 4px 20px rgba(0,0,0,.06)' : 'none';
-  });
+});
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('in'); observer.unobserve(entry.target); }
+  }), { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(element => { element.classList.add('animate'); observer.observe(element); });
+}
 </script>
 </body>
 </html>

@@ -12,11 +12,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --violet:#6c5ce7; --violet-deep:#4b3fe0;
-    --gold:#b8791f; --gold-soft:#fbf3e7;
+    --violet:#0D47A1; --violet-deep:#082E6B;
+    --gold:#8a7100; --gold-soft:#fff8cc;
     --text:#1d1d1f; --text-muted:#6e6e73; --text-faint:#9a9ca2;
-    --line:rgba(0,0,0,.08); --bg:#ffffff; --bg-soft:#f5f5f7;
-    --violet-soft:#f1effd; --green:#1e8e5a; --green-soft:#e8f7f0;
+    --line:rgba(0,0,0,.08); --bg:#ffffff; --bg-soft:#F5F8FF;
+    --violet-soft:#EAF0FF; --green:#1e8e5a; --green-soft:#e8f7f0;
     --radius-lg:20px; --radius-md:14px; --radius-sm:9px;
     --shadow-card:0 2px 5px rgba(0,0,0,.04), 0 14px 30px rgba(0,0,0,.05);
     --ease:cubic-bezier(.16,.84,.44,1);
@@ -180,12 +180,22 @@
       <div>{{ Str::upper($siteSettings->company_name) }}<small>Admin Panel</small></div>
     </div>
 
-    <div class="sb-label">Menu</div>
+    <div class="sb-label">Pengaturan Situs</div>
     <nav class="sb-menu">
-      <a href="{{ route('admin.konten') }}" class="{{ request()->routeIs('admin.*', 'dashboard') ? 'active' : '' }}">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-        Kelola Konten
-      </a>
+      <a href="{{ route('admin.identitas') }}" class="{{ request()->routeIs('admin.identitas', 'dashboard') ? 'active' : '' }}">Identitas</a>
+      <a href="{{ route('admin.hero') }}" class="{{ request()->routeIs('admin.hero') ? 'active' : '' }}">Hero & About</a>
+      <a href="{{ route('admin.kontak') }}" class="{{ request()->routeIs('admin.kontak') ? 'active' : '' }}">Kontak</a>
+      <a href="{{ route('admin.klien') }}" class="{{ request()->routeIs('admin.klien') ? 'active' : '' }}">Klien</a>
+      <a href="{{ route('admin.original-ip') }}" class="{{ request()->routeIs('admin.original-ip') ? 'active' : '' }}">Original IP</a>
+      <a href="{{ route('admin.tim') }}" class="{{ request()->routeIs('admin.tim') ? 'active' : '' }}">Tim Studio</a>
+      <a href="{{ route('admin.produk') }}" class="{{ request()->routeIs('admin.produk') ? 'active' : '' }}">Produk</a>
+    </nav>
+
+    <div class="sb-label">Konten</div>
+    <nav class="sb-menu">
+      <a href="{{ route('admin.layanan.index') }}" class="{{ request()->routeIs('admin.layanan.*') ? 'active' : '' }}">Layanan</a>
+      <a href="{{ route('admin.portofolio.index') }}" class="{{ request()->routeIs('admin.portofolio.*') ? 'active' : '' }}">Portofolio</a>
+      <a href="{{ route('admin.testimoni.index') }}" class="{{ request()->routeIs('admin.testimoni.*') ? 'active' : '' }}">Testimoni</a>
     </nav>
 
     <div class="sb-bottom">
@@ -219,13 +229,6 @@
     </div>
 
     <div class="content">
-      <div class="tabs">
-        <a href="{{ route('admin.konten') }}" class="tab-btn {{ request()->routeIs('admin.konten', 'dashboard') ? 'active' : '' }}">Pengaturan Umum</a>
-        <a href="{{ route('admin.layanan.index') }}" class="tab-btn {{ request()->routeIs('admin.layanan.*') ? 'active' : '' }}">Layanan</a>
-        <a href="{{ route('admin.portofolio.index') }}" class="tab-btn {{ request()->routeIs('admin.portofolio.*') ? 'active' : '' }}">Portofolio</a>
-        <a href="{{ route('admin.testimoni.index') }}" class="tab-btn {{ request()->routeIs('admin.testimoni.*') ? 'active' : '' }}">Testimoni</a>
-      </div>
-
       @if (session('status'))
         <div class="alert alert-success">{{ session('status') }}</div>
       @endif

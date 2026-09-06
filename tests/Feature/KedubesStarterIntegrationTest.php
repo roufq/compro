@@ -51,21 +51,12 @@ test('home renders company profile content from the database', function () {
         ->assertSee('https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg')
         ->assertSee('data-portfolio-index="0"', escape: false)
         ->assertSee('object-fit:contain', escape: false)
-        ->assertSee('class="lightbox-image"', escape: false)
-        ->assertSee('nav.links{display:flex;gap:34px;align-items:center;background:transparent;}', escape: false)
-        ->assertSee('nav.links .nav-cta,nav.links .nav-cta:hover{color:#fff;}', escape: false)
-        ->assertSee('position:absolute;top:100%;left:0;width:100vw;height:calc(100vh - 71px);height:calc(100dvh - 71px);', escape: false)
-        ->assertSee('visibility:hidden;pointer-events:none;transform:translateX(100%);', escape: false)
-        ->assertSee('aria-controls="navLinks" aria-expanded="false"', escape: false)
-        ->assertSee("document.body.classList.toggle('nav-open', isOpen);", escape: false)
-        ->assertSee('.hero-mosaic{grid-template-columns:1fr;padding:0 28px;}', escape: false)
-        ->assertSee('.hero-mosaic .tile.d,.hero-mosaic .tile.e,.hero-mosaic .tile.f{grid-column:1/-1;}', escape: false)
-        ->assertSee('.hero-media-meta .hero-play{position:absolute;left:50%;top:50%;', escape: false)
-        ->assertSee('transform:translate(-50%,-50%);', escape: false)
-        ->assertSee('color:var(--violet-deep);opacity:1;background:rgba(255,255,255,.94);', escape: false)
-        ->assertSee('.hero-media-meta{position:absolute;inset:0;z-index:2;display:block;}', escape: false)
-        ->assertSee('font-weight:600;line-height:1;letter-spacing:.1em;text-transform:uppercase;color:#fff;', escape: false)
-        ->assertSee('background:rgba(15,15,25,.78);backdrop-filter:blur(10px);', escape: false);
+        ->assertSee('id="lightbox" role="dialog"', escape: false)
+        ->assertSee('aria-controls="mobileMenu" aria-expanded="false"', escape: false)
+        ->assertSee('id="trusted"', escape: false)
+        ->assertSee('id="our-ip"', escape: false)
+        ->assertSee('id="team"', escape: false)
+        ->assertSee('id="download"', escape: false);
 });
 
 test('authenticated admin can render every content management page', function (string $routeName, string $heading) {
@@ -76,7 +67,13 @@ test('authenticated admin can render every content management page', function (s
         ->assertSuccessful()
         ->assertSeeText($heading);
 })->with([
-    ['admin.konten', 'Pengaturan Umum'],
+    ['admin.identitas', 'Identitas Perusahaan'],
+    ['admin.hero', 'Hero & About Us'],
+    ['admin.kontak', 'Kontak & Sosial Media'],
+    ['admin.klien', 'Klien / Trusted By'],
+    ['admin.original-ip', 'Original IP'],
+    ['admin.tim', 'Tim Studio'],
+    ['admin.produk', 'Produk Digital / Download'],
     ['admin.layanan.index', 'Tambah Layanan Baru'],
     ['admin.portofolio.index', 'Tambah Karya Baru'],
     ['admin.testimoni.index', 'Tambah Testimoni'],
@@ -87,7 +84,7 @@ test('admin layout uses the same uploaded logo as the welcome page', function ()
     $admin = User::factory()->create();
 
     $this->actingAs($admin)
-        ->put(route('admin.konten.update'), [
+        ->put(route('admin.pengaturan.update'), [
             'company_name' => 'Brand Logo Dinamis',
             'logo' => UploadedFile::fake()->image('brand-logo.png'),
         ])
@@ -143,7 +140,7 @@ test('content saved from the admin dashboard appears on the welcome page', funct
     $admin = User::factory()->create();
 
     $this->actingAs($admin)
-        ->put(route('admin.konten.update'), [
+        ->put(route('admin.pengaturan.update'), [
             'company_name' => 'Kedubes Dashboard',
             'tagline' => 'Data terhubung',
             'hero_title' => 'Hero dari Dashboard',
@@ -198,12 +195,12 @@ test('hubungi kami button opens gmail compose with the email configured from the
     $admin = User::factory()->create();
 
     $this->actingAs($admin)
-        ->get(route('admin.konten'))
+        ->get(route('admin.kontak'))
         ->assertSuccessful()
         ->assertSeeText('Email Tombol Hubungi Kami');
 
     $this->actingAs($admin)
-        ->put(route('admin.konten.update'), [
+        ->put(route('admin.pengaturan.update'), [
             'company_name' => 'Kedubes Dashboard',
             'email' => 'kontak@kedubes.test',
         ])

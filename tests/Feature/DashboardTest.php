@@ -20,7 +20,6 @@ test('authenticated users see the Kedubes admin dashboard', function () {
 
     $response
         ->assertOk()
-        ->assertSeeText('Pengaturan Umum')
-        ->assertSeeText('Kelola Konten')
+        ->assertSeeText('Identitas Perusahaan')
         ->assertSeeText('Lihat Situs');
 });

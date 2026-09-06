@@ -1,5 +1,7 @@
 /.phpunit.cache
 /node_modules
+/compro
+*.sqlite
 /public/build
 /public/fonts-manifest.dev.json
 /public/hot

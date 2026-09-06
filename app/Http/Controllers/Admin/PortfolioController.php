@@ -70,7 +70,7 @@ class PortfolioController extends Controller
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
-                'max:4096',
+                'max:2048',
             ],
             'youtube_url' => [
                 Rule::requiredIf($request->string('type')->is('video')),

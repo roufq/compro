@@ -9,15 +9,23 @@ use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicController::class, 'index'])->name('home');
+Route::get('/original-ip/{slug}', [PublicController::class, 'originalIp'])
+    ->where('slug', '[a-z0-9-]+')->name('original-ip.show');
 
 Route::middleware('auth')
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::redirect('/', '/admin/konten');
+        Route::redirect('/', '/admin/identitas');
 
-        Route::get('konten', [SiteSettingController::class, 'edit'])->name('konten');
-        Route::put('konten', [SiteSettingController::class, 'update'])->name('konten.update');
+        Route::get('identitas', [SiteSettingController::class, 'identitas'])->name('identitas');
+        Route::get('hero', [SiteSettingController::class, 'hero'])->name('hero');
+        Route::get('kontak', [SiteSettingController::class, 'kontak'])->name('kontak');
+        Route::get('klien', [SiteSettingController::class, 'klien'])->name('klien');
+        Route::get('original-ip', [SiteSettingController::class, 'originalIp'])->name('original-ip');
+        Route::get('tim', [SiteSettingController::class, 'tim'])->name('tim');
+        Route::get('produk', [SiteSettingController::class, 'produk'])->name('produk');
+        Route::put('pengaturan', [SiteSettingController::class, 'update'])->name('pengaturan.update');
 
         Route::get('layanan', [ServiceController::class, 'index'])->name('layanan.index');
         Route::post('layanan', [ServiceController::class, 'store'])->name('layanan.store');
@@ -38,7 +46,7 @@ Route::middleware('auth')
 Route::prefix('{current_team}')
     ->middleware(['auth', 'verified', EnsureTeamMembership::class])
     ->group(function () {
-        Route::get('dashboard', [SiteSettingController::class, 'edit'])->name('dashboard');
+        Route::get('dashboard', [SiteSettingController::class, 'identitas'])->name('dashboard');
     });
 
 require __DIR__.'/settings.php';
