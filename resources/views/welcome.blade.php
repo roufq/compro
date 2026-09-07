@@ -498,7 +498,7 @@
       <button class="filter-btn active" data-filter="semua">Semua</button>
       <button class="filter-btn" data-filter="gambar">Gambar</button>
       <button class="filter-btn" data-filter="video">Video</button>
-      @foreach ($portfolios->pluck('category')->unique() as $cat)
+      @foreach ($portfolioCategories as $cat)
       <button class="filter-btn" data-filter="{{ $cat }}">{{ ucfirst($cat) }}</button>
       @endforeach
     </div>

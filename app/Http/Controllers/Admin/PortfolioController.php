@@ -14,8 +14,11 @@ class PortfolioController extends Controller
 {
     public function index(): View
     {
+        $portfolios = Portfolio::query()->orderBy('order')->latest('id')->get();
+
         return view('admin.portfolios.index', [
-            'portfolios' => Portfolio::query()->orderBy('order')->latest('id')->get(),
+            'portfolios' => $portfolios,
+            'categories' => $portfolios->pluck('category')->filter()->unique()->sort()->values(),
         ]);
     }
 

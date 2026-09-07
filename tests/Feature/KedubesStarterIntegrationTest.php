@@ -18,6 +18,26 @@ test('home uses the public controller', function () {
     expect($route?->getActionName())->toBe(PublicController::class.'@index');
 });
 
+test('portfolio filters do not duplicate image and video type buttons', function () {
+    Portfolio::create([
+        'title' => 'Kategori Video',
+        'category' => 'video',
+        'type' => 'video',
+        'youtube_url' => 'https://youtu.be/dQw4w9WgXcQ',
+    ]);
+    Portfolio::create([
+        'title' => 'Kategori Gambar',
+        'category' => 'GAMBAR',
+        'type' => 'video',
+        'youtube_url' => 'https://youtu.be/9bZkp7q19f0',
+    ]);
+
+    $response = $this->get('/')->assertSuccessful();
+
+    expect(substr_count($response->getContent(), 'data-filter="video"'))->toBe(1)
+        ->and(substr_count($response->getContent(), 'data-filter="gambar"'))->toBe(1);
+});
+
 test('home renders company profile content from the database', function () {
     SiteSetting::current()->update([
         'company_name' => 'Kedubes Studio Indonesia',
@@ -277,6 +297,38 @@ test('portfolio edit modal displays the currently stored image', function () {
         ->assertSee('Gambar yang sedang digunakan')
         ->assertSee($portfolio->thumbnail_url)
         ->assertSee('data-original-src="'.$portfolio->thumbnail_url.'"', escape: false);
+});
+
+test('portfolio category input suggests existing categories and accepts a new category directly', function () {
+    $admin = User::factory()->create();
+    Portfolio::create([
+        'title' => 'Kategori Lama',
+        'category' => 'branding',
+        'type' => 'video',
+        'youtube_url' => 'https://youtu.be/dQw4w9WgXcQ',
+    ]);
+
+    $this->actingAs($admin)
+        ->get(route('admin.portofolio.index'))
+        ->assertSuccessful()
+        ->assertSee('list="portfolioCategories"', escape: false)
+        ->assertSee('<datalist id="portfolioCategories">', escape: false)
+        ->assertSee('<option value="branding"', escape: false)
+        ->assertSee('placeholder="Pilih atau ketik kategori baru"', escape: false)
+        ->assertDontSee('+ Tambah kategori baru');
+
+    $this->actingAs($admin)
+        ->post(route('admin.portofolio.store'), [
+            'title' => 'Kategori Baru',
+            'category' => 'kampanye digital',
+            'type' => 'video',
+            'youtube_url' => 'https://youtu.be/9bZkp7q19f0',
+            'order' => 0,
+        ])
+        ->assertSessionHasNoErrors();
+
+    expect(Portfolio::where('title', 'Kategori Baru')->value('category'))
+        ->toBe('kampanye digital');
 });
 
 test('all admin routes require authentication', function () {

@@ -21,7 +21,12 @@
         </div>
         <div class="field2">
           <label>Kategori</label>
-          <input type="text" name="category" value="{{ old('category') }}" placeholder="branding / produk / dll" required>
+          <input type="text" name="category" value="{{ old('category') }}" list="portfolioCategories" placeholder="Pilih atau ketik kategori baru" autocomplete="off" required>
+          <datalist id="portfolioCategories">
+            @foreach ($categories as $category)
+              <option value="{{ $category }}">{{ Str::headline($category) }}</option>
+            @endforeach
+          </datalist>
         </div>
 
         <div class="field2">
@@ -119,7 +124,7 @@
           </div>
           <div class="field2">
             <label>Kategori</label>
-            <input type="text" name="category" value="{{ $item->category }}" required>
+            <input type="text" name="category" value="{{ $item->category }}" list="portfolioCategories" placeholder="Pilih atau ketik kategori baru" autocomplete="off" required>
           </div>
           <div class="field2">
             <label>Tipe Karya</label>
