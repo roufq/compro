@@ -34,7 +34,7 @@
             @endif
           @endforeach
           @if ($section === 'original_ips')
-            <x-original-ip-fields :item="$item" :index="$index" />
+            <input type="hidden" data-field="slug" name="{{ $section }}[{{ $index }}][slug]" value="{{ $item['slug'] ?? '' }}">
           @endif
           <div class="field2 full" style="display:flex;gap:10px;flex-direction:row;">
             <button type="button" class="btn-outline" data-move-up>Naik</button><button type="button" class="btn-outline" data-move-down>Turun</button><button type="button" class="btn-outline" data-remove-row>Hapus Item</button>
@@ -57,7 +57,7 @@
           @endif
         @endforeach
         @if ($section === 'original_ips')
-          <x-original-ip-fields />
+          <input type="hidden" data-field="slug" value="">
         @endif
         <div class="field2 full" style="display:flex;gap:10px;flex-direction:row;">
           <button type="button" class="btn-outline" data-move-up>Naik</button><button type="button" class="btn-outline" data-move-down>Turun</button><button type="button" class="btn-outline" data-remove-row>Hapus Item</button>

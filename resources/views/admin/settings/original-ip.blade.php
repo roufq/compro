@@ -8,7 +8,7 @@
   @method('PUT')
   @include('admin.settings._collection-section', [
       'section' => 'original_ips',
-      'definition' => ['title' => 'Original IP', 'fields' => ['name' => 'Nama IP', 'description' => 'Deskripsi Singkat', 'image_url' => 'Logo / sampul (opsional)', 'url' => 'Tautan eksternal tambahan (opsional)']],
+      'definition' => ['title' => 'Original IP', 'fields' => ['name' => 'Nama IP', 'description' => 'Deskripsi Singkat', 'image_url' => 'Logo / sampul (opsional)', 'url' => 'Link Channel YouTube (jika diisi, kartu di beranda akan langsung membuka channel ini)']],
   ])
   <button type="submit" class="btn-primary">Simpan Perubahan</button>
 </form>

@@ -5,20 +5,37 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-test('existing IP cards open their own public detail pages', function () {
+test('IP cards without a YouTube channel link are not clickable on the homepage', function () {
     SiteSetting::current()->update(['original_ips' => [
         ['name' => 'Teman Ceria', 'description' => 'Original IP'],
         ['name' => 'Happy Friends', 'description' => 'Original IP'],
         ['name' => 'JAS — Jojo Acong Sitorus', 'description' => 'Original IP'],
     ]]);
 
-    foreach (SiteSetting::current()->originalIpItems() as $ip) {
-        $url = route('original-ip.show', $ip['slug']);
-        $this->get('/')->assertSuccessful()->assertSee('href="'.$url.'"', escape: false);
-        $this->get($url)->assertSuccessful()->assertSeeText('Tentang '.$ip['name'])
-            ->assertSeeText('Informasi lengkap akan segera tersedia.')
-            ->assertSee(route('home').'#our-ip');
-    }
+    $this->get('/')->assertSuccessful()
+        ->assertDontSee('ip-card" href', escape: false)
+        ->assertSee('ip-card--disabled', escape: false);
+});
+
+test('IP cards with a YouTube channel link open it in a new tab from the homepage', function () {
+    SiteSetting::current()->update(['original_ips' => [
+        ['name' => 'Teman Ceria', 'description' => 'Original IP', 'url' => 'https://www.youtube.com/@temanceria'],
+    ]]);
+
+    $this->get('/')->assertSuccessful()
+        ->assertSee('href="https://www.youtube.com/@temanceria" target="_blank"', escape: false);
+});
+
+test('the original IP detail page still renders directly by URL', function () {
+    SiteSetting::current()->update(['original_ips' => [
+        ['name' => 'Teman Ceria', 'description' => 'Original IP'],
+    ]]);
+
+    $ip = SiteSetting::current()->originalIpItems()[0];
+    $this->get(route('original-ip.show', $ip['slug']))->assertSuccessful()
+        ->assertSeeText('Tentang '.$ip['name'])
+        ->assertSeeText('Informasi lengkap akan segera tersedia.')
+        ->assertSee(route('home').'#our-ip');
 });
 
 test('admin can save IP details photos and playable videos', function () {
@@ -52,9 +69,11 @@ test('admin can save IP details photos and playable videos', function () {
         ->assertSee('https://www.youtube-nocookie.com/embed/9bZkp7q19f0');
 
     $this->get(route('admin.original-ip'))->assertSuccessful()
-        ->assertSeeText('Informasi Lengkap')->assertSeeText('Tambah Foto dari Perangkat')
-        ->assertSee('original_ips[0][photos][]', escape: false)
-        ->assertSee($uploadedUrl)->assertSeeText('Lihat Halaman Detail');
+        ->assertSeeText('Nama IP')->assertSeeText('Deskripsi Singkat')->assertSeeText('Logo / sampul')
+        ->assertSeeText('Link Channel YouTube')
+        ->assertDontSeeText('Informasi Lengkap')->assertDontSeeText('Tambah Foto dari Perangkat')
+        ->assertDontSee('original_ips[0][photos][]', escape: false)
+        ->assertDontSeeText('Lihat Halaman Detail');
 });
 
 test('saved IP addresses survive reordering and renaming and media can be cleared', function () {

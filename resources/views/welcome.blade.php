@@ -16,7 +16,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --void:#FFFFFF;
@@ -33,15 +33,15 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{background:var(--void);color:var(--text-1);font-family:'Poppins',sans-serif;overflow-x:hidden;line-height:1.6;}
-  h1,h2,h3{font-family:'Baloo 2',sans-serif;font-weight:700;letter-spacing:-0.01em;}
+  body{background:var(--void);color:var(--text-1);font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;overflow-x:hidden;line-height:1.6;}
+  h1,h2,h3{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;letter-spacing:-0.03em;}
   a{color:inherit;text-decoration:none;}
   .wrap{max-width:1200px;margin:0 auto;padding:0 32px;}
   ::selection{background:var(--accent);color:var(--black);}
   img{max-width:100%;display:block;}
 
   .tag{
-    font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;color:var(--blue);
+    font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;font-size:12px;color:var(--blue);
     text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;display:inline-block;
     background:var(--panel-2);padding:6px 14px;border-radius:100px;
   }
@@ -58,8 +58,8 @@
   .logo{display:flex;align-items:center;gap:10px;}
   .logo svg{width:36px;height:36px;flex-shrink:0;}
   .logo-text{display:flex;flex-direction:column;line-height:1;}
-  .logo-text .kd{font-family:'Luckiest Guy',cursive;font-size:18px;color:var(--blue);}
-  .logo-text .st{font-family:'Poppins';font-weight:700;font-size:8.5px;letter-spacing:0.22em;color:var(--text-2);}
+  .logo-text .kd{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:700;letter-spacing:-0.02em;font-size:17px;color:var(--text-1);}
+  .logo-text .st{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;font-size:8.5px;letter-spacing:0.22em;color:var(--text-2);}
   .nav-links{display:flex;gap:28px;font-size:14px;font-weight:600;color:var(--text-2);}
   .nav-links a{position:relative;padding-bottom:3px;}
   .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--accent);transition:width .25s ease;}
@@ -119,7 +119,7 @@
   }
   .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulseA 1.6s infinite;}
   @keyframes pulseA{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(1.3);}}
-  .hero-caption{text-align:center;margin-top:18px;font-family:'Luckiest Guy';color:var(--blue);font-size:15px;letter-spacing:0.02em;}
+  .hero-caption{text-align:center;margin-top:18px;font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;color:var(--blue);font-size:15px;letter-spacing:0.01em;}
 
   /* ===== BEYOND THE IMAGINATION ===== */
   .imagine-grid{display:grid;grid-template-columns:0.8fr 1.2fr;gap:56px;align-items:center;}
@@ -127,25 +127,31 @@
   .imagine-grid p{color:var(--text-2);font-size:15.5px;}
 
   /* ===== TRUSTED BY ===== */
-  .trusted-logos{
-    display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 34px;
+  .trusted-marquee{
+    overflow:hidden;position:relative;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
   }
-  .trusted-logos span{
-    font-family:'Baloo 2';font-weight:700;font-size:15px;color:var(--text-3);opacity:0.85;
-    padding:6px 4px;transition:.2s;
+  .trusted-track{display:flex;align-items:center;gap:56px;width:max-content;animation:trusted-scroll 30s linear infinite;}
+  .trusted-marquee:hover .trusted-track{animation-play-state:paused;}
+  .trusted-logo{display:flex;align-items:center;justify-content:center;flex-shrink:0;filter:grayscale(1);opacity:0.55;transition:opacity .25s,filter .25s;}
+  .trusted-logo:hover{filter:grayscale(0);opacity:1;}
+  .trusted-logo-text{
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Helvetica,Arial,sans-serif;
+    font-weight:600;font-size:15px;letter-spacing:-0.01em;color:var(--text-3);white-space:nowrap;
   }
-  .trusted-logos span:hover{color:var(--blue);opacity:1;}
+  @keyframes trusted-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
   /* ===== PORTFOLIO ===== */
   .filter-bar{display:flex;gap:10px;justify-content:center;margin-bottom:36px;flex-wrap:wrap;}
-  .filter-btn{font-family:'Poppins';font-weight:600;font-size:13px;padding:9px 18px;border-radius:100px;border:1px solid var(--line);color:var(--text-2);background:transparent;cursor:pointer;transition:.2s;}
+  .filter-btn{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;font-size:13px;padding:9px 18px;border-radius:100px;border:1px solid var(--line);color:var(--text-2);background:transparent;cursor:pointer;transition:.2s;}
   .filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
   .filter-btn:hover:not(.active){border-color:var(--blue);color:var(--blue);}
   .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
   .p-item{aspect-ratio:16/10;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;border:1px solid var(--line);}
   .p-item .fill{width:100%;height:100%;transition:transform .4s ease;display:flex;align-items:flex-end;padding:12px;}
   .p-item:hover .fill{transform:scale(1.05);}
-  .p-item .badge-name{font-family:'Luckiest Guy';font-size:20px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.4);}
+  .p-item .badge-name{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;letter-spacing:-0.01em;font-size:18px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.4);}
   .p-item .overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,20,40,0.85));display:flex;flex-direction:column;justify-content:flex-end;padding:14px;opacity:0;transition:.2s;}
   .p-item:hover .overlay{opacity:1;}
   .p-item .cat{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px;}
@@ -156,19 +162,25 @@
 
   /* ===== OUR IP ===== */
   .ip-grid{display:flex;justify-content:center;align-items:center;gap:60px;flex-wrap:wrap;}
-  .ip-card{display:flex;flex-direction:column;align-items:center;gap:10px;}
-  .ip-logo{font-family:'Baloo 2';font-weight:800;font-size:28px;letter-spacing:-0.02em;}
-  .ip-logo.teman{background:linear-gradient(90deg,#FF5F9E,#FFC800,#00C2A8);-webkit-background-clip:text;background-clip:text;color:transparent;}
-  .ip-logo.happy{background:linear-gradient(90deg,#FF7A00,#FFD600);-webkit-background-clip:text;background-clip:text;color:transparent;}
-  .ip-logo.jas{font-family:'Poppins';font-weight:700;font-size:18px;color:var(--text-2);border:1.5px dashed var(--line);padding:10px 18px;border-radius:10px;}
-  .ip-card span{font-size:12px;color:var(--text-3);}
+  .ip-card{display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .3s ease;}
+  .ip-card:hover{transform:translateY(-4px);}
+  .ip-card--disabled{cursor:default;opacity:0.6;}
+  .ip-card--disabled:hover{transform:none;}
+  .ip-logo{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:700;font-size:24px;letter-spacing:-0.02em;color:var(--text-1);}
+  .ip-logo.jas{font-weight:600;font-size:18px;color:var(--text-2);border:1.5px solid var(--line);padding:10px 18px;border-radius:10px;}
+  .ip-card span{
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Helvetica,Arial,sans-serif;
+    font-size:13px;letter-spacing:-0.01em;color:var(--text-3);
+  }
+  .ip-card .ip-cta{font-weight:600;color:var(--blue);display:inline-flex;align-items:center;gap:4px;transition:gap .2s;}
+  .ip-card:hover .ip-cta{gap:7px;}
 
   /* ===== TEAM ===== */
   .team-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
   .team-item{text-align:center;}
   .team-avatar{
     aspect-ratio:1/1;border-radius:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;
-    font-family:'Baloo 2';font-weight:700;font-size:22px;color:#fff;
+    font-weight:700;font-size:22px;color:#fff;
   }
   .team-item h4{font-size:13.5px;margin-bottom:2px;}
   .team-item span{font-size:11.5px;color:var(--text-3);}
@@ -181,13 +193,14 @@
   .info-row .ic{width:40px;height:40px;border-radius:10px;background:var(--panel-2);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
   .info-row b{display:block;font-size:14px;margin-bottom:2px;}
   .info-row span{font-size:13.5px;color:var(--text-2);}
-  .map-frame{border-radius:16px;overflow:hidden;border:1px solid var(--line);min-height:260px;background:var(--panel);display:flex;align-items:center;justify-content:center;}
-  .map-frame iframe{width:100%;height:100%;border:0;min-height:260px;}
+  .map-frame{border-radius:16px;overflow:hidden;border:1px solid var(--line);min-height:200px;background:var(--panel);display:flex;align-items:center;justify-content:center;}
+  .map-frame iframe{width:100%;height:100%;border:0;min-height:200px;}
   .contact-buttons{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;}
   .contact-btn{display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:13.5px;font-weight:600;transition:.2s;}
   .contact-btn:hover{border-color:var(--blue);transform:translateY(-2px);}
   .contact-btn .ic2{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
   .contact-btn.wa .ic2{background:#e7f9ef;color:#25D366;}
+  .contact-btn.maps .ic2{background:#eaf0ff;color:var(--blue);}
   .contact-btn.ig .ic2{background:#fdeef6;color:#E1306C;}
 
   /* ===== DOWNLOAD ===== */
@@ -198,7 +211,7 @@
   .download-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:14px;transition:.2s;}
   .download-card:hover{background:rgba(255,255,255,0.12);transform:translateY(-4px);}
   .download-card .dic{width:40px;height:40px;border-radius:10px;background:var(--accent);color:var(--black);display:flex;align-items:center;justify-content:center;font-size:16px;}
-  .download-card h3{font-size:16px;font-family:'Baloo 2';}
+  .download-card h3{font-size:16px;}
   .download-card p{font-size:13px;color:rgba(255,255,255,0.7);flex-grow:1;}
   .download-card .dl-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--accent);}
   .download-card .dl-btn:hover{text-decoration:underline;}
@@ -212,15 +225,15 @@
   .lb-nav{position:absolute;top:50%;transform:translateY(-50%);font-size:28px;color:rgba(255,255,255,0.7);cursor:pointer;background:none;border:none;padding:10px;}
   .lb-prev{left:20px;}.lb-next{right:20px;}
   .lb-close:hover,.lb-nav:hover{color:#fff;}
-  .lb-cat{font-family:'Poppins';font-weight:700;font-size:12px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;}
+  .lb-cat{font-weight:700;font-size:12px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;}
   .lb-title{font-size:20px;color:#fff;}
 
   /* ===== FOOTER ===== */
   footer{background:var(--black);color:rgba(255,255,255,0.7);padding:56px 0 26px;}
   .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:40px;}
   .foot-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-  .foot-logo .kd{font-family:'Luckiest Guy';color:var(--accent);font-size:20px;}
-  .foot-logo .st{font-family:'Poppins';font-weight:700;font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.55);}
+  .foot-logo .kd{font-weight:700;letter-spacing:-0.02em;color:#fff;font-size:18px;}
+  .foot-logo .st{font-weight:600;font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.55);}
   .foot-grid p{font-size:14px;max-width:300px;color:rgba(255,255,255,0.55);}
   .foot-grid h4{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;}
   .foot-grid ul{list-style:none;}
@@ -240,6 +253,7 @@
     .burger{display:flex;}
     .foot-grid{grid-template-columns:1fr 1fr;row-gap:28px;}
     .contact-grid{grid-template-columns:1fr;}
+    .map-frame,.map-frame iframe{min-height:280px;}
   }
   @media(max-width:640px){
     .wrap{padding:0 20px;}
@@ -253,7 +267,7 @@
     .ip-grid{gap:30px;}
   }
   @media(prefers-reduced-motion:reduce){
-    *{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}
+    *:not(.trusted-track){animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}
     .reveal{opacity:1;transform:none;}
   }
   [hidden]{display:none!important;}
@@ -261,14 +275,14 @@
   .hero-image{width:100%;height:100%;object-fit:cover;}
   .hero-video{width:100%;height:100%;border:0;object-fit:cover;pointer-events:none;}
   .hero-caption{white-space:pre-line;}
-  h1.hero-caption{font-family:'Baloo 2',sans-serif;font-size:clamp(24px,4vw,40px);}
+  h1.hero-caption{font-size:clamp(24px,4vw,40px);}
   .logo-text{max-width:230px;gap:4px;}.logo-text .st{letter-spacing:.03em;line-height:1.3;}
   .p-item .fill{background:linear-gradient(150deg,#1857C4,#082E6B);position:relative;}
   .p-item .fill img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
   .p-item .badge-name{position:relative;text-align:left;}
   .p-item:focus-visible .overlay{opacity:1;}
   .lb-visual{overflow:hidden;}.lb-visual img,.lb-visual iframe{width:100%;height:100%;object-fit:contain;border:0;}
-  .trusted-logos img{max-width:130px;max-height:60px;object-fit:contain;}
+  .trusted-logo img{max-width:130px;max-height:60px;object-fit:contain;}
   .ip-card img{max-width:200px;max-height:100px;object-fit:contain;}
   .team-avatar{background:var(--blue);overflow:hidden;}.team-avatar img{width:100%;height:100%;object-fit:cover;}
   .legacy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;}
@@ -351,13 +365,26 @@
   <section id="trusted" class="alt-bg">
     <div class="wrap">
       <div class="sec-head reveal"><span class="tag">Trusted By</span><h2>Dipercaya oleh</h2></div>
-      <div class="trusted-logos reveal">
-        @forelse ($settings->clients ?? [] as $client)
-          <span>@if (!empty($client['image_url']))<img src="{{ $client['image_url'] }}" alt="{{ $client['name'] }}" loading="lazy">@else{{ $client['name'] }}@endif</span>
-        @empty
-          <p>Daftar klien akan segera ditampilkan.</p>
-        @endforelse
-      </div>
+      @php($clients = $settings->clients ?? [])
+      @if (count($clients))
+        <div class="trusted-marquee reveal">
+          <div class="trusted-track">
+            @for ($rep = 0; $rep < 2; $rep++)
+              @foreach ($clients as $client)
+                <span class="trusted-logo" aria-hidden="{{ $rep === 1 ? 'true' : 'false' }}">
+                  @if (!empty($client['image_url']))
+                    <img src="{{ $client['image_url'] }}" alt="{{ $client['name'] }}" loading="lazy">
+                  @else
+                    <span class="trusted-logo-text">{{ $client['name'] }}</span>
+                  @endif
+                </span>
+              @endforeach
+            @endfor
+          </div>
+        </div>
+      @else
+        <p>Daftar klien akan segera ditampilkan.</p>
+      @endif
     </div>
   </section>
 
@@ -398,11 +425,15 @@
       <div class="sec-head reveal"><span class="tag">Our IP</span><h2>Original IP kami</h2></div>
       <div class="ip-grid reveal">
         @forelse ($settings->originalIpItems() as $ip)
-          <a class="ip-card" href="{{ route('original-ip.show', $ip['slug']) }}" aria-label="Lihat detail {{ $ip['name'] }}">
+          @php($ipHasChannel = !empty($ip['url']))
+          @php($ipTag = $ipHasChannel ? 'a' : 'div')
+          <{{ $ipTag }} class="ip-card @if (! $ipHasChannel) ip-card--disabled @endif" @if ($ipHasChannel) href="{{ $ip['url'] }}" target="_blank" rel="noopener noreferrer" aria-label="Tonton {{ $ip['name'] }} di YouTube" @endif>
             @if (!empty($ip['image_url']))<img src="{{ $ip['image_url'] }}" alt="{{ $ip['name'] }}" loading="lazy">@else<div class="ip-logo {{ $loop->index % 2 === 0 ? 'teman' : 'happy' }}">{{ $ip['name'] }}</div>@endif
             <span>{{ $ip['description'] ?? 'Original IP' }}</span>
-            <span>Lihat detail →</span>
-          </a>
+            @if ($ipHasChannel)
+              <span class="ip-cta">Tonton di YouTube ↗</span>
+            @endif
+          </{{ $ipTag }}>
         @empty
           <p>Original IP akan segera ditampilkan.</p>
         @endforelse
@@ -460,11 +491,12 @@
           <div class="contact-buttons">
             @if ($whatsappNumber)<a href="https://wa.me/{{ $whatsappNumber }}" target="_blank" rel="noopener noreferrer" class="contact-btn wa"><div class="ic2">💬</div>WhatsApp</a>@endif
             @if ($settings->instagram_url)<a href="{{ $settings->instagram_url }}" target="_blank" rel="noopener noreferrer" class="contact-btn ig"><div class="ic2">📷</div>Instagram</a>@endif
+            @if ($settings->map_query ?: $settings->address)<a href="https://www.google.com/maps/search/?api=1&amp;query={{ rawurlencode($settings->map_query ?: $settings->address) }}" target="_blank" rel="noopener noreferrer" class="contact-btn maps"><div class="ic2">📍</div>Buka di Google Maps</a>@endif
           </div>
         </div>
         <div class="map-frame">
           @if ($settings->map_query ?: $settings->address)
-          <iframe title="Lokasi kantor" src="https://www.google.com/maps?q={{ rawurlencode($settings->map_query ?: $settings->address) }}&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe title="Lokasi kantor" src="https://www.google.com/maps?q={{ rawurlencode($settings->map_query ?: $settings->address) }}&amp;iwloc=&amp;z=16&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           @else<p>Lokasi kantor belum tersedia.</p>@endif
         </div>
       </div>

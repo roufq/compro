@@ -99,15 +99,16 @@ class SiteSetting extends Model
 
     public static function current(): self
     {
-        return static::firstOrCreate(
-            ['id' => 1],
-            [
-                'company_name' => 'Kedubes Studio',
-                'tagline' => 'Kedutaan Kreativitas AI',
-                'hero_title' => 'Kreativitas tanpa batas, diperkuat kecerdasan buatan',
-                'hero_description' => 'Kami memadukan strategi kreatif, teknologi AI, dan sentuhan manusia untuk menghasilkan karya visual yang berkesan.',
-            ],
-        );
+        // `id` is not mass-assignable, so firstOrCreate(['id' => 1], ...) can never
+        // actually persist row 1 — it would silently create a new row every time
+        // one goes missing. Look up the single settings row by order instead, and
+        // only create one the very first time the table is empty.
+        return static::query()->oldest('id')->first() ?? static::create([
+            'company_name' => 'Kedubes Studio',
+            'tagline' => 'Kedutaan Kreativitas AI',
+            'hero_title' => 'Kreativitas tanpa batas, diperkuat kecerdasan buatan',
+            'hero_description' => 'Kami memadukan strategi kreatif, teknologi AI, dan sentuhan manusia untuk menghasilkan karya visual yang berkesan.',
+        ]);
     }
 
     public function getLogoUrlAttribute(): ?string
