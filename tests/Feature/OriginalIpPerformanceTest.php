@@ -1,27 +1,29 @@
 <?php
 
-use App\Models\SiteSetting;
+use App\Models\OriginalIp;
 
 test('demo optimization updates only matching image URLs and keeps originals', function () {
     $originalUrl = asset('images/original-ip-demo/teman-ceria.png');
     $webpUrl = asset('images/original-ip-demo/teman-ceria.webp');
-    SiteSetting::current()->update(['original_ips' => [[
+    $ip = OriginalIp::create([
         'name' => 'Teman Ceria', 'slug' => 'alamat-tetap', 'details' => 'Cerita tetap.',
         'image_url' => $originalUrl,
         'gallery_urls' => $originalUrl."\nhttps://example.com/custom.png",
-    ]]]);
+    ]);
 
     $sourceHash = hash_file('sha256', public_path('images/original-ip-demo/teman-ceria.png'));
     $this->artisan('app:optimize-original-ip-demo-images')->assertSuccessful();
-    $items = SiteSetting::current()->original_ips;
-    expect($items[0]['image_url'])->toBe($webpUrl)
-        ->and($items[0]['gallery_urls'])->toBe($webpUrl."\nhttps://example.com/custom.png")
-        ->and($items[0]['slug'])->toBe('alamat-tetap')
-        ->and($items[0]['details'])->toBe('Cerita tetap.')
+    $ip->refresh();
+    expect($ip->image_url)->toBe($webpUrl)
+        ->and($ip->gallery_urls)->toBe($webpUrl."\nhttps://example.com/custom.png")
+        ->and($ip->slug)->toBe('alamat-tetap')
+        ->and($ip->details)->toBe('Cerita tetap.')
         ->and(hash_file('sha256', public_path('images/original-ip-demo/teman-ceria.png')))->toBe($sourceHash);
 
     $this->artisan('app:optimize-original-ip-demo-images')->assertSuccessful();
-    expect(SiteSetting::current()->original_ips)->toBe($items);
+    $after = $ip->fresh();
+    expect($after->image_url)->toBe($ip->image_url)
+        ->and($after->gallery_urls)->toBe($ip->gallery_urls);
 
     foreach (glob(public_path('images/original-ip-demo/*.webp')) as $path) {
         $dimensions = getimagesize($path);
@@ -32,9 +34,9 @@ test('demo optimization updates only matching image URLs and keeps originals', f
 });
 
 test('IP page defers the YouTube player until the visitor clicks play', function () {
-    SiteSetting::current()->update(['original_ips' => [[
-        'name' => 'Teman Ceria', 'video_urls' => 'https://youtu.be/fN1Cyr0ZK9M',
-    ]]]);
+    OriginalIp::create([
+        'name' => 'Teman Ceria', 'slug' => 'teman-ceria', 'video_urls' => 'https://youtu.be/fN1Cyr0ZK9M',
+    ]);
 
     $this->get(route('original-ip.show', 'teman-ceria'))->assertSuccessful()
         ->assertDontSee('<iframe', escape: false)

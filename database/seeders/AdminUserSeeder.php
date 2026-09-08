@@ -11,11 +11,11 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         $admin = User::firstOrCreate(
-            ['email' => 'admin@kedubesstudio.id'],
+            ['email' => 'adminweb@kedubes.id'],
             [
                 'name' => 'Admin Kedubes Studio',
                 'email_verified_at' => now(),
-                'password' => 'ganti-password-ini',
+                'password' => 'Kedubes#24434',
             ],
         );
 

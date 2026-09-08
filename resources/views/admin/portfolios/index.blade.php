@@ -7,11 +7,57 @@
 <div class="card">
   <div class="card-head">
     <div>
+      <h3>Galeri Portofolio</h3>
+      <p>{{ $portfolios->count() }} karya ditampilkan di halaman utama</p>
+    </div>
+    <button type="button" class="btn-primary" onclick="document.getElementById('portfolio-add-modal').showModal()">+ Tambah Karya</button>
+  </div>
+
+  @if ($portfolios->isEmpty())
+    <div class="empty-note">Belum ada karya. Tambahkan lewat tombol di atas.</div>
+  @else
+    <table>
+      <thead><tr><th>Karya</th><th>Tipe</th><th>Kategori</th><th></th></tr></thead>
+      <tbody>
+        @foreach ($portfolios as $item)
+          <tr>
+            <td>
+              <div class="thumb-cell">
+                <div class="thumb" style="@if($item->thumbnail_url) background-image:url('{{ $item->thumbnail_url }}'); @endif"></div>
+                <div>
+                  <strong>{{ $item->title }}</strong>
+                  <span>{{ $item->isVideo() ? $item->youtube_url : 'File gambar' }}</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge {{ $item->type }}">{{ ucfirst($item->type) }}</span></td>
+            <td>{{ ucfirst($item->category) }}</td>
+            <td>
+              <div class="row-actions">
+                <button type="button" class="icon-btn" aria-label="Detail {{ $item->title }}" onclick="openPortfolioModal('detail', {{ $item->id }})">👁</button>
+                <button type="button" class="icon-btn" data-test="edit-portfolio-{{ $item->id }}" aria-label="Edit {{ $item->title }}" onclick="openPortfolioModal('edit', {{ $item->id }})">✎</button>
+                <form method="POST" action="{{ route('admin.portofolio.destroy', $item) }}" onsubmit="return confirm('Hapus karya ini?');">
+                  @csrf @method('DELETE')
+                  <button type="submit" class="icon-btn" aria-label="Hapus {{ $item->title }}">✕</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        @endforeach
+      </tbody>
+    </table>
+  @endif
+</div>
+
+<dialog class="admin-modal" id="portfolio-add-modal" onclick="closeModalFromBackdrop(event)">
+  <div class="admin-modal-head">
+    <div>
       <h3>Tambah Karya Baru</h3>
       <p>Pilih tipe "Gambar" untuk upload file, atau "Video" cukup tempel link YouTube</p>
     </div>
+    <button type="button" class="admin-modal-close" aria-label="Tutup modal" onclick="document.getElementById('portfolio-add-modal').close()">×</button>
   </div>
-  <div class="card-body">
+  <div class="admin-modal-body">
     <form method="POST" action="{{ route('admin.portofolio.store') }}" enctype="multipart/form-data">
       @csrf
       <div class="form-grid">
@@ -50,55 +96,13 @@
           <textarea name="description">{{ old('description') }}</textarea>
         </div>
       </div>
-      <div style="margin-top:16px;">
-        <button type="submit" class="btn-primary">+ Tambah Karya</button>
+      <div class="admin-modal-actions">
+        <button type="button" class="btn-outline" onclick="document.getElementById('portfolio-add-modal').close()">Batal</button>
+        <button type="submit" class="btn-primary">Simpan</button>
       </div>
     </form>
   </div>
-</div>
-
-<div class="card">
-  <div class="card-head">
-    <div>
-      <h3>Galeri Portofolio</h3>
-      <p>{{ $portfolios->count() }} karya ditampilkan di halaman utama</p>
-    </div>
-  </div>
-
-  @if ($portfolios->isEmpty())
-    <div class="empty-note">Belum ada karya. Tambahkan lewat form di atas.</div>
-  @else
-    <table>
-      <thead><tr><th>Karya</th><th>Tipe</th><th>Kategori</th><th></th></tr></thead>
-      <tbody>
-        @foreach ($portfolios as $item)
-          <tr>
-            <td>
-              <div class="thumb-cell">
-                <div class="thumb" style="@if($item->thumbnail_url) background-image:url('{{ $item->thumbnail_url }}'); @endif"></div>
-                <div>
-                  <strong>{{ $item->title }}</strong>
-                  <span>{{ $item->isVideo() ? $item->youtube_url : 'File gambar' }}</span>
-                </div>
-              </div>
-            </td>
-            <td><span class="badge {{ $item->type }}">{{ ucfirst($item->type) }}</span></td>
-            <td>{{ ucfirst($item->category) }}</td>
-            <td>
-              <div class="row-actions">
-                <button type="button" class="icon-btn" data-test="edit-portfolio-{{ $item->id }}" aria-label="Edit {{ $item->title }}" onclick="openPortfolioModal({{ $item->id }})">✎</button>
-                <form method="POST" action="{{ route('admin.portofolio.destroy', $item) }}" onsubmit="return confirm('Hapus karya ini?');">
-                  @csrf @method('DELETE')
-                  <button type="submit" class="icon-btn" aria-label="Hapus {{ $item->title }}">✕</button>
-                </form>
-              </div>
-            </td>
-          </tr>
-        @endforeach
-      </tbody>
-    </table>
-  @endif
-</div>
+</dialog>
 
 @foreach ($portfolios as $item)
   <dialog class="admin-modal" id="portfolio-modal-{{ $item->id }}" data-test="portfolio-edit-modal-{{ $item->id }}" onclick="closeModalFromBackdrop(event)">
@@ -164,6 +168,23 @@
       </form>
     </div>
   </dialog>
+
+  <dialog class="admin-modal" id="portfolio-detail-modal-{{ $item->id }}" onclick="closeModalFromBackdrop(event)">
+    <div class="admin-modal-head">
+      <div><h3>{{ $item->title }}</h3><p>{{ ucfirst($item->category) }} · {{ ucfirst($item->type) }}</p></div>
+      <button type="button" class="admin-modal-close" aria-label="Tutup modal" onclick="document.getElementById('portfolio-detail-modal-{{ $item->id }}').close()">×</button>
+    </div>
+    <div class="admin-modal-body">
+      @if ($item->isVideo() && $item->youtube_embed)
+        <div style="aspect-ratio:16/9;border-radius:12px;overflow:hidden;margin-bottom:14px;">
+          <iframe src="{{ $item->youtube_embed }}" style="width:100%;height:100%;border:0;" allowfullscreen loading="lazy"></iframe>
+        </div>
+      @elseif ($item->thumbnail_url)
+        <img src="{{ $item->thumbnail_url }}" alt="{{ $item->title }}" style="width:100%;border-radius:12px;margin-bottom:14px;">
+      @endif
+      <p style="color:var(--text-muted);white-space:pre-line;">{{ $item->description ?: 'Tidak ada deskripsi.' }}</p>
+    </div>
+  </dialog>
 @endforeach
 
 @endsection
@@ -176,9 +197,13 @@
     document.getElementById('fieldVideo').style.display = type === 'video' ? 'block' : 'none';
   }
 
-  function openPortfolioModal(id){
-    toggleEditType(id);
-    document.getElementById(`portfolio-modal-${id}`).showModal();
+  function openPortfolioModal(kind, id){
+    if (kind === 'edit') {
+      toggleEditType(id);
+      document.getElementById(`portfolio-modal-${id}`).showModal();
+    } else {
+      document.getElementById(`portfolio-detail-modal-${id}`).showModal();
+    }
   }
 
   function closePortfolioModal(id){

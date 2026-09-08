@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\SiteSetting;
+use App\Models\OriginalIp;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -57,24 +57,26 @@ class OptimizeOriginalIpDemoImages extends Command
             $replacements['/'.$relative.'.png'] = '/'.$relative.'.webp';
         }
 
-        $settings = SiteSetting::current();
-        $items = $settings->original_ips ?? [];
+        foreach (OriginalIp::all() as $ip) {
+            $changed = false;
 
-        foreach ($items as &$item) {
-            if (isset($replacements[$item['image_url'] ?? ''])) {
-                $item['image_url'] = $replacements[$item['image_url']];
+            if (isset($replacements[$ip->image_url ?? ''])) {
+                $ip->image_url = $replacements[$ip->image_url];
+                $changed = true;
             }
 
-            if (isset($item['gallery_urls'])) {
-                $item['gallery_urls'] = implode("\n", array_map(
+            if ($ip->gallery_urls) {
+                $ip->gallery_urls = implode("\n", array_map(
                     fn (string $url): string => $replacements[trim($url)] ?? $url,
-                    preg_split('/\R/', $item['gallery_urls']),
+                    preg_split('/\R/', $ip->gallery_urls),
                 ));
+                $changed = true;
+            }
+
+            if ($changed) {
+                $ip->save();
             }
         }
-        unset($item);
-
-        $settings->update(['original_ips' => $items]);
         $this->info(sprintf('Demo images: %.2f MB -> %.2f MB (%.1f%% smaller).', $originalBytes / 1000000, $optimizedBytes / 1000000, (1 - $optimizedBytes / $originalBytes) * 100));
 
         return self::SUCCESS;

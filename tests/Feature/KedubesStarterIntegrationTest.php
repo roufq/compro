@@ -70,10 +70,10 @@ test('authenticated admin can render every content management page', function (s
     ['admin.identitas', 'Identitas Perusahaan'],
     ['admin.hero', 'Hero & About Us'],
     ['admin.kontak', 'Kontak & Sosial Media'],
-    ['admin.klien', 'Klien / Trusted By'],
-    ['admin.original-ip', 'Original IP'],
-    ['admin.tim', 'Tim Studio'],
-    ['admin.produk', 'Produk Digital / Download'],
+    ['admin.klien.index', 'Klien / Trusted By'],
+    ['admin.original-ip.index', 'Original IP'],
+    ['admin.tim.index', 'Tim Studio'],
+    ['admin.produk.index', 'Produk Digital / Download'],
     ['admin.layanan.index', 'Tambah Layanan Baru'],
     ['admin.portofolio.index', 'Tambah Karya Baru'],
     ['admin.testimoni.index', 'Tambah Testimoni'],
@@ -317,13 +317,13 @@ test('the admin seeder creates one usable admin account', function () {
 
     $this->assertDatabaseCount('users', 1);
     $this->assertDatabaseHas('users', [
-        'email' => 'admin@kedubesstudio.id',
+        'email' => 'adminweb@kedubes.id',
     ]);
     $this->assertDatabaseCount('teams', 1);
     $this->assertDatabaseCount('team_members', 1);
 
-    $admin = User::where('email', 'admin@kedubesstudio.id')->firstOrFail();
+    $admin = User::where('email', 'adminweb@kedubes.id')->firstOrFail();
 
-    expect(Hash::check('ganti-password-ini', $admin->password))->toBeTrue()
+    expect(Hash::check('Kedubes#24434', $admin->password))->toBeTrue()
         ->and($admin->current_team_id)->not->toBeNull();
 });

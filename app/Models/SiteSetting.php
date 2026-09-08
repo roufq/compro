@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 #[Fillable([
     'logo_path',
@@ -23,58 +22,9 @@ use Illuminate\Support\Str;
     'about_title',
     'about_description',
     'map_query',
-    'clients',
-    'original_ips',
-    'team_members',
-    'products',
 ])]
 class SiteSetting extends Model
 {
-    /**
-     * @param  array<int, array{name: string, slug?: string|null}>  $items
-     * @return array<int, array{name: string, slug: string}>
-     */
-    public static function originalIpsWithSlugs(array $items): array
-    {
-        $usedSlugs = array_filter(array_column($items, 'slug'));
-
-        foreach ($items as &$item) {
-            if (! empty($item['slug'])) {
-                continue;
-            }
-
-            $base = Str::slug(Str::limit($item['name'], 150, '')) ?: 'original-ip';
-            $slug = $base;
-            $suffix = 2;
-
-            while (in_array($slug, $usedSlugs, true)) {
-                $slug = $base.'-'.$suffix++;
-            }
-
-            $item['slug'] = $slug;
-            $usedSlugs[] = $slug;
-        }
-
-        return array_values($items);
-    }
-
-    /** @return array<int, array{name: string, slug: string}> */
-    public function originalIpItems(): array
-    {
-        return self::originalIpsWithSlugs($this->original_ips ?? []);
-    }
-
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return [
-            'clients' => 'array',
-            'original_ips' => 'array',
-            'team_members' => 'array',
-            'products' => 'array',
-        ];
-    }
-
     public function getHeroImageUrlAttribute(): ?string
     {
         return $this->hero_image_path ? asset('storage/'.$this->hero_image_path) : null;

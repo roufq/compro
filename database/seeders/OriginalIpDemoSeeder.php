@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\SiteSetting;
+use App\Models\OriginalIp;
 use Illuminate\Database\Seeder;
 
 class OriginalIpDemoSeeder extends Seeder
@@ -102,18 +102,20 @@ TEXT,
             ],
         ];
 
-        $settings = SiteSetting::current();
-        $items = $settings->originalIpItems();
+        foreach (OriginalIp::all() as $ip) {
+            $fields = $examples[$ip->name] ?? null;
 
-        foreach ($items as &$item) {
-            foreach ($examples[$item['name']] ?? [] as $field => $value) {
-                if (blank($item[$field] ?? null) || ($field === 'description' && $item[$field] === 'Original IP')) {
-                    $item[$field] = $value;
+            if ($fields === null) {
+                continue;
+            }
+
+            foreach ($fields as $field => $value) {
+                if (blank($ip->{$field}) || ($field === 'description' && $ip->{$field} === 'Original IP')) {
+                    $ip->{$field} = $value;
                 }
             }
-        }
-        unset($item);
 
-        $settings->update(['original_ips' => $items]);
+            $ip->save();
+        }
     }
 }

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
+use App\Models\OriginalIp;
 use App\Models\Portfolio;
+use App\Models\Product;
 use App\Models\Service;
 use App\Models\SiteSetting;
+use App\Models\TeamMember;
 use App\Models\Testimonial;
 use Illuminate\Contracts\View\View;
 
@@ -13,13 +17,11 @@ class PublicController extends Controller
     public function originalIp(string $slug): View
     {
         $settings = SiteSetting::current();
-        $ip = collect($settings->originalIpItems())->firstWhere('slug', $slug);
+        $ip = OriginalIp::query()->where('slug', $slug)->first();
         abort_if($ip === null, 404);
 
-        $photos = preg_split('/\R/', $ip['gallery_urls'] ?? '', flags: PREG_SPLIT_NO_EMPTY);
-        $videos = collect(preg_split('/\R/', $ip['video_urls'] ?? '', flags: PREG_SPLIT_NO_EMPTY))
-            ->map(fn (string $url): ?string => Portfolio::youtubeIdFromUrl(trim($url)))
-            ->filter()->values();
+        $photos = $ip->photos;
+        $videos = $ip->video_ids;
 
         return view('original-ip', compact('settings', 'ip', 'photos', 'videos'));
     }
@@ -41,6 +43,10 @@ class PublicController extends Controller
                 'embed' => $portfolio->youtube_embed,
             ]),
             'testimonials' => Testimonial::all(),
+            'clients' => Client::query()->orderBy('order')->orderBy('id')->get(),
+            'originalIps' => OriginalIp::query()->orderBy('order')->orderBy('id')->get(),
+            'teamMembers' => TeamMember::query()->orderBy('order')->orderBy('id')->get(),
+            'products' => Product::query()->orderBy('order')->orderBy('id')->get(),
         ]);
     }
 }

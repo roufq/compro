@@ -185,10 +185,10 @@
       <a href="{{ route('admin.identitas') }}" class="{{ request()->routeIs('admin.identitas', 'dashboard') ? 'active' : '' }}">Identitas</a>
       <a href="{{ route('admin.hero') }}" class="{{ request()->routeIs('admin.hero') ? 'active' : '' }}">Hero & About</a>
       <a href="{{ route('admin.kontak') }}" class="{{ request()->routeIs('admin.kontak') ? 'active' : '' }}">Kontak</a>
-      <a href="{{ route('admin.klien') }}" class="{{ request()->routeIs('admin.klien') ? 'active' : '' }}">Klien</a>
-      <a href="{{ route('admin.original-ip') }}" class="{{ request()->routeIs('admin.original-ip') ? 'active' : '' }}">Original IP</a>
-      <a href="{{ route('admin.tim') }}" class="{{ request()->routeIs('admin.tim') ? 'active' : '' }}">Tim Studio</a>
-      <a href="{{ route('admin.produk') }}" class="{{ request()->routeIs('admin.produk') ? 'active' : '' }}">Produk</a>
+      <a href="{{ route('admin.klien.index') }}" class="{{ request()->routeIs('admin.klien.*') ? 'active' : '' }}">Klien</a>
+      <a href="{{ route('admin.original-ip.index') }}" class="{{ request()->routeIs('admin.original-ip.*') ? 'active' : '' }}">Original IP</a>
+      <a href="{{ route('admin.tim.index') }}" class="{{ request()->routeIs('admin.tim.*') ? 'active' : '' }}">Tim Studio</a>
+      <a href="{{ route('admin.produk.index') }}" class="{{ request()->routeIs('admin.produk.*') ? 'active' : '' }}">Produk</a>
     </nav>
 
     <div class="sb-label">Konten</div>
@@ -206,6 +206,9 @@
           @endif
         </div>
         <div><strong>{{ auth()->user()->name ?? 'Admin' }}</strong><span>{{ auth()->user()->email ?? '' }}</span></div>
+        <a href="{{ route('admin.akun.edit') }}" class="logout {{ request()->routeIs('admin.akun.*') ? 'active' : '' }}" title="Akun Saya">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </a>
         <form method="POST" action="{{ route('logout') }}">
           @csrf
           <button type="submit" class="logout" title="Keluar">

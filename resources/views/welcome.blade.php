@@ -365,8 +365,7 @@
   <section id="trusted" class="alt-bg">
     <div class="wrap">
       <div class="sec-head reveal"><span class="tag">Trusted By</span><h2>Dipercaya oleh</h2></div>
-      @php($clients = $settings->clients ?? [])
-      @if (count($clients))
+      @if ($clients->isNotEmpty())
         <div class="trusted-marquee reveal">
           <div class="trusted-track">
             @for ($rep = 0; $rep < 2; $rep++)
@@ -424,7 +423,7 @@
     <div class="wrap">
       <div class="sec-head reveal"><span class="tag">Our IP</span><h2>Original IP kami</h2></div>
       <div class="ip-grid reveal">
-        @forelse ($settings->originalIpItems() as $ip)
+        @forelse ($originalIps as $ip)
           @php($ipHasChannel = !empty($ip['url']))
           @php($ipTag = $ipHasChannel ? 'a' : 'div')
           <{{ $ipTag }} class="ip-card @if (! $ipHasChannel) ip-card--disabled @endif" @if ($ipHasChannel) href="{{ $ip['url'] }}" target="_blank" rel="noopener noreferrer" aria-label="Tonton {{ $ip['name'] }} di YouTube" @endif>
@@ -446,7 +445,7 @@
     <div class="wrap">
       <div class="sec-head reveal"><span class="tag">Our Team</span><h2>Tim di balik karya</h2></div>
       <div class="team-grid" id="teamGrid">
-        @forelse ($settings->team_members ?? [] as $member)
+        @forelse ($teamMembers as $member)
           <div class="team-item reveal">
             <div class="team-avatar">@if (!empty($member['image_url']))<img src="{{ $member['image_url'] }}" alt="{{ $member['name'] }}" loading="lazy">@else{{ mb_substr($member['name'], 0, 1) }}@endif</div>
             <h4>{{ $member['name'] }}</h4><span>{{ $member['role'] }}</span>
@@ -512,7 +511,7 @@
         <p>Dapatkan produk digital kami melalui ScaleV.</p>
       </div>
       <div class="download-grid" id="downloadGrid">
-        @forelse ($settings->products ?? [] as $product)
+        @forelse ($products as $product)
           <div class="download-card reveal">
             <div class="dic">↓</div><h3>{{ $product['name'] }}</h3><p>{{ $product['description'] ?? '' }}</p>
             <a href="{{ $product['url'] }}" target="_blank" rel="noopener noreferrer" class="dl-btn">Lihat Produk →</a>
