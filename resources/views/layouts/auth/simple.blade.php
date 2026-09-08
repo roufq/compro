@@ -28,7 +28,7 @@
                     <div class="max-w-xl">
                         <span class="mb-5 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-[11px] font-semibold uppercase tracking-[.14em] text-[#b8791f] shadow-sm">
                             <span class="size-1.5 rounded-full bg-[#b8791f]"></span>
-                            {{ __('Studio Kreatif Bertenaga AI') }}
+                            {{ $siteSettings->hero_badge_text ?: __('Studio Kreatif Bertenaga AI') }}
                         </span>
                         <h1 class="max-w-2xl text-5xl font-bold leading-tight tracking-normal text-[#1d1d1f]">
                             {{ $siteSettings->hero_title ?: __('Kreativitas tanpa batas, diperkuat kecerdasan buatan') }}
@@ -39,9 +39,21 @@
                     </div>
 
                     <div class="grid grid-cols-3 gap-3" aria-hidden="true">
-                        <div class="h-32 rounded-2xl bg-linear-to-br from-[#6c5ce7] via-[#8f7bf8] to-[#b8791f]"></div>
-                        <div class="h-32 rounded-2xl bg-linear-to-br from-[#0f2e4c] via-[#2f6fb0] to-[#7b6ef6]"></div>
-                        <div class="h-32 rounded-2xl bg-linear-to-br from-[#332107] via-[#b8791f] to-[#fff2c9]"></div>
+                        @if ($siteSettings->hero_tile_1_url)
+                            <img src="{{ $siteSettings->hero_tile_1_url }}" alt="" class="h-32 w-full rounded-2xl object-cover">
+                        @else
+                            <div class="h-32 rounded-2xl bg-linear-to-br from-[#6c5ce7] via-[#8f7bf8] to-[#b8791f]"></div>
+                        @endif
+                        @if ($siteSettings->hero_tile_2_url)
+                            <img src="{{ $siteSettings->hero_tile_2_url }}" alt="" class="h-32 w-full rounded-2xl object-cover">
+                        @else
+                            <div class="h-32 rounded-2xl bg-linear-to-br from-[#0f2e4c] via-[#2f6fb0] to-[#7b6ef6]"></div>
+                        @endif
+                        @if ($siteSettings->hero_tile_3_url)
+                            <img src="{{ $siteSettings->hero_tile_3_url }}" alt="" class="h-32 w-full rounded-2xl object-cover">
+                        @else
+                            <div class="h-32 rounded-2xl bg-linear-to-br from-[#332107] via-[#b8791f] to-[#fff2c9]"></div>
+                        @endif
                     </div>
                 </section>
 

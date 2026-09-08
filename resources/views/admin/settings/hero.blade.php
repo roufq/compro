@@ -63,5 +63,39 @@
       </div>
     </div>
   </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <h3>Panel Halaman Login</h3>
+        <p>Badge dan 3 kotak visual yang tampil di sisi kiri halaman login admin.</p>
+      </div>
+      <button type="submit" class="btn-primary">Simpan Perubahan</button>
+    </div>
+    <div class="card-body">
+      <div class="form-grid">
+
+        <div class="field2 full">
+          <label for="hero_badge_text">Teks Badge</label>
+          <input id="hero_badge_text" name="hero_badge_text" value="{{ old('hero_badge_text', $settings->hero_badge_text) }}" maxlength="255" placeholder="Studio Kreatif Bertenaga AI">
+        </div>
+
+        @for ($tile = 1; $tile <= 3; $tile++)
+          <div class="field2">
+            <label for="hero_tile_{{ $tile }}">Kotak Visual {{ $tile }}</label>
+            @if ($settings->{"hero_tile_{$tile}_url"})
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <img src="{{ $settings->{"hero_tile_{$tile}_url"} }}" alt="" style="width:64px;height:44px;border-radius:8px;object-fit:cover;border:1px solid var(--line);">
+                <label style="font-weight:400;"><input type="checkbox" name="remove_hero_tile_{{ $tile }}" value="1" @checked(old("remove_hero_tile_{$tile}"))> Hapus, pakai gradien bawaan</label>
+              </div>
+            @endif
+            <input id="hero_tile_{{ $tile }}" type="file" name="hero_tile_{{ $tile }}" accept="image/jpeg,image/png,image/webp">
+            <small>Opsional. Jika kosong, kotak menampilkan warna gradien bawaan.</small>
+          </div>
+        @endfor
+
+      </div>
+    </div>
+  </div>
 </form>
 @endsection

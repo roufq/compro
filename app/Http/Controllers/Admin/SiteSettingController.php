@@ -34,6 +34,13 @@ class SiteSettingController extends Controller
             'tagline' => ['nullable', 'string', 'max:255'],
             'hero_title' => ['nullable', 'string', 'max:255'],
             'hero_description' => ['nullable', 'string'],
+            'hero_badge_text' => ['nullable', 'string', 'max:255'],
+            'hero_tile_1' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'hero_tile_2' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'hero_tile_3' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'remove_hero_tile_1' => ['sometimes', 'boolean'],
+            'remove_hero_tile_2' => ['sometimes', 'boolean'],
+            'remove_hero_tile_3' => ['sometimes', 'boolean'],
             'email' => ['nullable', 'email'],
             'phone' => ['nullable', 'string', 'max:50'],
             'address' => ['nullable', 'string', 'max:255'],
@@ -68,6 +75,18 @@ class SiteSettingController extends Controller
 
         if ($request->hasFile('logo')) {
             $data['logo_path'] = $request->file('logo')->store('logo', 'public');
+        }
+
+        foreach ([1, 2, 3] as $tile) {
+            unset($data["hero_tile_{$tile}"], $data["remove_hero_tile_{$tile}"]);
+
+            if ($request->boolean("remove_hero_tile_{$tile}")) {
+                $data["hero_tile_{$tile}_path"] = null;
+            }
+
+            if ($request->hasFile("hero_tile_{$tile}")) {
+                $data["hero_tile_{$tile}_path"] = $request->file("hero_tile_{$tile}")->store('hero-tiles', 'public');
+            }
         }
 
         SiteSetting::current()->update($data);

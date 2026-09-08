@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Model;
     'tagline',
     'hero_title',
     'hero_description',
+    'hero_badge_text',
+    'hero_tile_1_path',
+    'hero_tile_2_path',
+    'hero_tile_3_path',
     'email',
     'phone',
     'address',
@@ -64,5 +68,20 @@ class SiteSetting extends Model
     public function getLogoUrlAttribute(): ?string
     {
         return $this->logo_path ? asset('storage/'.$this->logo_path) : null;
+    }
+
+    public function getHeroTile1UrlAttribute(): ?string
+    {
+        return $this->hero_tile_1_path ? asset('storage/'.$this->hero_tile_1_path) : null;
+    }
+
+    public function getHeroTile2UrlAttribute(): ?string
+    {
+        return $this->hero_tile_2_path ? asset('storage/'.$this->hero_tile_2_path) : null;
+    }
+
+    public function getHeroTile3UrlAttribute(): ?string
+    {
+        return $this->hero_tile_3_path ? asset('storage/'.$this->hero_tile_3_path) : null;
     }
 }
