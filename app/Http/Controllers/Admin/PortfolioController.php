@@ -57,6 +57,9 @@ class PortfolioController extends Controller
     /** @return array<string, mixed> */
     private function validated(Request $request): array
     {
+        $portfolio = $request->route('portfolio');
+        $hasExistingImage = $portfolio instanceof Portfolio && $portfolio->image_path;
+
         return $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -65,7 +68,7 @@ class PortfolioController extends Controller
             'image' => [
                 Rule::requiredIf(
                     $request->string('type')->is('gambar')
-                    && ! $request->route('portfolio')?->image_path
+                    && ! $hasExistingImage
                 ),
                 'nullable',
                 'image',

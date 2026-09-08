@@ -62,7 +62,7 @@ class OriginalIpController extends Controller
             'order' => ['sometimes', 'integer', 'min:0'],
         ]);
 
-        $gallery = array_values(array_filter(array_map('trim', preg_split('/\R/', $data['gallery_urls'] ?? ''))));
+        $gallery = array_values(array_filter(array_map('trim', preg_split('/\R/', $data['gallery_urls'] ?? '') ?: [])));
 
         if (count($gallery) + count($data['photos'] ?? []) > 100) {
             throw ValidationException::withMessages(['gallery_urls' => 'Maksimal 100 foto per IP, termasuk unggahan baru.']);

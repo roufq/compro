@@ -68,7 +68,7 @@ class OptimizeOriginalIpDemoImages extends Command
             if ($ip->gallery_urls) {
                 $ip->gallery_urls = implode("\n", array_map(
                     fn (string $url): string => $replacements[trim($url)] ?? $url,
-                    preg_split('/\R/', $ip->gallery_urls),
+                    preg_split('/\R/', $ip->gallery_urls) ?: [],
                 ));
                 $changed = true;
             }

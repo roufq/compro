@@ -18,7 +18,7 @@ class MediaUrlList implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $urls = array_values(array_filter(array_map('trim', preg_split('/\R/', $value))));
+        $urls = array_values(array_filter(array_map('trim', preg_split('/\R/', $value) ?: [])));
 
         if (count($urls) > ($this->youtube ? 20 : 100)) {
             $fail($this->youtube ? 'Maksimal 20 video per IP.' : 'Maksimal 100 foto per IP.');
@@ -27,7 +27,8 @@ class MediaUrlList implements ValidationRule
         }
 
         foreach ($urls as $url) {
-            if (strlen($url) > 2048 || ! filter_var($url, FILTER_VALIDATE_URL) || ! in_array(strtolower(parse_url($url, PHP_URL_SCHEME) ?? ''), ['http', 'https'], true)) {
+            $scheme = parse_url($url, PHP_URL_SCHEME);
+            if (strlen($url) > 2048 || ! filter_var($url, FILTER_VALIDATE_URL) || ! in_array(strtolower(is_string($scheme) ? $scheme : ''), ['http', 'https'], true)) {
                 $fail('Setiap baris harus berisi satu URL HTTP atau HTTPS yang valid.');
 
                 return;

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 #[Fillable([
@@ -51,10 +52,10 @@ class OriginalIp extends Model
         return preg_split('/\R/', $this->gallery_urls ?? '', flags: PREG_SPLIT_NO_EMPTY) ?: [];
     }
 
-    /** @return \Illuminate\Support\Collection<int, string> */
-    public function getVideoIdsAttribute(): \Illuminate\Support\Collection
+    /** @return Collection<int, non-falsy-string> */
+    public function getVideoIdsAttribute(): Collection
     {
-        return collect(preg_split('/\R/', $this->video_urls ?? '', flags: PREG_SPLIT_NO_EMPTY))
+        return collect(preg_split('/\R/', $this->video_urls ?? '', flags: PREG_SPLIT_NO_EMPTY) ?: [])
             ->map(fn (string $url): ?string => Portfolio::youtubeIdFromUrl(trim($url)))
             ->filter()
             ->values();

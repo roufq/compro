@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -56,7 +57,7 @@ return new class extends Migration
             $slug = $ip['slug'] ?? null;
 
             if (! $slug) {
-                $base = \Illuminate\Support\Str::slug(\Illuminate\Support\Str::limit($ip['name'] ?? 'original-ip', 150, '')) ?: 'original-ip';
+                $base = Str::slug(Str::limit($ip['name'] ?? 'original-ip', 150, '')) ?: 'original-ip';
                 $slug = $base;
                 $suffix = 2;
                 while (in_array($slug, $usedSlugs, true)) {
