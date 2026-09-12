@@ -45,6 +45,7 @@ test('admin can save and render the new homepage sections', function () {
         ->assertSeeText('Tentang Studio Baru')
         ->assertSeeText('Cerita studio kami.')
         ->assertSee('https://example.com/client.png')
+        ->assertSee('.trusted-logo{display:flex;align-items:center;justify-content:center;flex-shrink:0;filter:none;opacity:1;}', escape: false)
         ->assertSeeText('IP Baru')
         ->assertSeeText('Sinta')
         ->assertSeeText('Art Director')

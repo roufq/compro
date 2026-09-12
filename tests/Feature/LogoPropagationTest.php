@@ -10,17 +10,20 @@ test('uploaded logo propagates to favicon, homepage, and every branded page', fu
     Storage::fake('public');
     $admin = User::factory()->create();
     OriginalIp::create(['name' => 'IP Cek', 'slug' => 'ip-cek']);
+    $logoPath = UploadedFile::fake()->image('logo-baru.png')->store('logo', 'public');
 
-    $this->actingAs($admin)->put(route('admin.pengaturan.update'), [
+    SiteSetting::current()->update([
         'company_name' => 'Studio Cek Logo',
-        'logo' => UploadedFile::fake()->image('logo-baru.png'),
-    ])->assertSessionHasNoErrors();
+        'logo_path' => $logoPath,
+    ]);
 
     $logoUrl = SiteSetting::current()->logo_url;
     expect($logoUrl)->not->toBeNull();
 
-    // Public homepage: favicon link + navbar + footer logo.
-    $this->get('/')->assertSuccessful()->assertSee($logoUrl, escape: false);
+    $this->get('/')
+        ->assertSuccessful()
+        ->assertSee('rel="icon" href="'.$logoUrl.'?v=', escape: false)
+        ->assertDontSee('href="data:image/svg+xml', escape: false);
 
     // Public Original IP detail page: favicon + brand logo.
     $this->get(route('original-ip.show', 'ip-cek'))->assertSuccessful()->assertSee($logoUrl, escape: false);

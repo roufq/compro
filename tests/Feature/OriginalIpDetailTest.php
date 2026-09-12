@@ -64,6 +64,20 @@ test('admin can save IP details photos and playable videos', function () {
         ->assertSeeText('Teman Ceria');
 });
 
+test('admin original IP forms hide detail and gallery controls', function () {
+    $admin = User::factory()->create();
+    OriginalIp::create(['name' => 'Teman Ceria', 'slug' => 'teman-ceria']);
+
+    $this->actingAs($admin)
+        ->get(route('admin.original-ip.index'))
+        ->assertSuccessful()
+        ->assertDontSee('name="details"', escape: false)
+        ->assertDontSee('name="gallery_urls"', escape: false)
+        ->assertDontSee('name="photos[]"', escape: false)
+        ->assertDontSee('name="video_urls"', escape: false)
+        ->assertDontSeeText('Lihat Halaman Detail');
+});
+
 test('renaming an original IP keeps its slug and public link stable', function () {
     $admin = User::factory()->create();
     $ip = OriginalIp::create(['name' => 'Teman Ceria', 'slug' => 'teman-ceria']);

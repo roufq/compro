@@ -6,13 +6,15 @@
 <title>{{ $settings->company_name }} — {{ $settings->tagline }}</title>
 <meta name="description" content="{{ $settings->hero_description }}">
 <meta name="theme-color" content="#0D47A1">
+@if ($settings->logo_url)
+<link rel="icon" href="{{ $settings->logo_url }}?v={{ $settings->updated_at?->timestamp ?? 1 }}" sizes="any">
+<link rel="apple-touch-icon" href="{{ $settings->logo_url }}?v={{ $settings->updated_at?->timestamp ?? 1 }}">
+@else
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='26' r='24' fill='%230D47A1'/%3E%3Cpath d='M14 34 L38 22 L38 40 Z' fill='%23FFD600'/%3E%3C/svg%3E">
+@endif
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{ $settings->company_name }} — {{ $settings->tagline }}">
 <meta property="og:description" content="{{ $settings->hero_description }}">
-@if ($settings->logo_url)
-<link rel="icon" href="{{ $settings->logo_url }}?v={{ $settings->updated_at?->timestamp ?? 1 }}">
-@endif
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -134,8 +136,7 @@
   }
   .trusted-track{display:flex;align-items:center;gap:56px;width:max-content;animation:trusted-scroll 30s linear infinite;}
   .trusted-marquee:hover .trusted-track{animation-play-state:paused;}
-  .trusted-logo{display:flex;align-items:center;justify-content:center;flex-shrink:0;filter:grayscale(1);opacity:0.55;transition:opacity .25s,filter .25s;}
-  .trusted-logo:hover{filter:grayscale(0);opacity:1;}
+  .trusted-logo{display:flex;align-items:center;justify-content:center;flex-shrink:0;filter:none;opacity:1;}
   .trusted-logo-text{
     font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Helvetica,Arial,sans-serif;
     font-weight:600;font-size:15px;letter-spacing:-0.01em;color:var(--text-3);white-space:nowrap;

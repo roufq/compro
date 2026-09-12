@@ -77,22 +77,6 @@
           <label>Link Channel YouTube <span style="color:#9a9ca2;font-weight:400;">(opsional)</span></label>
           <input type="url" name="url" placeholder="https://youtube.com/@channel">
         </div>
-        <div class="field2 full">
-          <label>Informasi Lengkap</label>
-          <textarea name="details" rows="6" maxlength="20000"></textarea>
-        </div>
-        <div class="field2 full">
-          <label>Galeri Foto <span style="color:#9a9ca2;font-weight:400;">(satu URL per baris)</span></label>
-          <textarea name="gallery_urls" rows="3" maxlength="65000"></textarea>
-        </div>
-        <div class="field2 full">
-          <label>Tambah Foto dari Perangkat</label>
-          <input type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple>
-        </div>
-        <div class="field2 full">
-          <label>Video YouTube <span style="color:#9a9ca2;font-weight:400;">(satu link per baris)</span></label>
-          <textarea name="video_urls" rows="3" maxlength="45000"></textarea>
-        </div>
       </div>
       <div class="admin-modal-actions">
         <button type="button" class="btn-outline" onclick="document.getElementById('ip-add-modal').close()">Batal</button>
@@ -140,25 +124,6 @@
             <label>Link Channel YouTube <span style="color:#9a9ca2;font-weight:400;">(opsional)</span></label>
             <input type="url" name="url" value="{{ $ip->url }}" placeholder="https://youtube.com/@channel">
           </div>
-          <div class="field2 full">
-            <label>Informasi Lengkap</label>
-            <textarea name="details" rows="6" maxlength="20000">{{ $ip->details }}</textarea>
-          </div>
-          <div class="field2 full">
-            <label>Galeri Foto <span style="color:#9a9ca2;font-weight:400;">(satu URL per baris)</span></label>
-            <textarea name="gallery_urls" rows="3" maxlength="65000">{{ $ip->gallery_urls }}</textarea>
-          </div>
-          <div class="field2 full">
-            <label>Tambah Foto dari Perangkat</label>
-            <input type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple>
-          </div>
-          <div class="field2 full">
-            <label>Video YouTube <span style="color:#9a9ca2;font-weight:400;">(satu link per baris)</span></label>
-            <textarea name="video_urls" rows="3" maxlength="45000">{{ $ip->video_urls }}</textarea>
-          </div>
-          <div class="field2 full">
-            <a class="btn-outline" href="{{ route('original-ip.show', $ip->slug) }}" target="_blank" rel="noopener noreferrer">Lihat Halaman Detail ↗</a>
-          </div>
         </div>
         <div class="admin-modal-actions">
           <button type="button" class="btn-outline" onclick="document.getElementById('ip-edit-modal-{{ $ip->id }}').close()">Batal</button>
@@ -182,7 +147,6 @@
       @endif
       <p style="color:var(--text-muted);white-space:pre-line;">{{ $ip->details ?: 'Belum ada informasi lengkap.' }}</p>
       <p style="margin-top:12px;color:var(--text-faint);font-size:12.5px;">{{ count($ip->photos) }} foto galeri · {{ $ip->video_ids->count() }} video</p>
-      <p style="margin-top:12px;"><a class="btn-outline" href="{{ route('original-ip.show', $ip->slug) }}" target="_blank" rel="noopener noreferrer">Lihat Halaman Detail ↗</a></p>
     </div>
   </dialog>
 @endforeach
