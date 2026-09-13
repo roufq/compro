@@ -48,6 +48,8 @@ class SiteSettingController extends Controller
             'linkedin_url' => ['nullable', 'url'],
             'youtube_url' => ['nullable', 'url'],
             'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'logo_text' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'remove_logo_text' => ['sometimes', 'boolean'],
             'hero_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'remove_hero_image' => ['sometimes', 'boolean'],
             'hero_video_url' => [
@@ -63,7 +65,7 @@ class SiteSettingController extends Controller
             'map_query' => ['nullable', 'string', 'max:255'],
         ]);
 
-        unset($data['logo'], $data['hero_image'], $data['remove_hero_image']);
+        unset($data['logo'], $data['logo_text'], $data['remove_logo_text'], $data['hero_image'], $data['remove_hero_image']);
 
         if ($request->boolean('remove_hero_image')) {
             $data['hero_image_path'] = null;
@@ -75,6 +77,14 @@ class SiteSettingController extends Controller
 
         if ($request->hasFile('logo')) {
             $data['logo_path'] = $request->file('logo')->store('logo', 'public');
+        }
+
+        if ($request->boolean('remove_logo_text')) {
+            $data['logo_text_path'] = null;
+        }
+
+        if ($request->hasFile('logo_text')) {
+            $data['logo_text_path'] = $request->file('logo_text')->store('logo', 'public');
         }
 
         foreach ([1, 2, 3] as $tile) {

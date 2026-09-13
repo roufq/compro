@@ -19,6 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
   :root{
     --void:#FFFFFF;
@@ -35,7 +36,9 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{background:var(--void);color:var(--text-1);font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;overflow-x:hidden;line-height:1.6;}
+  #ai-core-canvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;}
+  body{background:transparent;color:var(--text-1);font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;overflow-x:hidden;line-height:1.6;}
+  html{background:var(--void);}
   h1,h2,h3{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;letter-spacing:-0.03em;}
   a{color:inherit;text-decoration:none;}
   .wrap{max-width:1200px;margin:0 auto;padding:0 32px;}
@@ -43,9 +46,8 @@
   img{max-width:100%;display:block;}
 
   .tag{
-    font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;font-size:12px;color:var(--blue);
-    text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;display:inline-block;
-    background:var(--panel-2);padding:6px 14px;border-radius:100px;
+    font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(26px,3.6vw,38px);color:var(--blue);
+    letter-spacing:-0.02em;margin-bottom:10px;display:inline-block;
   }
 
   .reveal.animate{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
@@ -53,6 +55,15 @@
   .reveal.d1{transition-delay:.08s;}
   .reveal.d2{transition-delay:.16s;}
   .reveal.d3{transition-delay:.24s;}
+
+  /* Cinematic "wipe" reveal for kicker/heading text — like a film title rising into frame */
+  .reveal.animate.wipe{clip-path:inset(0 0 100% 0);transition:clip-path .7s cubic-bezier(.16,1,.3,1), opacity .5s ease, transform .5s ease;}
+  .reveal.animate.wipe.in{clip-path:inset(0 0 0 0);}
+  .sec-head.animate .tag,.sec-head.animate h2{clip-path:inset(0 0 100% 0);transition:clip-path .7s cubic-bezier(.16,1,.3,1);}
+  .sec-head.animate.in .tag{clip-path:inset(0 0 0 0);}
+  .sec-head.animate.in h2{clip-path:inset(0 0 0 0);transition-delay:.12s;}
+
+  #scrollProgress{position:fixed;top:0;left:0;width:0%;height:3px;background:linear-gradient(90deg,var(--accent),var(--blue));z-index:60;}
 
   /* ===== NAVBAR ===== */
   header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
@@ -62,25 +73,35 @@
   .logo-text{display:flex;flex-direction:column;line-height:1;}
   .logo-text .kd{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:700;letter-spacing:-0.02em;font-size:17px;color:var(--text-1);}
   .logo-text .st{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;font-size:8.5px;letter-spacing:0.22em;color:var(--text-2);}
+  .logo-text-img{height:36px;width:auto;max-width:220px;object-fit:contain;}
   .nav-links{display:flex;gap:28px;font-size:14px;font-weight:600;color:var(--text-2);}
   .nav-links a{position:relative;padding-bottom:3px;}
   .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--accent);transition:width .25s ease;}
   .nav-links a:hover{color:var(--blue);}
   .nav-links a:hover::after{width:100%;}
-  .nav-cta{padding:10px 20px;border-radius:100px;font-size:13px;font-weight:700;background:var(--blue);color:#fff;}
+  .nav-cta{padding:10px 20px;border-radius:100px;font-size:13px;font-weight:700;background:var(--blue);color:#fff;display:inline-block;transition:transform .2s ease;}
   .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
   .burger span{width:22px;height:2.5px;background:var(--blue);display:block;border-radius:2px;}
   .mobile-menu{display:none;position:absolute;top:100%;left:0;right:0;height:calc(100dvh - 76px);overflow-y:auto;z-index:49;background:#fff;padding:32px;flex-direction:column;gap:22px;font-size:18px;font-weight:600;}
   .mobile-menu.open{display:flex;}
 
   section{padding:88px 0;position:relative;}
-  .alt-bg{background:var(--panel);}
+  .alt-bg{background:rgba(245,248,255,0.88);}
   .sec-head{max-width:640px;margin:0 auto 40px;text-align:center;}
-  .sec-head h2{font-size:clamp(24px,3.4vw,34px);margin-bottom:10px;}
+  .sec-head h2{font-size:clamp(16px,1.8vw,19px);font-weight:600;color:var(--text-2);margin-bottom:10px;}
   .sec-head p{color:var(--text-2);font-size:15px;}
 
   /* ===== HERO VISUAL ===== */
   .hero{padding:44px 0 0;}
+  .hero::before{
+    content:'';position:absolute;left:50%;top:6%;width:min(900px,140vw);aspect-ratio:1/1;
+    transform:translateX(-50%);z-index:-1;pointer-events:none;filter:blur(60px);
+    background:
+      radial-gradient(circle at 32% 32%, rgba(13,71,161,0.28), transparent 55%),
+      radial-gradient(circle at 68% 62%, rgba(255,214,0,0.2), transparent 55%);
+    animation:auroraDrift 14s ease-in-out infinite alternate;
+  }
+  @keyframes auroraDrift{0%{transform:translateX(-54%) translateY(0) scale(1);}100%{transform:translateX(-46%) translateY(-18px) scale(1.08);}}
   .hero-visual{
     max-width:980px;margin:0 auto;border-radius:24px;overflow:hidden;position:relative;
     aspect-ratio:16/8.2;box-shadow:0 30px 70px -24px rgba(13,71,161,0.4);
@@ -88,6 +109,18 @@
       radial-gradient(circle at 50% 46%, #FFF7D6 0%, #FFE9A0 8%, #FFD54F 16%, rgba(255,213,79,0.25) 26%, transparent 40%),
       linear-gradient(180deg, #050B1E 0%, #0A1B45 40%, #123B7A 68%, #1857C4 100%);
   }
+  .hero-grain{
+    position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0.12;mix-blend-mode:overlay;background-size:120px 120px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .hero-scanlines{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0.5;
+    background:repeating-linear-gradient(180deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px);
+  }
+  .hero-spotlight{
+    position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;transition:opacity .35s ease;
+    background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.22), transparent 60%);
+  }
+  .hero-visual:hover .hero-spotlight{opacity:1;}
   .hero-stars{position:absolute;inset:0;background-image:
       radial-gradient(1.5px 1.5px at 20px 30px, #fff, transparent),
       radial-gradient(1.5px 1.5px at 90px 80px, #fff, transparent),
@@ -122,10 +155,12 @@
   .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulseA 1.6s infinite;}
   @keyframes pulseA{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(1.3);}}
   .hero-caption{text-align:center;margin-top:18px;font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;color:var(--blue);font-size:15px;letter-spacing:0.01em;}
+  h1.hero-caption.typewriter::after{content:'';display:inline-block;width:2px;height:0.9em;background:var(--blue);margin-left:2px;vertical-align:-0.1em;animation:caretBlink .8s steps(1) infinite;}
+  @keyframes caretBlink{50%{opacity:0;}}
 
   /* ===== BEYOND THE IMAGINATION ===== */
   .imagine-grid{display:grid;grid-template-columns:0.8fr 1.2fr;gap:56px;align-items:center;}
-  .imagine-grid h2{font-size:clamp(28px,3.6vw,40px);line-height:1.15;color:var(--blue);}
+  .imagine-grid h2{font-size:clamp(28px,3.6vw,40px);line-height:1.15;color:var(--blue);text-align:right;}
   .imagine-grid p{color:var(--text-2);font-size:15.5px;}
 
   /* ===== TRUSTED BY ===== */
@@ -144,12 +179,21 @@
   @keyframes trusted-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
   /* ===== PORTFOLIO ===== */
-  .filter-bar{display:flex;gap:10px;justify-content:center;margin-bottom:36px;flex-wrap:wrap;}
+  .filter-bar{display:flex;gap:10px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
   .filter-btn{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;font-size:13px;padding:9px 18px;border-radius:100px;border:1px solid var(--line);color:var(--text-2);background:transparent;cursor:pointer;transition:.2s;}
   .filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
   .filter-btn:hover:not(.active){border-color:var(--blue);color:var(--blue);}
-  .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-  .p-item{aspect-ratio:16/10;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;border:1px solid var(--line);}
+  .filter-progress{max-width:280px;height:2px;background:var(--panel-2);border-radius:2px;margin:0 auto 32px;overflow:hidden;position:relative;}
+  .filter-progress::after{content:'';position:absolute;inset:0;width:0;background:var(--blue);transition:width .4s ease;}
+  .filter-progress.loading::after{width:100%;}
+  .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;perspective:1200px;}
+  .p-item{aspect-ratio:16/10;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;border:1px solid var(--line);transition:transform .35s cubic-bezier(.16,1,.3,1);}
+  .p-item.reveal.animate{transition:opacity .6s ease, transform .35s cubic-bezier(.16,1,.3,1);}
+  .p-item::before{content:'';position:absolute;inset:-40% -60%;z-index:2;pointer-events:none;
+    background:linear-gradient(75deg,transparent 42%,rgba(255,255,255,0.35) 50%,transparent 58%);
+    transform:translateX(-120%) rotate(8deg);transition:transform .7s ease;
+  }
+  .p-item:hover::before{transform:translateX(120%) rotate(8deg);}
   .p-item .fill{width:100%;height:100%;transition:transform .4s ease;display:flex;align-items:flex-end;padding:12px;}
   .p-item:hover .fill{transform:scale(1.05);}
   .p-item .badge-name{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;letter-spacing:-0.01em;font-size:18px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.4);}
@@ -167,6 +211,8 @@
   .ip-card:hover{transform:translateY(-4px);}
   .ip-card--disabled{cursor:default;opacity:0.6;}
   .ip-card--disabled:hover{transform:none;}
+  .ip-card img,.ip-card .ip-logo{transition:box-shadow .3s ease;border-radius:12px;}
+  .ip-card:not(.ip-card--disabled):hover img,.ip-card:not(.ip-card--disabled):hover .ip-logo{box-shadow:0 0 0 3px rgba(255,214,0,0.4), 0 10px 24px rgba(13,71,161,0.25);}
   .ip-logo{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:700;font-size:24px;letter-spacing:-0.02em;color:var(--text-1);}
   .ip-logo.jas{font-weight:600;font-size:18px;color:var(--text-2);border:1.5px solid var(--line);padding:10px 18px;border-radius:10px;}
   .ip-card span{
@@ -181,8 +227,9 @@
   .team-item{text-align:center;}
   .team-avatar{
     aspect-ratio:1/1;border-radius:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:22px;color:#fff;
+    font-weight:700;font-size:22px;color:#fff;transition:transform .3s ease, box-shadow .3s ease;
   }
+  .team-item:hover .team-avatar{transform:scale(1.05);box-shadow:0 0 0 3px rgba(255,214,0,0.4), 0 12px 24px rgba(13,71,161,0.3);}
   .team-item h4{font-size:13.5px;margin-bottom:2px;}
   .team-item span{font-size:11.5px;color:var(--text-3);}
   .team-note{text-align:center;font-size:12px;color:var(--text-3);margin-top:22px;font-style:italic;}
@@ -197,20 +244,30 @@
   .map-frame{border-radius:16px;overflow:hidden;border:1px solid var(--line);min-height:200px;background:var(--panel);display:flex;align-items:center;justify-content:center;}
   .map-frame iframe{width:100%;height:100%;border:0;min-height:200px;}
   .contact-buttons{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;}
-  .contact-btn{display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:13.5px;font-weight:600;transition:.2s;}
+  .contact-btn{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:13.5px;font-weight:600;transition:.2s;}
   .contact-btn:hover{border-color:var(--blue);transform:translateY(-2px);}
+  .contact-btn::after{content:'';position:absolute;inset:-40% -60%;pointer-events:none;
+    background:linear-gradient(75deg,transparent 42%,rgba(255,214,0,0.3) 50%,transparent 58%);
+    transform:translateX(-120%) rotate(8deg);transition:transform .7s ease;
+  }
+  .contact-btn:hover::after{transform:translateX(120%) rotate(8deg);}
   .contact-btn .ic2{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
   .contact-btn.wa .ic2{background:#e7f9ef;color:#25D366;}
   .contact-btn.maps .ic2{background:#eaf0ff;color:var(--blue);}
   .contact-btn.ig .ic2{background:#fdeef6;color:#E1306C;}
 
   /* ===== DOWNLOAD ===== */
-  .download-section{background:var(--blue);color:#fff;}
+  .download-section{background:rgba(13,71,161,0.9);color:#fff;}
   .download-section .sec-head p{color:rgba(255,255,255,0.75);}
-  .download-section .tag{background:rgba(255,255,255,0.14);color:var(--accent);}
+  .download-section .tag{color:var(--accent);}
   .download-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  .download-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:14px;transition:.2s;}
+  .download-card{position:relative;overflow:hidden;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:14px;transition:.2s;}
   .download-card:hover{background:rgba(255,255,255,0.12);transform:translateY(-4px);}
+  .download-card::after{content:'';position:absolute;inset:-40% -60%;pointer-events:none;
+    background:linear-gradient(75deg,transparent 42%,rgba(255,214,0,0.16) 50%,transparent 58%);
+    transform:translateX(-120%) rotate(8deg);transition:transform .7s ease;
+  }
+  .download-card:hover::after{transform:translateX(120%) rotate(8deg);}
   .download-card .dic{width:40px;height:40px;border-radius:10px;background:var(--accent);color:var(--black);display:flex;align-items:center;justify-content:center;font-size:16px;}
   .download-card h3{font-size:16px;}
   .download-card p{font-size:13px;color:rgba(255,255,255,0.7);flex-grow:1;}
@@ -248,6 +305,7 @@
     .team-grid{grid-template-columns:repeat(3,1fr);}
     .download-grid{grid-template-columns:repeat(2,1fr);}
     .imagine-grid{grid-template-columns:1fr;gap:24px;text-align:center;}
+    .imagine-grid h2{text-align:center;}
   }
   @media(max-width:860px){
     .nav-links{display:none;}
@@ -270,11 +328,14 @@
   @media(prefers-reduced-motion:reduce){
     *:not(.trusted-track){animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}
     .reveal{opacity:1;transform:none;}
+    .reveal.wipe,.sec-head .tag,.sec-head h2{clip-path:none!important;}
+    .hero::before,.p-item::before{display:none;}
+    #ai-core-canvas{display:none;}
   }
   [hidden]{display:none!important;}
   section{scroll-margin-top:76px;}
   .hero-image{width:100%;height:100%;object-fit:cover;}
-  .hero-video{width:100%;height:100%;border:0;object-fit:cover;pointer-events:none;}
+  .hero-video{position:absolute;top:50%;left:50%;width:145%;height:145%;transform:translate(-50%,-50%);border:0;pointer-events:none;}
   .hero-caption{white-space:pre-line;}
   h1.hero-caption{font-size:clamp(24px,4vw,40px);}
   .logo-text{max-width:230px;gap:4px;}.logo-text .st{letter-spacing:.03em;line-height:1.3;}
@@ -293,6 +354,8 @@
 </style>
 </head>
 <body>
+<canvas id="ai-core-canvas" aria-hidden="true"></canvas>
+<div id="scrollProgress" aria-hidden="true"></div>
 @php
     $phoneDigits = preg_replace('/[^0-9]/', '', $settings->phone ?? '');
     $whatsappNumber = str_starts_with($phoneDigits, '0') ? '62'.substr($phoneDigits, 1) : $phoneDigits;
@@ -308,7 +371,11 @@
         <circle cx="20" cy="20" r="4" fill="#FFD600"/>
         <rect x="24" y="16" width="8" height="2.4" rx="1.2" fill="#FFD600"/>
       </svg>@endif
-      <span class="logo-text"><span class="kd">{{ $settings->company_name }}</span><span class="st">{{ $settings->tagline }}</span></span>
+      @if ($settings->logo_text_url)
+        <img class="logo-text-img" src="{{ $settings->logo_text_url }}" alt="{{ $settings->company_name }} — {{ $settings->tagline }}">
+      @else
+        <span class="logo-text"><span class="kd">{{ $settings->company_name }}</span><span class="st">{{ $settings->tagline }}</span></span>
+      @endif
     </a>
     <div class="nav-links">
       <a href="#about">About Us</a>
@@ -347,9 +414,12 @@
         </svg>
         <div class="hero-water"></div>
         @endif
+        <div class="hero-grain"></div>
+        <div class="hero-scanlines"></div>
+        <div class="hero-spotlight"></div>
         <div class="hero-badge"><span class="dot"></span>{{ $settings->company_name }}</div>
       </div>
-      <h1 class="hero-caption reveal">{{ $settings->hero_title }}</h1>
+      <h1 class="hero-caption" id="heroTitle">{{ $settings->hero_title }}</h1>
       <p class="hero-caption reveal">{{ $settings->tagline }}</p>
     </div>
   </section>
@@ -357,7 +427,7 @@
   <!-- BEYOND THE IMAGINATION -->
   <section id="about">
     <div class="wrap imagine-grid">
-      <h2 class="reveal">{{ $settings->about_title ?: "Beyond The Imagination" }}</h2>
+      <h2 class="reveal wipe">{{ $settings->about_title ?: "Beyond The Imagination" }}</h2>
       <p class="reveal d1">{{ $settings->about_description ?: $settings->hero_description }}</p>
     </div>
   </section>
@@ -365,7 +435,7 @@
   <!-- TRUSTED BY -->
   <section id="trusted" class="alt-bg">
     <div class="wrap">
-      <div class="sec-head reveal"><span class="tag">Trusted By</span><h2>Dipercaya oleh</h2></div>
+      <div class="sec-head reveal"><span class="tag">Trusted By</span></div>
       @if ($clients->isNotEmpty())
         <div class="trusted-marquee reveal">
           <div class="trusted-track">
@@ -402,9 +472,10 @@
           <button class="filter-btn" data-f="{{ $category }}">{{ $category === 'character' ? 'Karakter' : ucfirst($category) }}</button>
         @endforeach
       </div>
+      <div class="filter-progress" id="filterProgress"></div>
       <div class="portfolio-grid" id="portfolioGrid">
         @forelse ($portfolios as $portfolio)
-          <button type="button" class="p-item" data-portfolio-index="{{ $loop->index }}" data-category="{{ $portfolio->category }}" aria-label="Lihat {{ $portfolio->title }}">
+          <button type="button" class="p-item reveal" style="transition-delay:{{ min($loop->index % 9, 8) * 0.05 }}s" data-portfolio-index="{{ $loop->index }}" data-category="{{ $portfolio->category }}" aria-label="Lihat {{ $portfolio->title }}">
             <div class="fill">
               @if ($portfolio->thumbnail_url)<img src="{{ $portfolio->thumbnail_url }}" alt="{{ $portfolio->title }}" loading="lazy">@endif
               <span class="badge-name">{{ $portfolio->title }}</span>
@@ -447,7 +518,7 @@
       <div class="sec-head reveal"><span class="tag">Our Team</span><h2>Tim di balik karya</h2></div>
       <div class="team-grid" id="teamGrid">
         @forelse ($teamMembers as $member)
-          <div class="team-item reveal">
+          <div class="team-item reveal" style="transition-delay:{{ min($loop->index, 6) * 0.06 }}s">
             <div class="team-avatar">@if (!empty($member['image_url']))<img src="{{ $member['image_url'] }}" alt="{{ $member['name'] }}" loading="lazy">@else{{ mb_substr($member['name'], 0, 1) }}@endif</div>
             <h4>{{ $member['name'] }}</h4><span>{{ $member['role'] }}</span>
           </div>
@@ -460,13 +531,13 @@
 
   @if ($services->isNotEmpty())
   <section id="services" class="alt-bg"><div class="wrap">
-    <div class="sec-head"><span class="tag">Layanan</span><h2>Solusi produksi kreatif</h2></div>
+    <div class="sec-head reveal"><span class="tag">Layanan</span><h2>Solusi produksi kreatif</h2></div>
     <div class="legacy-grid">@foreach ($services as $service)<article class="legacy-card"><h3>{{ $service->title }}</h3><p>{{ $service->description }}</p></article>@endforeach</div>
   </div></section>
   @endif
   @if ($testimonials->isNotEmpty())
   <section id="testimonials"><div class="wrap">
-    <div class="sec-head"><span class="tag">Testimoni</span><h2>Cerita dari klien kami</h2></div>
+    <div class="sec-head reveal"><span class="tag">Testimoni</span><h2>Cerita dari klien kami</h2></div>
     <div class="legacy-grid">@foreach ($testimonials as $testimonial)<figure class="legacy-card"><blockquote>{{ $testimonial->quote }}</blockquote><figcaption><strong>{{ $testimonial->name }}</strong><p>{{ $testimonial->role }}</p></figcaption></figure>@endforeach</div>
   </div></section>
   @endif
@@ -513,7 +584,7 @@
       </div>
       <div class="download-grid" id="downloadGrid">
         @forelse ($products as $product)
-          <div class="download-card reveal">
+          <div class="download-card reveal" style="transition-delay:{{ $loop->index * 0.08 }}s">
             <div class="dic">↓</div><h3>{{ $product['name'] }}</h3><p>{{ $product['description'] ?? '' }}</p>
             <a href="{{ $product['url'] }}" target="_blank" rel="noopener noreferrer" class="dl-btn">Lihat Produk →</a>
           </div>
@@ -577,17 +648,136 @@
 </div>
 
 <script>
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Floating 3D "storyboard network" background — film/storyboard panels drifting in space,
+// connected by light lines (production pipeline processed by AI), brand colors, transparent
+// canvas so the site's white background shows through.
+(function initAiCore() {
+  const canvas = document.getElementById('ai-core-canvas');
+  if (!canvas || prefersReducedMotion || typeof THREE === 'undefined') return;
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  } catch (e) {
+    return; // WebGL unavailable — leave plain white background, no regression.
+  }
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 0, 6);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const storyboardGroup = new THREE.Group();
+  storyboardGroup.position.set(3.4, -1.6, -1); // digeser ke kanan-bawah hero visual, di ruang kosong bukan di atas video
+  scene.add(storyboardGroup);
+
+  const panelCount = 7;
+  const panels = [];
+  for (let i = 0; i < panelCount; i++) {
+    const w = 0.85, h = 0.55;
+    const geo = new THREE.PlaneGeometry(w, h);
+    const panel = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
+      color: 0x0d47a1, transparent: true, opacity: 0.16, side: THREE.DoubleSide,
+    }));
+    const border = new THREE.LineSegments(
+      new THREE.EdgesGeometry(geo),
+      new THREE.LineBasicMaterial({ color: 0xffd600, transparent: true, opacity: 0.85 })
+    );
+    panel.add(border);
+
+    const angle = (i / panelCount) * Math.PI * 2;
+    const radius = 1.15 + (i % 3) * 0.4;
+    panel.position.set(
+      Math.cos(angle) * radius,
+      Math.sin(angle) * radius * 0.6 + (i % 2 ? 0.35 : -0.35),
+      (i % 3 - 1) * 0.7
+    );
+    panel.rotation.set((Math.random() - 0.5) * 0.6, (Math.random() - 0.5) * 0.7, (Math.random() - 0.5) * 0.35);
+    panel.userData = {
+      baseX: panel.position.x, baseY: panel.position.y, baseZ: panel.position.z,
+      baseRotZ: panel.rotation.z, floatOffset: i * 1.35,
+    };
+    panels.push(panel);
+    storyboardGroup.add(panel);
+  }
+
+  // Connecting lines between nearby panels — the "pipeline" linking each frame.
+  const connectionPairs = [];
+  for (let i = 0; i < panelCount; i++) {
+    connectionPairs.push([i, (i + 1) % panelCount]);
+    if (i % 2 === 0) connectionPairs.push([i, (i + 2) % panelCount]);
+  }
+  const linePositions = new Float32Array(connectionPairs.length * 2 * 3);
+  const lineGeo = new THREE.BufferGeometry();
+  lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+  const lines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
+    color: 0xffd600, transparent: true, opacity: 0.3,
+  }));
+  storyboardGroup.add(lines);
+
+  function updateConnections() {
+    const arr = lineGeo.attributes.position.array;
+    connectionPairs.forEach(([a, b], idx) => {
+      const pa = panels[a].position, pb = panels[b].position;
+      arr[idx * 6 + 0] = pa.x; arr[idx * 6 + 1] = pa.y; arr[idx * 6 + 2] = pa.z;
+      arr[idx * 6 + 3] = pb.x; arr[idx * 6 + 4] = pb.y; arr[idx * 6 + 5] = pb.z;
+    });
+    lineGeo.attributes.position.needsUpdate = true;
+  }
+
+  let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+  window.addEventListener('mousemove', event => {
+    mouseX = (event.clientX / window.innerWidth - 0.5) * 0.6;
+    mouseY = (event.clientY / window.innerHeight - 0.5) * 0.6;
+  });
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  let rafId;
+  function animate() {
+    rafId = requestAnimationFrame(animate);
+    const t = performance.now() * 0.001;
+    panels.forEach(panel => {
+      const d = panel.userData;
+      panel.position.y = d.baseY + Math.sin(t * 0.6 + d.floatOffset) * 0.14;
+      panel.position.x = d.baseX + Math.cos(t * 0.4 + d.floatOffset) * 0.06;
+      panel.rotation.z = d.baseRotZ + Math.sin(t * 0.4 + d.floatOffset) * 0.1;
+      panel.rotation.y += 0.0015;
+    });
+    updateConnections();
+    targetX += (mouseX - targetX) * 0.04;
+    targetY += (mouseY - targetY) * 0.04;
+    storyboardGroup.rotation.y = targetX;
+    storyboardGroup.rotation.x = -targetY;
+    renderer.render(scene, camera);
+  }
+  animate();
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) cancelAnimationFrame(rafId);
+    else animate();
+  });
+})();
+
 const portfolioItems = {{ Illuminate\Support\Js::from($portfolioItems) }};
 const portfolioButtons = [...document.querySelectorAll('[data-portfolio-index]')];
 const loadMore = document.getElementById('loadMore');
+const filterProgress = document.getElementById('filterProgress');
 let activeCategory = 'all';
 let visibleCount = 9;
 let filteredButtons = portfolioButtons;
 function filterPortfolio() {
+  filterProgress?.classList.add('loading');
   filteredButtons = portfolioButtons.filter(button => activeCategory === 'all' || button.dataset.category === activeCategory);
   portfolioButtons.forEach(button => { button.hidden = true; });
   filteredButtons.slice(0, visibleCount).forEach(button => { button.hidden = false; });
   loadMore.hidden = filteredButtons.length <= visibleCount;
+  setTimeout(() => filterProgress?.classList.remove('loading'), 420);
 }
 document.getElementById('filterBar').addEventListener('click', event => {
   const button = event.target.closest('.filter-btn');
@@ -668,11 +858,88 @@ document.addEventListener('keydown', event => {
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   }
 });
-if ('IntersectionObserver' in window) {
-  const observer = new IntersectionObserver(entries => entries.forEach(entry => {
-    if (entry.isIntersecting) { entry.target.classList.add('in'); observer.unobserve(entry.target); }
-  }), { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(element => { element.classList.add('animate'); observer.observe(element); });
+const scrollProgress = document.getElementById('scrollProgress');
+if (scrollProgress) {
+  const updateScrollProgress = () => {
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    scrollProgress.style.width = (docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0) + '%';
+  };
+  window.addEventListener('scroll', updateScrollProgress, { passive: true });
+  updateScrollProgress();
+}
+
+// Scroll-reveal via manual geometry checks (more resilient than IntersectionObserver,
+// which was found to sometimes miss delivering callbacks on some machines/browsers).
+document.querySelectorAll('.reveal').forEach(element => element.classList.add('animate'));
+function revealElementsInView() {
+  document.querySelectorAll('.reveal.animate:not(.in)').forEach(element => {
+    const rect = element.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+      element.classList.add('in');
+    }
+  });
+}
+revealElementsInView();
+window.addEventListener('scroll', revealElementsInView, { passive: true });
+window.addEventListener('resize', revealElementsInView);
+setInterval(revealElementsInView, 500);
+
+// Hero title "generating" typewriter effect
+const heroTitle = document.getElementById('heroTitle');
+if (heroTitle) {
+  if (prefersReducedMotion) {
+    heroTitle.classList.add('in');
+  } else {
+    const fullText = heroTitle.textContent;
+    heroTitle.textContent = '';
+    heroTitle.classList.add('typewriter');
+    let charIndex = 0;
+    (function typeNextChar() {
+      heroTitle.textContent = fullText.slice(0, charIndex);
+      charIndex++;
+      if (charIndex <= fullText.length) {
+        setTimeout(typeNextChar, 28);
+      } else {
+        heroTitle.classList.remove('typewriter');
+      }
+    })();
+  }
+}
+
+// Hero visual cursor spotlight
+if (!prefersReducedMotion) {
+  document.querySelectorAll('.hero-visual').forEach(visual => {
+    visual.addEventListener('mousemove', event => {
+      const rect = visual.getBoundingClientRect();
+      visual.style.setProperty('--mx', ((event.clientX - rect.left) / rect.width * 100) + '%');
+      visual.style.setProperty('--my', ((event.clientY - rect.top) / rect.height * 100) + '%');
+    });
+  });
+}
+
+// Portfolio card 3D tilt
+if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
+  document.querySelectorAll('.p-item').forEach(item => {
+    item.addEventListener('mousemove', event => {
+      const rect = item.getBoundingClientRect();
+      const px = (event.clientX - rect.left) / rect.width - 0.5;
+      const py = (event.clientY - rect.top) / rect.height - 0.5;
+      item.style.transform = `rotateX(${(-py * 8).toFixed(2)}deg) rotateY(${(px * 10).toFixed(2)}deg) scale(1.02)`;
+    });
+    item.addEventListener('mouseleave', () => { item.style.transform = ''; });
+  });
+
+  // Magnetic CTA button
+  const magneticCta = document.querySelector('.nav-cta');
+  if (magneticCta) {
+    magneticCta.addEventListener('mousemove', event => {
+      const rect = magneticCta.getBoundingClientRect();
+      const x = event.clientX - rect.left - rect.width / 2;
+      const y = event.clientY - rect.top - rect.height / 2;
+      magneticCta.style.transform = `translate(${(x * 0.25).toFixed(2)}px, ${(y * 0.4).toFixed(2)}px)`;
+    });
+    magneticCta.addEventListener('mouseleave', () => { magneticCta.style.transform = ''; });
+  }
 }
 </script>
 </body>

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
     'logo_path',
+    'logo_text_path',
     'company_name',
     'tagline',
     'hero_title',
@@ -68,6 +69,11 @@ class SiteSetting extends Model
     public function getLogoUrlAttribute(): ?string
     {
         return $this->logo_path ? asset('storage/'.$this->logo_path) : null;
+    }
+
+    public function getLogoTextUrlAttribute(): ?string
+    {
+        return $this->logo_text_path ? asset('storage/'.$this->logo_text_path) : null;
     }
 
     public function getHeroTile1UrlAttribute(): ?string
