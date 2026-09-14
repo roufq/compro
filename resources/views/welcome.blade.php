@@ -641,9 +641,9 @@
   <button class="lb-nav lb-next" id="lbNext" aria-label="Karya berikutnya">›</button>
   <div class="lb-content">
     <div class="lb-visual" id="lbVisual"></div>
-    <p id="lbDescription" style="color:white"></p>
     <div class="lb-cat" id="lbCat"></div>
     <h3 class="lb-title" id="lbTitle"></h3>
+    <p id="lbDescription" style="color:white"></p>
   </div>
 </div>
 
