@@ -249,6 +249,8 @@
   </div>
 </div>
 
+<x-auth-session-timeout />
+
 @stack('scripts')
 </body>
 </html>

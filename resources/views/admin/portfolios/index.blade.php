@@ -53,7 +53,7 @@
   <div class="admin-modal-head">
     <div>
       <h3>Tambah Karya Baru</h3>
-      <p>Pilih tipe "Gambar" untuk upload file, atau "Video" cukup tempel link YouTube</p>
+      <p>Upload thumbnail untuk kartu portofolio dan tempel link video YouTube untuk modal</p>
     </div>
     <button type="button" class="admin-modal-close" aria-label="Tutup modal" onclick="document.getElementById('portfolio-add-modal').close()">×</button>
   </div>
@@ -71,24 +71,18 @@
         </div>
 
         <div class="field2">
-          <label>Tipe Karya</label>
-          <select name="type" id="typeSelect" onchange="toggleType()">
-            <option value="gambar" @selected(old('type', 'gambar') === 'gambar')>Gambar (upload file)</option>
-            <option value="video" @selected(old('type') === 'video')>Video (link YouTube)</option>
-          </select>
-        </div>
-        <div class="field2">
           <label>Urutan Tampil</label>
           <input type="number" name="order" min="0" value="{{ old('order', 0) }}">
         </div>
 
-        <div class="field2" id="fieldGambar">
-          <label>Upload Gambar</label>
+        <div class="field2">
+          <label>Thumbnail <span style="color:#9a9ca2;font-weight:400;">(opsional)</span></label>
           <input type="file" name="image" accept="image/*">
+          <small>Jika kosong, thumbnail YouTube akan digunakan.</small>
         </div>
-        <div class="field2" id="fieldVideo" style="display:none;">
-          <label>Link YouTube</label>
-          <input type="url" name="youtube_url" value="{{ old('youtube_url') }}" placeholder="https://youtu.be/xxxxxxxxxxx">
+        <div class="field2">
+          <label>Link Video YouTube</label>
+          <input type="url" name="youtube_url" value="{{ old('youtube_url') }}" placeholder="https://youtu.be/xxxxxxxxxxx" required>
         </div>
 
         <div class="field2 full">
@@ -126,13 +120,6 @@
             <input type="text" name="category" value="{{ $item->category }}" required>
           </div>
           <div class="field2">
-            <label>Tipe Karya</label>
-            <select name="type" id="editType-{{ $item->id }}" onchange="toggleEditType({{ $item->id }})">
-              <option value="gambar" @selected($item->type === 'gambar')>Gambar (upload file)</option>
-              <option value="video" @selected($item->type === 'video')>Video (link YouTube)</option>
-            </select>
-          </div>
-          <div class="field2">
             <label>Urutan Tampil</label>
             <input type="number" name="order" min="0" value="{{ $item->order }}">
           </div>
@@ -143,18 +130,18 @@
                 <img id="portfolio-preview-{{ $item->id }}" src="{{ $item->thumbnail_url }}" data-original-src="{{ $item->thumbnail_url }}" alt="Media saat ini untuk {{ $item->title }}">
                 <div>
                   <strong>{{ $item->title }}</strong>
-                  <span>{{ $item->isVideo() ? 'Thumbnail video YouTube yang sedang digunakan' : 'Gambar yang sedang digunakan' }}</span>
+                  <span>Thumbnail kartu yang sedang digunakan</span>
                 </div>
               </div>
             </div>
           @endif
-          <div class="field2" id="editImage-{{ $item->id }}">
-            <label>Ganti Gambar <span style="color:#9a9ca2;font-weight:400;">(opsional)</span></label>
+          <div class="field2">
+            <label>Ganti Thumbnail <span style="color:#9a9ca2;font-weight:400;">(opsional)</span></label>
             <input type="file" name="image" accept="image/*" onchange="previewPortfolioImage({{ $item->id }}, this)">
           </div>
-          <div class="field2" id="editVideo-{{ $item->id }}">
-            <label>Link YouTube</label>
-            <input type="url" name="youtube_url" value="{{ $item->youtube_url }}" placeholder="https://youtu.be/xxxxxxxxxxx">
+          <div class="field2">
+            <label>Link Video YouTube</label>
+            <input type="url" name="youtube_url" value="{{ $item->youtube_url }}" placeholder="https://youtu.be/xxxxxxxxxxx" required>
           </div>
           <div class="field2 full">
             <label>Deskripsi</label>
@@ -169,15 +156,15 @@
     </div>
   </dialog>
 
-  <dialog class="admin-modal" id="portfolio-detail-modal-{{ $item->id }}" onclick="closeModalFromBackdrop(event)">
+  <dialog class="admin-modal" id="portfolio-detail-modal-{{ $item->id }}" data-portfolio-detail-modal onclick="closeModalFromBackdrop(event)">
     <div class="admin-modal-head">
       <div><h3>{{ $item->title }}</h3><p>{{ ucfirst($item->category) }} · {{ ucfirst($item->type) }}</p></div>
-      <button type="button" class="admin-modal-close" aria-label="Tutup modal" onclick="document.getElementById('portfolio-detail-modal-{{ $item->id }}').close()">×</button>
+      <button type="button" class="admin-modal-close" aria-label="Tutup modal" onclick="closePortfolioDetailModal({{ $item->id }})">×</button>
     </div>
     <div class="admin-modal-body">
-      @if ($item->isVideo() && $item->youtube_embed)
+      @if ($item->youtube_embed)
         <div style="aspect-ratio:16/9;border-radius:12px;overflow:hidden;margin-bottom:14px;">
-          <iframe src="{{ $item->youtube_embed }}" style="width:100%;height:100%;border:0;" allowfullscreen loading="lazy"></iframe>
+          <iframe data-video-src="{{ $item->youtube_embed }}" title="Video {{ $item->title }}" style="width:100%;height:100%;border:0;" allowfullscreen loading="lazy"></iframe>
         </div>
       @elseif ($item->thumbnail_url)
         <img src="{{ $item->thumbnail_url }}" alt="{{ $item->title }}" style="width:100%;border-radius:12px;margin-bottom:14px;">
@@ -191,18 +178,18 @@
 
 @push('scripts')
 <script>
-  function toggleType(){
-    const type = document.getElementById('typeSelect').value;
-    document.getElementById('fieldGambar').style.display = type === 'gambar' ? 'block' : 'none';
-    document.getElementById('fieldVideo').style.display = type === 'video' ? 'block' : 'none';
-  }
-
   function openPortfolioModal(kind, id){
     if (kind === 'edit') {
-      toggleEditType(id);
       document.getElementById(`portfolio-modal-${id}`).showModal();
     } else {
-      document.getElementById(`portfolio-detail-modal-${id}`).showModal();
+      const dialog = document.getElementById(`portfolio-detail-modal-${id}`);
+      const video = dialog.querySelector('[data-video-src]');
+
+      if (video && ! video.hasAttribute('src')) {
+        video.src = video.dataset.videoSrc;
+      }
+
+      dialog.showModal();
     }
   }
 
@@ -210,16 +197,22 @@
     document.getElementById(`portfolio-modal-${id}`).close();
   }
 
+  function stopPortfolioVideo(dialog){
+    const video = dialog.querySelector('[data-video-src]');
+
+    if (video) {
+      video.removeAttribute('src');
+    }
+  }
+
+  function closePortfolioDetailModal(id){
+    document.getElementById(`portfolio-detail-modal-${id}`).close();
+  }
+
   function closeModalFromBackdrop(event){
     if (event.target === event.currentTarget) {
       event.currentTarget.close();
     }
-  }
-
-  function toggleEditType(id){
-    const type = document.getElementById(`editType-${id}`).value;
-    document.getElementById(`editImage-${id}`).style.display = type === 'gambar' ? 'block' : 'none';
-    document.getElementById(`editVideo-${id}`).style.display = type === 'video' ? 'block' : 'none';
   }
 
   function previewPortfolioImage(id, input){
@@ -231,6 +224,9 @@
     }
   }
 
-  toggleType();
+  document.querySelectorAll('[data-portfolio-detail-modal]').forEach((dialog) => {
+    dialog.addEventListener('close', () => stopPortfolioVideo(dialog));
+  });
+
 </script>
 @endpush

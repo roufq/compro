@@ -23,7 +23,7 @@
           <tr>
             <td>
               <div class="thumb-cell">
-                <div class="thumb" style="@if($client->image_url) background-image:url('{{ $client->image_url }}'); @endif"></div>
+                <div class="thumb" style="@if($client->logo_url) background-image:url('{{ $client->logo_url }}'); @endif"></div>
                 <div><strong>{{ $client->name }}</strong></div>
               </div>
             </td>
@@ -88,10 +88,10 @@
             <label>Nama Klien</label>
             <input type="text" name="name" value="{{ $client->name }}" required>
           </div>
-          @if ($client->image_url)
+          @if ($client->logo_url)
             <div class="field2 full">
               <div class="current-media">
-                <img src="{{ $client->image_url }}" alt="{{ $client->name }}">
+                <img src="{{ $client->logo_url }}" alt="{{ $client->name }}">
                 <div><strong>{{ $client->name }}</strong><span>Logo saat ini</span></div>
               </div>
             </div>
@@ -120,8 +120,8 @@
     </div>
     <div class="admin-modal-body">
       <div class="current-media">
-        @if ($client->image_url)
-          <img src="{{ $client->image_url }}" alt="{{ $client->name }}">
+        @if ($client->logo_url)
+          <img src="{{ $client->logo_url }}" alt="{{ $client->name }}">
         @endif
         <div><strong>{{ $client->name }}</strong><span>Ditambahkan {{ $client->created_at?->translatedFormat('d M Y') }}</span></div>
       </div>

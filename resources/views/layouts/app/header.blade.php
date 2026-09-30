@@ -87,6 +87,8 @@
             </flux:toast.group>
         @endpersist
 
+        <x-auth-session-timeout />
+
         @fluxScripts
     </body>
 </html>

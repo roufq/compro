@@ -50,7 +50,7 @@
           <div><span class="tag">Original IP</span><h1>{{ $ip['name'] }}</h1><p>{{ $ip['description'] ?? '' }}</p>
             @if (!empty($ip['url']))<a class="button" href="{{ $ip['url'] }}" target="_blank" rel="noopener noreferrer">Jelajahi {{ $ip['name'] }} ↗</a>@endif
           </div>
-          @if (!empty($ip['image_url']))<img class="cover" src="{{ $ip['image_url'] }}" alt="{{ $ip['name'] }}">@else<div class="cover-placeholder">{{ $ip['name'] }}</div>@endif
+          @if ($ip->cover_url)<img class="cover" src="{{ $ip->cover_url }}" alt="{{ $ip->name }}">@else<div class="cover-placeholder">{{ $ip->name }}</div>@endif
         </div>
       </div>
     </section>

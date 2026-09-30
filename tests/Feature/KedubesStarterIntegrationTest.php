@@ -50,6 +50,7 @@ test('home renders company profile content from the database', function () {
         ->assertSee('Video Kampanye')
         ->assertSee('https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg')
         ->assertSee('data-portfolio-index="0"', escape: false)
+        ->assertSee('.portfolio-grid{display:grid;grid-template-columns:repeat(4,1fr)', escape: false)
         ->assertSee('object-fit:contain', escape: false)
         ->assertSee('id="lightbox" role="dialog"', escape: false)
         ->assertSee('aria-controls="mobileMenu" aria-expanded="false"', escape: false)
@@ -259,7 +260,7 @@ test('admin can edit an existing portfolio from the portfolio gallery', function
         ->assertSeeText('Judul Baru');
 });
 
-test('changing a video portfolio to an image requires an uploaded image', function () {
+test('portfolio requires a valid youtube link for its modal video', function () {
     $admin = User::factory()->create();
     $portfolio = Portfolio::create([
         'title' => 'Video Lama',
@@ -271,16 +272,15 @@ test('changing a video portfolio to an image requires an uploaded image', functi
     $this->actingAs($admin)
         ->from(route('admin.portofolio.index'))
         ->put(route('admin.portofolio.update', $portfolio), [
-            'title' => 'Menjadi Gambar',
-            'category' => 'gambar',
-            'type' => 'gambar',
+            'title' => 'Video Baru',
+            'category' => 'video',
             'order' => 0,
         ])
         ->assertRedirect(route('admin.portofolio.index'))
-        ->assertSessionHasErrors('image');
+        ->assertSessionHasErrors('youtube_url');
 });
 
-test('portfolio edit modal displays the currently stored image', function () {
+test('portfolio uses the uploaded image as its card thumbnail and youtube video in the modal', function () {
     Storage::fake('public');
     $admin = User::factory()->create();
     $imagePath = UploadedFile::fake()->image('gambar-awal.jpg')->store('portfolio', 'public');
@@ -289,15 +289,28 @@ test('portfolio edit modal displays the currently stored image', function () {
         'category' => 'branding',
         'type' => 'gambar',
         'image_path' => $imagePath,
+        'youtube_url' => 'https://youtu.be/dQw4w9WgXcQ',
     ]);
 
     $this->actingAs($admin)
         ->get(route('admin.portofolio.index'))
         ->assertSuccessful()
         ->assertSee('data-test="portfolio-edit-modal-'.$portfolio->id.'"', escape: false)
-        ->assertSee('Gambar yang sedang digunakan')
+        ->assertSee('Thumbnail kartu yang sedang digunakan')
         ->assertSee($portfolio->thumbnail_url)
-        ->assertSee('data-original-src="'.$portfolio->thumbnail_url.'"', escape: false);
+        ->assertSee('data-original-src="'.$portfolio->thumbnail_url.'"', escape: false)
+        ->assertSee('data-portfolio-detail-modal', escape: false)
+        ->assertSee('data-video-src="'.$portfolio->youtube_embed.'"', escape: false)
+        ->assertSee("dialog.addEventListener('close', () => stopPortfolioVideo(dialog));", escape: false)
+        ->assertSee("video.removeAttribute('src');", escape: false);
+
+    $this->get('/')
+        ->assertSuccessful()
+        ->assertSee(asset('storage/'.$imagePath))
+        ->assertSee('www.youtube.com', escape: false)
+        ->assertSee('dQw4w9WgXcQ', escape: false)
+        ->assertSee('frame.src = `${item.embed}?autoplay=1&rel=0`;', escape: false)
+        ->assertDontSee("const img = document.createElement('img');", escape: false);
 });
 
 test('all admin routes require authentication', function () {

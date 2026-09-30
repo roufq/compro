@@ -11,10 +11,12 @@ use Illuminate\Support\Str;
     'name',
     'slug',
     'description',
+    'image_path',
     'image_url',
     'url',
     'details',
     'gallery_urls',
+    'gallery_paths',
     'video_urls',
     'order',
 ])]
@@ -49,7 +51,20 @@ class OriginalIp extends Model
     /** @return array<int, string> */
     public function getPhotosAttribute(): array
     {
-        return preg_split('/\R/', $this->gallery_urls ?? '', flags: PREG_SPLIT_NO_EMPTY) ?: [];
+        $urls = preg_split('/\R/', $this->gallery_urls ?? '', flags: PREG_SPLIT_NO_EMPTY) ?: [];
+        $paths = preg_split('/\R/', $this->gallery_paths ?? '', flags: PREG_SPLIT_NO_EMPTY) ?: [];
+
+        return array_merge(
+            $urls,
+            array_map(fn (string $path): string => asset('storage/'.$path), $paths),
+        );
+    }
+
+    public function getCoverUrlAttribute(): ?string
+    {
+        return $this->image_path
+            ? asset('storage/'.$this->image_path)
+            : $this->image_url;
     }
 
     /** @return Collection<int, non-falsy-string> */

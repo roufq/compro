@@ -38,6 +38,7 @@
   html{scroll-behavior:smooth;}
   #ai-core-canvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;}
   body{background:transparent;color:var(--text-1);font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;overflow-x:hidden;line-height:1.6;}
+  body *,body *::before,body *::after{font-weight:400!important;}
   html{background:var(--void);}
   h1,h2,h3{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;letter-spacing:-0.03em;}
   a{color:inherit;text-decoration:none;}
@@ -74,12 +75,12 @@
   .logo-text .kd{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:700;letter-spacing:-0.02em;font-size:17px;color:var(--text-1);}
   .logo-text .st{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Helvetica,Arial,sans-serif;font-weight:600;font-size:8.5px;letter-spacing:0.22em;color:var(--text-2);}
   .logo-text-img{height:36px;width:auto;max-width:220px;object-fit:contain;}
-  .nav-links{display:flex;gap:28px;font-size:14px;font-weight:600;color:var(--text-2);}
+  .nav-links{display:flex;gap:28px;margin-left:auto;font-size:14px;font-weight:600;color:var(--text-2);}
   .nav-links a{position:relative;padding-bottom:3px;}
   .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--accent);transition:width .25s ease;}
   .nav-links a:hover{color:var(--blue);}
   .nav-links a:hover::after{width:100%;}
-  .nav-cta{padding:10px 20px;border-radius:100px;font-size:13px;font-weight:700;background:var(--blue);color:#fff;display:inline-block;transition:transform .2s ease;}
+  .nav-cta{margin-left:36px;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:700;background:var(--blue);color:#fff;display:inline-block;transition:transform .2s ease;}
   .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
   .burger span{width:22px;height:2.5px;background:var(--blue);display:block;border-radius:2px;}
   .mobile-menu{display:none;position:absolute;top:100%;left:0;right:0;height:calc(100dvh - 76px);overflow-y:auto;z-index:49;background:#fff;padding:32px;flex-direction:column;gap:22px;font-size:18px;font-weight:600;}
@@ -90,9 +91,13 @@
   .sec-head{max-width:640px;margin:0 auto 40px;text-align:center;}
   .sec-head h2{font-size:clamp(16px,1.8vw,19px);font-weight:600;color:var(--text-2);margin-bottom:10px;}
   .sec-head p{color:var(--text-2);font-size:15px;}
+  .sec-head h2,.sec-head p{display:none;}
 
   /* ===== HERO VISUAL ===== */
-  .hero{padding:44px 0 0;}
+  .hero{padding:28px 0 0;}
+  .hero-brand{display:flex;flex-direction:column;align-items:center;gap:12px;margin:0 auto 28px;text-align:center;}
+  .hero-brand-mark{width:auto;height:clamp(72px,10vw,118px);object-fit:contain;}
+  .hero-brand-text{width:auto;height:clamp(32px,5vw,56px);max-width:min(520px,80vw);object-fit:contain;}
   .hero::before{
     content:'';position:absolute;left:50%;top:6%;width:min(900px,140vw);aspect-ratio:1/1;
     transform:translateX(-50%);z-index:-1;pointer-events:none;filter:blur(60px);
@@ -109,6 +114,7 @@
       radial-gradient(circle at 50% 46%, #FFF7D6 0%, #FFE9A0 8%, #FFD54F 16%, rgba(255,213,79,0.25) 26%, transparent 40%),
       linear-gradient(180deg, #050B1E 0%, #0A1B45 40%, #123B7A 68%, #1857C4 100%);
   }
+  .hero-visual--video{aspect-ratio:16/9;background:#000;}
   .hero-grain{
     position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0.12;mix-blend-mode:overlay;background-size:120px 120px;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -186,7 +192,7 @@
   .filter-progress{max-width:280px;height:2px;background:var(--panel-2);border-radius:2px;margin:0 auto 32px;overflow:hidden;position:relative;}
   .filter-progress::after{content:'';position:absolute;inset:0;width:0;background:var(--blue);transition:width .4s ease;}
   .filter-progress.loading::after{width:100%;}
-  .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;perspective:1200px;}
+  .portfolio-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;perspective:1200px;}
   .p-item{aspect-ratio:16/10;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;border:1px solid var(--line);transition:transform .35s cubic-bezier(.16,1,.3,1);}
   .p-item.reveal.animate{transition:opacity .6s ease, transform .35s cubic-bezier(.16,1,.3,1);}
   .p-item::before{content:'';position:absolute;inset:-40% -60%;z-index:2;pointer-events:none;
@@ -226,7 +232,7 @@
   .team-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
   .team-item{text-align:center;}
   .team-avatar{
-    aspect-ratio:1/1;border-radius:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;
+    aspect-ratio:9/16;border-radius:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;
     font-weight:700;font-size:22px;color:#fff;transition:transform .3s ease, box-shadow .3s ease;
   }
   .team-item:hover .team-avatar{transform:scale(1.05);box-shadow:0 0 0 3px rgba(255,214,0,0.4), 0 12px 24px rgba(13,71,161,0.3);}
@@ -309,6 +315,7 @@
   }
   @media(max-width:860px){
     .nav-links{display:none;}
+    .nav-cta{margin-left:auto;}
     .burger{display:flex;}
     .foot-grid{grid-template-columns:1fr 1fr;row-gap:28px;}
     .contact-grid{grid-template-columns:1fr;}
@@ -335,9 +342,10 @@
   [hidden]{display:none!important;}
   section{scroll-margin-top:76px;}
   .hero-image{width:100%;height:100%;object-fit:cover;}
-  .hero-video{position:absolute;top:50%;left:50%;width:145%;height:145%;transform:translate(-50%,-50%);border:0;pointer-events:none;}
+  .hero-video{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;}
   .hero-caption{white-space:pre-line;}
   h1.hero-caption{font-size:clamp(24px,4vw,40px);}
+  h1.hero-caption--lowered{margin-top:clamp(72px,8vw,100px);}
   .logo-text{max-width:230px;gap:4px;}.logo-text .st{letter-spacing:.03em;line-height:1.3;}
   .p-item .fill{background:linear-gradient(150deg,#1857C4,#082E6B);position:relative;}
   .p-item .fill img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
@@ -371,28 +379,21 @@
         <circle cx="20" cy="20" r="4" fill="#FFD600"/>
         <rect x="24" y="16" width="8" height="2.4" rx="1.2" fill="#FFD600"/>
       </svg>@endif
-      @if ($settings->logo_text_url)
-        <img class="logo-text-img" src="{{ $settings->logo_text_url }}" alt="{{ $settings->company_name }} — {{ $settings->tagline }}">
-      @else
-        <span class="logo-text"><span class="kd">{{ $settings->company_name }}</span><span class="st">{{ $settings->tagline }}</span></span>
-      @endif
     </a>
     <div class="nav-links">
-      <a href="#about">About Us</a>
-      <a href="#portfolio">Projects</a>
-      <a href="#trusted">Clients</a>
-      <a href="#our-ip">IPs</a>
-      <a href="#contact">Contact Us</a>
+      <a href="#about">Tentang Kami</a>
+      <a href="#portfolio">Portofolio</a>
+      <a href="#trusted">Klien</a>
+      <a href="#our-ip">IP Kami</a>
     </div>
     <a href="#contact" class="nav-cta">Hubungi Kami</a>
     <button class="burger" id="burger" aria-label="Buka menu" aria-controls="mobileMenu" aria-expanded="false"><span></span><span></span><span></span></button>
   </nav>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="#about">About Us</a>
-    <a href="#portfolio">Projects</a>
-    <a href="#trusted">Clients</a>
-    <a href="#our-ip">IPs</a>
-    <a href="#contact">Contact Us</a>
+    <a href="#about">Tentang Kami</a>
+    <a href="#portfolio">Portofolio</a>
+    <a href="#trusted">Klien</a>
+    <a href="#our-ip">IP Kami</a>
   </div>
 </header>
 
@@ -400,7 +401,17 @@
   <!-- HERO VISUAL -->
   <section class="hero">
     <div class="wrap">
-      <div class="hero-visual reveal">
+      @if ($settings->logo_url || $settings->logo_text_url)
+      <div class="hero-brand reveal" aria-label="{{ $settings->company_name }}">
+        @if ($settings->logo_url)
+          <img class="hero-brand-mark" src="{{ $settings->logo_url }}" alt="Logo {{ $settings->company_name }}">
+        @endif
+        @if ($settings->logo_text_url)
+          <img class="hero-brand-text" src="{{ $settings->logo_text_url }}" alt="{{ $settings->company_name }} — {{ $settings->tagline }}">
+        @endif
+      </div>
+      @endif
+      <div class="hero-visual reveal @if ($settings->hero_video_embed) hero-visual--video @endif">
         @if ($settings->hero_video_embed)
         <iframe class="hero-video" src="{{ $settings->hero_video_embed }}" title="{{ $settings->hero_title }}" allow="autoplay; encrypted-media; picture-in-picture" loading="lazy"></iframe>
         @elseif ($settings->hero_image_url)<img class="hero-image" src="{{ $settings->hero_image_url }}" alt="{{ $settings->hero_title }}">@else
@@ -419,15 +430,14 @@
         <div class="hero-spotlight"></div>
         <div class="hero-badge"><span class="dot"></span>{{ $settings->company_name }}</div>
       </div>
-      <h1 class="hero-caption" id="heroTitle">{{ $settings->hero_title }}</h1>
-      <p class="hero-caption reveal">{{ $settings->tagline }}</p>
+      <h1 class="hero-caption hero-caption--lowered" id="heroTitle">{{ $settings->hero_title }}</h1>
     </div>
   </section>
 
   <!-- BEYOND THE IMAGINATION -->
   <section id="about">
     <div class="wrap imagine-grid">
-      <h2 class="reveal wipe">{{ $settings->about_title ?: "Beyond The Imagination" }}</h2>
+      <h2 class="reveal wipe">{{ $settings->about_title ?: "Melampaui Imajinasi" }}</h2>
       <p class="reveal d1">{{ $settings->about_description ?: $settings->hero_description }}</p>
     </div>
   </section>
@@ -435,17 +445,17 @@
   <!-- TRUSTED BY -->
   <section id="trusted" class="alt-bg">
     <div class="wrap">
-      <div class="sec-head reveal"><span class="tag">Trusted By</span></div>
+      <div class="sec-head reveal"><span class="tag">Dipercaya Oleh</span></div>
       @if ($clients->isNotEmpty())
         <div class="trusted-marquee reveal">
           <div class="trusted-track">
             @for ($rep = 0; $rep < 2; $rep++)
               @foreach ($clients as $client)
                 <span class="trusted-logo" aria-hidden="{{ $rep === 1 ? 'true' : 'false' }}">
-                  @if (!empty($client['image_url']))
-                    <img src="{{ $client['image_url'] }}" alt="{{ $client['name'] }}" loading="lazy">
+                  @if ($client->logo_url)
+                    <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" loading="lazy">
                   @else
-                    <span class="trusted-logo-text">{{ $client['name'] }}</span>
+                    <span class="trusted-logo-text">{{ $client->name }}</span>
                   @endif
                 </span>
               @endforeach
@@ -478,9 +488,12 @@
           <button type="button" class="p-item reveal" style="transition-delay:{{ min($loop->index % 9, 8) * 0.05 }}s" data-portfolio-index="{{ $loop->index }}" data-category="{{ $portfolio->category }}" aria-label="Lihat {{ $portfolio->title }}">
             <div class="fill">
               @if ($portfolio->thumbnail_url)<img src="{{ $portfolio->thumbnail_url }}" alt="{{ $portfolio->title }}" loading="lazy">@endif
-              <span class="badge-name">{{ $portfolio->title }}</span>
+              <span hidden class="badge-name">{{ $portfolio->title }}</span>
             </div>
-            <div class="overlay"><div class="cat">{{ $portfolio->category }}</div><div class="ttl">{{ $portfolio->title }}</div></div>
+            <div class="overlay">
+              <div class="cat">{{ $portfolio->category }}</div>
+              <div hidden class="ttl">{{ $portfolio->title }}</div>
+            </div>
           </button>
         @empty
           <p>Portofolio akan segera ditampilkan.</p>
@@ -493,13 +506,13 @@
   <!-- OUR IP -->
   <section id="our-ip" class="alt-bg">
     <div class="wrap">
-      <div class="sec-head reveal"><span class="tag">Our IP</span><h2>Original IP kami</h2></div>
+      <div class="sec-head reveal"><span class="tag">IP Kami</span><h2>IP orisinal kami</h2></div>
       <div class="ip-grid reveal">
         @forelse ($originalIps as $ip)
           @php($ipHasChannel = !empty($ip['url']))
           @php($ipTag = $ipHasChannel ? 'a' : 'div')
           <{{ $ipTag }} class="ip-card @if (! $ipHasChannel) ip-card--disabled @endif" @if ($ipHasChannel) href="{{ $ip['url'] }}" target="_blank" rel="noopener noreferrer" aria-label="Tonton {{ $ip['name'] }} di YouTube" @endif>
-            @if (!empty($ip['image_url']))<img src="{{ $ip['image_url'] }}" alt="{{ $ip['name'] }}" loading="lazy">@else<div class="ip-logo {{ $loop->index % 2 === 0 ? 'teman' : 'happy' }}">{{ $ip['name'] }}</div>@endif
+            @if ($ip->cover_url)<img src="{{ $ip->cover_url }}" alt="{{ $ip->name }}" loading="lazy">@else<div class="ip-logo {{ $loop->index % 2 === 0 ? 'teman' : 'happy' }}">{{ $ip->name }}</div>@endif
             <span>{{ $ip['description'] ?? 'Original IP' }}</span>
             @if ($ipHasChannel)
               <span class="ip-cta">Tonton di YouTube ↗</span>
@@ -515,11 +528,11 @@
   <!-- OUR TEAM -->
   <section id="team">
     <div class="wrap">
-      <div class="sec-head reveal"><span class="tag">Our Team</span><h2>Tim di balik karya</h2></div>
+      <div class="sec-head reveal"><span class="tag">Tim Kami</span><h2>Tim di balik karya</h2></div>
       <div class="team-grid" id="teamGrid">
         @forelse ($teamMembers as $member)
           <div class="team-item reveal" style="transition-delay:{{ min($loop->index, 6) * 0.06 }}s">
-            <div class="team-avatar">@if (!empty($member['image_url']))<img src="{{ $member['image_url'] }}" alt="{{ $member['name'] }}" loading="lazy">@else{{ mb_substr($member['name'], 0, 1) }}@endif</div>
+            <div class="team-avatar">@if ($member->photo_url)<img src="{{ $member->photo_url }}" alt="{{ $member->name }}" loading="lazy">@else{{ mb_substr($member->name, 0, 1) }}@endif</div>
             <h4>{{ $member['name'] }}</h4><span>{{ $member['role'] }}</span>
           </div>
         @empty
@@ -544,7 +557,7 @@
   <!-- CONTACT -->
   <section id="contact" class="alt-bg">
     <div class="wrap">
-      <div class="sec-head reveal"><span class="tag">Contact Us</span><h2>Mari diskusikan proyek Anda</h2></div>
+      <div class="sec-head reveal"><span class="tag">Kontak</span><h2>Mari diskusikan proyek Anda</h2></div>
       <div class="contact-grid reveal">
         <div class="contact-info">
           <div class="info-row">
@@ -578,7 +591,7 @@
   <section id="download" class="download-section">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="tag">Download</span>
+        <span class="tag">Unduhan</span>
         <h2>Produk & aset kami</h2>
         <p>Dapatkan produk digital kami melalui ScaleV.</p>
       </div>
@@ -612,9 +625,9 @@
       <div>
         <h4>Navigasi</h4>
         <ul>
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#portfolio">Projects</a></li>
-          <li><a href="#our-ip">IPs</a></li>
+          <li><a href="#about">Tentang Kami</a></li>
+          <li><a href="#portfolio">Portofolio</a></li>
+          <li><a href="#our-ip">IP Kami</a></li>
         </ul>
       </div>
       <div>
@@ -797,19 +810,13 @@ function openLightbox(index) {
   selectedIndex = index;
   const item = portfolioItems[index];
   visual.replaceChildren();
-  if (item.type === 'video' && item.embed) {
+  if (item.embed) {
     const frame = document.createElement('iframe');
-    frame.src = item.embed;
+    frame.src = `${item.embed}?autoplay=1&rel=0`;
     frame.title = item.title;
     frame.allow = 'autoplay; encrypted-media; picture-in-picture';
     frame.allowFullscreen = true;
     visual.append(frame);
-  } else if (item.thumb) {
-    const img = document.createElement('img');
-    img.src = item.thumb;
-    img.alt = item.title;
-    img.className = 'lightbox-image';
-    visual.append(img);
   }
   document.getElementById('lbTitle').textContent = item.title;
   document.getElementById('lbCat').textContent = item.category;

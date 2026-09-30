@@ -50,7 +50,10 @@ class TeamMemberController extends Controller
         ]);
 
         if ($request->hasFile('photo')) {
-            $data['image_url'] = asset('storage/'.$request->file('photo')->store('team-members', 'public'));
+            $data['image_path'] = $request->file('photo')->store('team-members', 'public');
+            $data['image_url'] = null;
+        } elseif ($request->filled('image_url')) {
+            $data['image_path'] = null;
         }
         unset($data['photo']);
 

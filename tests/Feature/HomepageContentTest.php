@@ -50,6 +50,7 @@ test('admin can save and render the new homepage sections', function () {
         ->assertSeeText('Sinta')
         ->assertSeeText('Art Director')
         ->assertSee('https://example.com/sinta.jpg')
+        ->assertSee('aspect-ratio:9/16', escape: false)
         ->assertSeeText('Paket Storyboard')
         ->assertSee('https://scalev.id/produk/studio')
         ->assertSee('https://wa.me/6281234567890')
@@ -101,6 +102,36 @@ test('hero image can be uploaded displayed and removed', function () {
     $this->get('/')->assertSuccessful()->assertSee('class="hero-boat"', escape: false);
 });
 
+test('homepage uses the stacked brand, uncropped hero video, and Indonesian navigation', function () {
+    $settings = SiteSetting::current();
+    $settings->update([
+        'logo_path' => 'branding/logo.png',
+        'logo_text_path' => 'branding/logo-text.png',
+        'hero_video_url' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    ]);
+
+    $this->get('/')
+        ->assertSuccessful()
+        ->assertSee('class="hero-brand reveal"', escape: false)
+        ->assertSee('class="hero-brand-mark"', escape: false)
+        ->assertSee('class="hero-brand-text"', escape: false)
+        ->assertSee('.hero{padding:28px 0 0;}', escape: false)
+        ->assertDontSee('class="logo-text-img"', escape: false)
+        ->assertDontSee('class="logo-text"', escape: false)
+        ->assertSee('hero-visual--video', escape: false)
+        ->assertSee('.hero-video{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;}', escape: false)
+        ->assertSeeText('Tentang Kami')
+        ->assertSeeText('Portofolio')
+        ->assertSeeText('Klien')
+        ->assertSeeText('IP Kami')
+        ->assertSee('.nav-links{display:flex;gap:28px;margin-left:auto;', escape: false)
+        ->assertSee('.nav-cta{margin-left:36px;', escape: false)
+        ->assertSee('.nav-cta{margin-left:auto;}', escape: false)
+        ->assertSee('<h1 class="hero-caption hero-caption--lowered" id="heroTitle">'.$settings->hero_title.'</h1>', escape: false)
+        ->assertDontSee('<p class="hero-caption reveal">'.$settings->tagline.'</p>', escape: false)
+        ->assertDontSeeText('Contact Us');
+});
+
 test('clients, original ips, and team member photos can be uploaded and stored', function () {
     Storage::fake('public');
     $admin = User::factory()->create();
@@ -121,17 +152,53 @@ test('clients, original ips, and team member photos can be uploaded and stored',
     $ip = OriginalIp::firstWhere('name', 'IP Upload');
     $member = TeamMember::firstWhere('name', 'Anggota Upload');
 
-    expect($client->image_url)->not->toBeEmpty()
-        ->and($ip->image_url)->not->toBeEmpty()
-        ->and($member->image_url)->not->toBeEmpty();
+    expect($client->image_path)->not->toBeEmpty()
+        ->and($client->image_url)->toBeNull()
+        ->and($ip->image_path)->not->toBeEmpty()
+        ->and($ip->image_url)->toBeNull()
+        ->and($member->image_path)->not->toBeEmpty()
+        ->and($member->image_url)->toBeNull();
 
-    Storage::disk('public')->assertExists(str_replace(asset('storage/'), '', $client->image_url));
-    Storage::disk('public')->assertExists(str_replace(asset('storage/'), '', $ip->image_url));
-    Storage::disk('public')->assertExists(str_replace(asset('storage/'), '', $member->image_url));
+    Storage::disk('public')->assertExists($client->image_path);
+    Storage::disk('public')->assertExists($ip->image_path);
+    Storage::disk('public')->assertExists($member->image_path);
 
     $this->get('/')->assertSuccessful()
-        ->assertSee($client->image_url)
-        ->assertSee($member->image_url);
+        ->assertSee($client->logo_url)
+        ->assertSee($member->photo_url);
+});
+
+test('uploaded team photos use the host that serves the homepage', function () {
+    Storage::fake('public');
+
+    $this->actingAs(User::factory()->create())
+        ->post(route('admin.tim.store'), [
+            'name' => 'Anggota Jaringan',
+            'role' => 'Desainer',
+            'photo' => UploadedFile::fake()->image('member-network.jpg'),
+        ])->assertSessionHasNoErrors();
+
+    $member = TeamMember::firstWhere('name', 'Anggota Jaringan');
+
+    $this->get('http://192.168.18.77/')
+        ->assertSuccessful()
+        ->assertSee('http://192.168.18.77/storage/'.$member->image_path);
+});
+
+test('uploaded client logos use the host that serves the homepage', function () {
+    Storage::fake('public');
+
+    $this->actingAs(User::factory()->create())
+        ->post(route('admin.klien.store'), [
+            'name' => 'Klien Jaringan',
+            'logo' => UploadedFile::fake()->image('client-network.jpg'),
+        ])->assertSessionHasNoErrors();
+
+    $client = Client::firstWhere('name', 'Klien Jaringan');
+
+    $this->get('http://192.168.18.77/')
+        ->assertSuccessful()
+        ->assertSee('http://192.168.18.77/storage/'.$client->image_path);
 });
 
 test('uploaded photo rejects oversized or non-image files', function () {

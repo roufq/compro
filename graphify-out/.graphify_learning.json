@@ -1,5 +1,212 @@
 {
-  "generated_at": "2026-08-26T09:00:18.911111+00:00",
-  "nodes": {},
+  "generated_at": "2026-09-28T04:53:26.512106+00:00",
+  "nodes": {
+    "app_livewire_actions_logout_logout": {
+      "code_fingerprint": "d04551c0e48c5736b7c0e762a6a696ed3715ea2e8b00c1d97a57838eae6e86bc",
+      "label": "Logout",
+      "last": "2026-09-28T03:49:37.016430+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-28T03:49:37.016430+00:00",
+          "outcome": "useful",
+          "q": "cek lagi sistem middleware auth ketika session habis sudah auto logout"
+        }
+      ],
+      "score": 0.998976449,
+      "source_file": "app/Livewire/Actions/Logout.php",
+      "status": "tentative",
+      "uses": 1
+    },
+    "app_models_portfolio_portfolio": {
+      "code_fingerprint": "d59bf9961d3a2875697412795f1b82a50b895e3c7c6d70fc2cc33e30a19c69d5",
+      "label": "Portfolio",
+      "last": "2026-09-28T04:48:43.747774+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-28T04:48:43.747774+00:00",
+          "outcome": "useful",
+          "q": "perbaik bug yang ada di admin/portfolio ketika saya klik detail terplay video tapi ketika saya close video seperti masih terputar padahal sudah tercolse karena suara dari video masih jalan faham?"
+        },
+        {
+          "date": "2026-09-28T04:30:43.702242+00:00",
+          "outcome": "useful",
+          "q": "lakukan riset harga pasar untuk menjual web aplikasi ini"
+        },
+        {
+          "date": "2026-08-26T09:00:59.359836+00:00",
+          "outcome": "useful",
+          "q": "harga untuk web aplikasi ini jika di jual lepas"
+        }
+      ],
+      "score": 2.467933159,
+      "source_file": "app/Models/Portfolio.php",
+      "status": "preferred",
+      "uses": 3
+    },
+    "app_models_service_service": {
+      "code_fingerprint": "966d91eb93f934e4d9d4b780ba870599431b00416ff6d8375b8a407d36c2d238",
+      "label": "Service",
+      "last": "2026-09-28T04:30:43.702242+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-28T04:30:43.702242+00:00",
+          "outcome": "useful",
+          "q": "lakukan riset harga pasar untuk menjual web aplikasi ini"
+        },
+        {
+          "date": "2026-08-26T09:00:59.359836+00:00",
+          "outcome": "useful",
+          "q": "harga untuk web aplikasi ini jika di jual lepas"
+        }
+      ],
+      "score": 1.468008772,
+      "source_file": "app/Models/Service.php",
+      "status": "preferred",
+      "uses": 2
+    },
+    "app_models_sitesetting_sitesetting": {
+      "code_fingerprint": "0d8b6b4a91500b92e9698e21a1713b9400effec55d4f40760418c90be5d0de15",
+      "label": "SiteSetting",
+      "last": "2026-09-28T04:30:43.702242+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-28T04:30:43.702242+00:00",
+          "outcome": "useful",
+          "q": "lakukan riset harga pasar untuk menjual web aplikasi ini"
+        },
+        {
+          "date": "2026-08-26T09:00:59.359836+00:00",
+          "outcome": "useful",
+          "q": "harga untuk web aplikasi ini jika di jual lepas"
+        }
+      ],
+      "score": 1.468008772,
+      "source_file": "app/Models/SiteSetting.php",
+      "status": "preferred",
+      "uses": 2
+    },
+    "app_models_team_team": {
+      "code_fingerprint": "c32e0f22bf0da2210f757d739ab68d27e7922d46ce852d02b068e49334d9d95b",
+      "label": "Team",
+      "last": "2026-09-28T04:30:43.702242+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-28T04:30:43.702242+00:00",
+          "outcome": "useful",
+          "q": "lakukan riset harga pasar untuk menjual web aplikasi ini"
+        },
+        {
+          "date": "2026-08-26T09:00:59.359836+00:00",
+          "outcome": "useful",
+          "q": "harga untuk web aplikasi ini jika di jual lepas"
+        }
+      ],
+      "score": 1.468008772,
+      "source_file": "app/Models/Team.php",
+      "status": "preferred",
+      "uses": 2
+    },
+    "app_models_testimonial_testimonial": {
+      "code_fingerprint": "78d5e479fcf146219408ec32edc3fb20d49d9b6f05b50174e8dabbf7fcad814a",
+      "label": "Testimonial",
+      "last": "2026-09-28T04:30:43.702242+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-28T04:30:43.702242+00:00",
+          "outcome": "useful",
+          "q": "lakukan riset harga pasar untuk menjual web aplikasi ini"
+        },
+        {
+          "date": "2026-08-26T09:00:59.359836+00:00",
+          "outcome": "useful",
+          "q": "harga untuk web aplikasi ini jika di jual lepas"
+        }
+      ],
+      "score": 1.468008772,
+      "source_file": "app/Models/Testimonial.php",
+      "status": "preferred",
+      "uses": 2
+    },
+    "app_models_user_user": {
+      "code_fingerprint": "c388b7efc599e777af0349134f1a85e083e49454f8265ed48b6d7f2a05e7fa4e",
+      "label": "User",
+      "last": "2026-08-26T09:00:59.359836+00:00",
+      "provenance": [
+        {
+          "date": "2026-08-26T09:00:59.359836+00:00",
+          "outcome": "useful",
+          "q": "harga untuk web aplikasi ini jika di jual lepas"
+        }
+      ],
+      "score": 0.468373145,
+      "source_file": "app/Models/User.php",
+      "status": "tentative",
+      "uses": 1
+    },
+    "app_providers_fortifyserviceprovider": {
+      "code_fingerprint": "6314894d8166b7bdaf7ee309e1aec634c67ca1c62d69d052c4f2c9b6f96f2dc1",
+      "label": "FortifyServiceProvider.php",
+      "last": "2026-09-28T04:30:43.702242+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-28T04:30:43.702242+00:00",
+          "outcome": "useful",
+          "q": "lakukan riset harga pasar untuk menjual web aplikasi ini"
+        }
+      ],
+      "score": 0.999635627,
+      "source_file": "app/Providers/FortifyServiceProvider.php",
+      "status": "tentative",
+      "uses": 1
+    },
+    "config_session": {
+      "code_fingerprint": "272de4fd3ad8b806f5726a34d2a4ad11cbdbd4184fcad17143280ee2a8d4c7d6",
+      "label": "session.php",
+      "last": "2026-09-28T03:49:37.016430+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-28T03:49:37.016430+00:00",
+          "outcome": "useful",
+          "q": "cek lagi sistem middleware auth ketika session habis sudah auto logout"
+        }
+      ],
+      "score": 0.998976449,
+      "source_file": "config/session.php",
+      "status": "tentative",
+      "uses": 1
+    },
+    "tests_feature_auth_authenticationtest": {
+      "code_fingerprint": "27b5ca264bfd04b430d4028259ca310009be951fc46bd727e63097ca429961af",
+      "label": "AuthenticationTest.php",
+      "last": "2026-09-28T03:49:37.016430+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-28T03:49:37.016430+00:00",
+          "outcome": "useful",
+          "q": "cek lagi sistem middleware auth ketika session habis sudah auto logout"
+        }
+      ],
+      "score": 0.998976449,
+      "source_file": "tests/Feature/Auth/AuthenticationTest.php",
+      "status": "tentative",
+      "uses": 1
+    },
+    "tests_feature_kedubesstarterintegrationtest": {
+      "code_fingerprint": "e68991eaed887dd31a0895fd7b7bbea06a4f9d8ba24768647659593a37b538dd",
+      "label": "KedubesStarterIntegrationTest.php",
+      "last": "2026-09-28T04:48:43.747774+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-28T04:48:43.747774+00:00",
+          "outcome": "useful",
+          "q": "perbaik bug yang ada di admin/portfolio ketika saya klik detail terplay video tapi ketika saya close video seperti masih terputar padahal sudah tercolse karena suara dari video masih jalan faham?"
+        }
+      ],
+      "score": 0.999924387,
+      "source_file": "tests/Feature/KedubesStarterIntegrationTest.php",
+      "status": "tentative",
+      "uses": 1
+    }
+  },
   "version": 1
 }

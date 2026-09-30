@@ -49,7 +49,11 @@ test('admin can save IP details photos and playable videos', function () {
     $ip = OriginalIp::firstWhere('name', 'Teman Ceria');
     expect($ip->slug)->toBe('teman-ceria');
     expect(Storage::disk('public')->allFiles('original-ips'))->toHaveCount(1);
-    $uploadedUrl = asset('storage/'.Storage::disk('public')->allFiles('original-ips')[0]);
+    $uploadedPath = Storage::disk('public')->allFiles('original-ips')[0];
+    $uploadedUrl = asset('storage/'.$uploadedPath);
+
+    expect($ip->gallery_paths)->toBe($uploadedPath)
+        ->and($ip->gallery_urls)->toBe('https://example.com/photo.jpg');
 
     $this->get(route('original-ip.show', $ip->slug))->assertSuccessful()
         ->assertSeeText('Cerita dan karakter Teman Ceria.')
@@ -62,6 +66,27 @@ test('admin can save IP details photos and playable videos', function () {
     $this->get(route('admin.original-ip.index'))->assertSuccessful()
         ->assertSeeText('Original IP')
         ->assertSeeText('Teman Ceria');
+});
+
+test('uploaded original IP images use the host that serves the page', function () {
+    Storage::fake('public');
+
+    $this->actingAs(User::factory()->create())
+        ->post(route('admin.original-ip.store'), [
+            'name' => 'IP Jaringan',
+            'cover' => UploadedFile::fake()->image('cover.jpg'),
+            'photos' => [UploadedFile::fake()->image('gallery.jpg')],
+        ])->assertSessionHasNoErrors();
+
+    $ip = OriginalIp::firstWhere('name', 'IP Jaringan');
+
+    $this->get('http://192.168.18.77/')
+        ->assertSuccessful()
+        ->assertSee('http://192.168.18.77/storage/'.$ip->image_path);
+
+    $this->get('http://192.168.18.77/original-ip/'.$ip->slug)
+        ->assertSuccessful()
+        ->assertSee('http://192.168.18.77/storage/'.$ip->gallery_paths);
 });
 
 test('admin original IP forms hide detail and gallery controls', function () {

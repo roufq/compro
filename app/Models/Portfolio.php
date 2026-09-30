@@ -80,8 +80,8 @@ class Portfolio extends Model
 
     public function getThumbnailUrlAttribute(): ?string
     {
-        return $this->isVideo()
-            ? $this->youtube_thumbnail
-            : ($this->image_path ? asset('storage/'.$this->image_path) : null);
+        return $this->image_path
+            ? asset('storage/'.$this->image_path)
+            : $this->youtube_thumbnail;
     }
 }

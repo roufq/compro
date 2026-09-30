@@ -63,19 +63,24 @@ class OriginalIpController extends Controller
         ]);
 
         $gallery = array_values(array_filter(array_map('trim', preg_split('/\R/', $data['gallery_urls'] ?? '') ?: [])));
+        $galleryPaths = preg_split('/\R/', $originalIp?->gallery_paths ?? '', flags: PREG_SPLIT_NO_EMPTY) ?: [];
 
-        if (count($gallery) + count($data['photos'] ?? []) > 100) {
+        if (count($gallery) + count($galleryPaths) + count($data['photos'] ?? []) > 100) {
             throw ValidationException::withMessages(['gallery_urls' => 'Maksimal 100 foto per IP, termasuk unggahan baru.']);
         }
 
         foreach ($data['photos'] ?? [] as $photo) {
-            $gallery[] = asset('storage/'.$photo->store('original-ips', 'public'));
+            $galleryPaths[] = $photo->store('original-ips', 'public');
         }
         $data['gallery_urls'] = implode("\n", $gallery);
+        $data['gallery_paths'] = implode("\n", $galleryPaths);
         unset($data['photos']);
 
         if ($request->hasFile('cover')) {
-            $data['image_url'] = asset('storage/'.$request->file('cover')->store('original-ips', 'public'));
+            $data['image_path'] = $request->file('cover')->store('original-ips', 'public');
+            $data['image_url'] = null;
+        } elseif ($request->filled('image_url')) {
+            $data['image_path'] = null;
         }
         unset($data['cover']);
 

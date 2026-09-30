@@ -23,7 +23,7 @@
           <tr>
             <td>
               <div class="thumb-cell">
-                <div class="thumb" style="@if($ip->image_url) background-image:url('{{ $ip->image_url }}'); @endif"></div>
+                <div class="thumb" style="@if($ip->cover_url) background-image:url('{{ $ip->cover_url }}'); @endif"></div>
                 <div>
                   <strong>{{ $ip->name }}</strong>
                   <span>{{ Str::limit($ip->description, 50) }}</span>
@@ -104,10 +104,10 @@
             <label>Deskripsi Singkat</label>
             <input type="text" name="description" value="{{ $ip->description }}">
           </div>
-          @if ($ip->image_url)
+          @if ($ip->cover_url)
             <div class="field2 full">
               <div class="current-media">
-                <img src="{{ $ip->image_url }}" alt="{{ $ip->name }}">
+                <img src="{{ $ip->cover_url }}" alt="{{ $ip->name }}">
                 <div><strong>{{ $ip->name }}</strong><span>Sampul saat ini</span></div>
               </div>
             </div>
@@ -139,9 +139,9 @@
       <button type="button" class="admin-modal-close" aria-label="Tutup modal" onclick="document.getElementById('ip-detail-modal-{{ $ip->id }}').close()">×</button>
     </div>
     <div class="admin-modal-body">
-      @if ($ip->image_url)
+      @if ($ip->cover_url)
         <div class="current-media" style="margin-bottom:14px;">
-          <img src="{{ $ip->image_url }}" alt="{{ $ip->name }}">
+          <img src="{{ $ip->cover_url }}" alt="{{ $ip->name }}">
           <div><span>Slug: {{ $ip->slug }}</span></div>
         </div>
       @endif

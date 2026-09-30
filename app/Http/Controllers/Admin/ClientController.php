@@ -49,7 +49,10 @@ class ClientController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            $data['image_url'] = asset('storage/'.$request->file('logo')->store('clients', 'public'));
+            $data['image_path'] = $request->file('logo')->store('clients', 'public');
+            $data['image_url'] = null;
+        } elseif ($request->filled('image_url')) {
+            $data['image_path'] = null;
         }
         unset($data['logo']);
 

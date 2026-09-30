@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['name', 'role', 'image_url', 'order'])]
+#[Fillable(['name', 'role', 'image_path', 'image_url', 'order'])]
 class TeamMember extends Model
 {
     // Deliberately not `team_members` — that table already belongs to the
@@ -16,4 +16,11 @@ class TeamMember extends Model
     protected $attributes = [
         'order' => 0,
     ];
+
+    public function getPhotoUrlAttribute(): ?string
+    {
+        return $this->image_path
+            ? asset('storage/'.$this->image_path)
+            : $this->image_url;
+    }
 }

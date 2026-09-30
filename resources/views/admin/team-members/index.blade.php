@@ -23,7 +23,7 @@
           <tr>
             <td>
               <div class="thumb-cell">
-                <div class="thumb" style="@if($member->image_url) background-image:url('{{ $member->image_url }}'); @endif"></div>
+                <div class="thumb" style="@if($member->photo_url) background-image:url('{{ $member->photo_url }}'); @endif"></div>
                 <div><strong>{{ $member->name }}</strong></div>
               </div>
             </td>
@@ -97,10 +97,10 @@
             <label>Jabatan</label>
             <input type="text" name="role" value="{{ $member->role }}" required>
           </div>
-          @if ($member->image_url)
+          @if ($member->photo_url)
             <div class="field2 full">
               <div class="current-media">
-                <img src="{{ $member->image_url }}" alt="{{ $member->name }}">
+                <img src="{{ $member->photo_url }}" alt="{{ $member->name }}">
                 <div><strong>{{ $member->name }}</strong><span>Foto saat ini</span></div>
               </div>
             </div>
@@ -129,8 +129,8 @@
     </div>
     <div class="admin-modal-body">
       <div class="current-media">
-        @if ($member->image_url)
-          <img src="{{ $member->image_url }}" alt="{{ $member->name }}">
+        @if ($member->photo_url)
+          <img src="{{ $member->photo_url }}" alt="{{ $member->name }}">
         @endif
         <div><strong>{{ $member->name }}</strong><span>{{ $member->role }}</span></div>
       </div>

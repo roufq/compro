@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -28,16 +29,12 @@ return Application::configure(basePath: dirname(__DIR__))
                 return $response;
             }
 
+            Auth::guard('web')->logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+
             return redirect()
-                ->back()
-                ->withInput(request()->except([
-                    '_token',
-                    'password',
-                    'password_confirmation',
-                    'current_password',
-                    'code',
-                    'recovery_code',
-                ]))
-                ->with('error', 'Sesi Anda telah berakhir. Silakan periksa kembali formulir lalu kirim ulang.');
+                ->route('login')
+                ->with('status', 'Sesi Anda telah berakhir. Silakan masuk kembali.');
         });
     })->create();

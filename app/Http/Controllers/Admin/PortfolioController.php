@@ -8,7 +8,6 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class PortfolioController extends Controller
 {
@@ -23,6 +22,7 @@ class PortfolioController extends Controller
     {
         $data = $this->validated($request);
         unset($data['image']);
+        $data['type'] = 'video';
 
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('portfolio', 'public');
@@ -37,6 +37,7 @@ class PortfolioController extends Controller
     {
         $data = $this->validated($request);
         unset($data['image']);
+        $data['type'] = 'video';
 
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('portfolio', 'public');
@@ -57,30 +58,21 @@ class PortfolioController extends Controller
     /** @return array<string, mixed> */
     private function validated(Request $request): array
     {
-        $portfolio = $request->route('portfolio');
-        $hasExistingImage = $portfolio instanceof Portfolio && $portfolio->image_path;
-
         return $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'category' => ['required', 'string', 'max:100'],
-            'type' => ['required', Rule::in(['gambar', 'video'])],
             'image' => [
-                Rule::requiredIf(
-                    $request->string('type')->is('gambar')
-                    && ! $hasExistingImage
-                ),
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
                 'max:2048',
             ],
             'youtube_url' => [
-                Rule::requiredIf($request->string('type')->is('video')),
-                'nullable',
+                'required',
                 'url',
-                function (string $attribute, mixed $value, Closure $fail) use ($request): void {
-                    if ($request->string('type')->is('video') && (! is_string($value) || ! Portfolio::youtubeIdFromUrl($value))) {
+                function (string $attribute, mixed $value, Closure $fail): void {
+                    if (! is_string($value) || ! Portfolio::youtubeIdFromUrl($value)) {
                         $fail('Link video harus berupa URL YouTube yang valid.');
                     }
                 },
