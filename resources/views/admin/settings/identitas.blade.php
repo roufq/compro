@@ -30,7 +30,7 @@
             </div>
             <label class="btn-outline" style="cursor:pointer;">
               Ganti Logo
-              <input type="file" name="logo" accept="image/*" style="display:none;">
+              <input type="file" name="logo" accept="image/jpeg,image/png,image/webp" data-max-kb="80" data-file-label="Logo utama" style="display:none;">
             </label>
           </div>
         </div>
@@ -47,7 +47,7 @@
             </div>
             <label class="btn-outline" style="cursor:pointer;">
               Ganti Gambar
-              <input type="file" name="logo_text" accept="image/*" style="display:none;">
+              <input type="file" name="logo_text" accept="image/jpeg,image/png,image/webp" data-max-kb="80" data-file-label="Logo teks" style="display:none;">
             </label>
             @if ($settings->logo_text_url)
               <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#5A6785;">

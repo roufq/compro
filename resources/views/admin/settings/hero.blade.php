@@ -40,7 +40,7 @@
             <img src="{{ $settings->hero_image_url }}" alt="Gambar hero saat ini" style="max-width:320px;border-radius:12px;margin-bottom:12px;">
             <label><input type="checkbox" name="remove_hero_image" value="1" @checked(old('remove_hero_image'))> Hapus gambar dan gunakan ilustrasi bawaan</label>
           @endif
-          <input id="hero_image" type="file" name="hero_image" accept="image/jpeg,image/png,image/webp">
+          <input id="hero_image" type="file" name="hero_image" accept="image/jpeg,image/png,image/webp" data-max-kb="500" data-file-label="Gambar hero">
           <small>JPG, PNG, atau WebP, maksimal 5 MB. Rasio yang disarankan 16:8. Diabaikan bila Video Hero di atas diisi.</small>
         </div>
 
@@ -89,7 +89,7 @@
                 <label style="font-weight:400;"><input type="checkbox" name="remove_hero_tile_{{ $tile }}" value="1" @checked(old("remove_hero_tile_{$tile}"))> Hapus, pakai gradien bawaan</label>
               </div>
             @endif
-            <input id="hero_tile_{{ $tile }}" type="file" name="hero_tile_{{ $tile }}" accept="image/jpeg,image/png,image/webp">
+            <input id="hero_tile_{{ $tile }}" type="file" name="hero_tile_{{ $tile }}" accept="image/jpeg,image/png,image/webp" data-max-kb="250" data-file-label="Tile hero {{ $tile }}">
             <small>Opsional. Jika kosong, kotak menampilkan warna gradien bawaan.</small>
           </div>
         @endfor

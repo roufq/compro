@@ -35,7 +35,7 @@
               <div class="row-actions">
                 <button type="button" class="icon-btn" aria-label="Detail {{ $ip->name }}" onclick="document.getElementById('ip-detail-modal-{{ $ip->id }}').showModal()">👁</button>
                 <button type="button" class="icon-btn" aria-label="Edit {{ $ip->name }}" onclick="document.getElementById('ip-edit-modal-{{ $ip->id }}').showModal()">✎</button>
-                <form method="POST" action="{{ route('admin.original-ip.destroy', $ip) }}" onsubmit="return confirm('Hapus Original IP ini?');">
+                <form method="POST" action="{{ route('admin.original-ip.destroy', $ip) }}">
                   @csrf @method('DELETE')
                   <button type="submit" class="icon-btn" aria-label="Hapus {{ $ip->name }}">✕</button>
                 </form>
@@ -67,7 +67,7 @@
         </div>
         <div class="field2">
           <label>Upload Sampul</label>
-          <input type="file" name="cover" accept="image/jpeg,image/png,image/webp">
+          <input type="file" name="cover" accept="image/jpeg,image/png,image/webp" data-max-kb="250" data-file-label="Cover Original IP">
         </div>
         <div class="field2">
           <label>atau URL Sampul</label>
@@ -114,7 +114,7 @@
           @endif
           <div class="field2">
             <label>Ganti Sampul <span style="color:#9a9ca2;font-weight:400;">(opsional)</span></label>
-            <input type="file" name="cover" accept="image/jpeg,image/png,image/webp">
+            <input type="file" name="cover" accept="image/jpeg,image/png,image/webp" data-max-kb="250" data-file-label="Cover Original IP">
           </div>
           <div class="field2">
             <label>atau URL Sampul</label>

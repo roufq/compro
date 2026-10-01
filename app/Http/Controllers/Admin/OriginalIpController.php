@@ -52,14 +52,17 @@ class OriginalIpController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
             'image_url' => ['nullable', 'url:http,https', 'max:2048'],
-            'cover' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'cover' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:250'],
             'url' => ['nullable', 'url:http,https', 'max:2048'],
             'details' => ['nullable', 'string', 'max:20000'],
             'gallery_urls' => ['bail', 'nullable', 'string', 'max:65000', new MediaUrlList],
             'photos' => ['nullable', 'array', 'max:20'],
-            'photos.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'photos.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:250'],
             'video_urls' => ['bail', 'nullable', 'string', 'max:45000', new MediaUrlList(youtube: true)],
             'order' => ['sometimes', 'integer', 'min:0'],
+        ], [
+            'cover.max' => 'Ukuran cover Original IP maksimal 250 KB.',
+            'photos.*.max' => 'Ukuran setiap foto galeri maksimal 250 KB.',
         ]);
 
         $gallery = array_values(array_filter(array_map('trim', preg_split('/\R/', $data['gallery_urls'] ?? '') ?: [])));

@@ -56,7 +56,7 @@
             <td>
               <div class="row-actions">
                 <button type="button" class="icon-btn" onclick="document.getElementById('edit-{{ $service->id }}').style.display='table-row'; this.closest('tr').style.display='none';">✎</button>
-                <form method="POST" action="{{ route('admin.layanan.destroy', $service) }}" onsubmit="return confirm('Hapus layanan ini?');">
+                <form method="POST" action="{{ route('admin.layanan.destroy', $service) }}">
                   @csrf @method('DELETE')
                   <button type="submit" class="icon-btn">✕</button>
                 </form>

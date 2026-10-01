@@ -27,7 +27,7 @@
               <div class="row-actions">
                 <button type="button" class="icon-btn" aria-label="Detail {{ $product->name }}" onclick="document.getElementById('product-detail-modal-{{ $product->id }}').showModal()">👁</button>
                 <button type="button" class="icon-btn" aria-label="Edit {{ $product->name }}" onclick="document.getElementById('product-edit-modal-{{ $product->id }}').showModal()">✎</button>
-                <form method="POST" action="{{ route('admin.produk.destroy', $product) }}" onsubmit="return confirm('Hapus produk ini?');">
+                <form method="POST" action="{{ route('admin.produk.destroy', $product) }}">
                   @csrf @method('DELETE')
                   <button type="submit" class="icon-btn" aria-label="Hapus {{ $product->name }}">✕</button>
                 </form>

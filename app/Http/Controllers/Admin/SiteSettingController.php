@@ -35,9 +35,9 @@ class SiteSettingController extends Controller
             'hero_title' => ['nullable', 'string', 'max:255'],
             'hero_description' => ['nullable', 'string'],
             'hero_badge_text' => ['nullable', 'string', 'max:255'],
-            'hero_tile_1' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'hero_tile_2' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'hero_tile_3' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'hero_tile_1' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:250'],
+            'hero_tile_2' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:250'],
+            'hero_tile_3' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:250'],
             'remove_hero_tile_1' => ['sometimes', 'boolean'],
             'remove_hero_tile_2' => ['sometimes', 'boolean'],
             'remove_hero_tile_3' => ['sometimes', 'boolean'],
@@ -47,10 +47,10 @@ class SiteSettingController extends Controller
             'instagram_url' => ['nullable', 'url'],
             'linkedin_url' => ['nullable', 'url'],
             'youtube_url' => ['nullable', 'url'],
-            'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'logo_text' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:80'],
+            'logo_text' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:80'],
             'remove_logo_text' => ['sometimes', 'boolean'],
-            'hero_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'hero_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:500'],
             'remove_hero_image' => ['sometimes', 'boolean'],
             'hero_video_url' => [
                 'bail', 'nullable', 'string', 'url:http,https', 'max:2048',
@@ -63,6 +63,13 @@ class SiteSettingController extends Controller
             'about_title' => ['nullable', 'string', 'max:255'],
             'about_description' => ['nullable', 'string', 'max:10000'],
             'map_query' => ['nullable', 'string', 'max:255'],
+        ], [
+            'logo.max' => 'Ukuran logo utama maksimal 80 KB.',
+            'logo_text.max' => 'Ukuran logo teks maksimal 80 KB.',
+            'hero_image.max' => 'Ukuran gambar hero maksimal 500 KB.',
+            'hero_tile_1.max' => 'Ukuran tile hero pertama maksimal 250 KB.',
+            'hero_tile_2.max' => 'Ukuran tile hero kedua maksimal 250 KB.',
+            'hero_tile_3.max' => 'Ukuran tile hero ketiga maksimal 250 KB.',
         ]);
 
         unset($data['logo'], $data['logo_text'], $data['remove_logo_text'], $data['hero_image'], $data['remove_hero_image']);

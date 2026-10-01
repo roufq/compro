@@ -232,18 +232,6 @@
     </div>
 
     <div class="content">
-      @if (session('status'))
-        <div class="alert alert-success">{{ session('status') }}</div>
-      @endif
-      @if (session('error'))
-        <div class="alert alert-error">{{ session('error') }}</div>
-      @endif
-      @if ($errors->any())
-        <div class="alert alert-error">
-          @foreach ($errors->all() as $error) {{ $error }}<br> @endforeach
-        </div>
-      @endif
-
       @yield('content')
     </div>
   </div>
@@ -252,5 +240,78 @@
 <x-auth-session-timeout />
 
 @stack('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const statusMessage = @json(session('status'));
+    const errorMessage = @json(session('error'));
+    const validationErrors = @json($errors->all());
+
+    if (validationErrors.length > 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Data belum sesuai',
+        text: validationErrors.join('\n'),
+        confirmButtonColor: '#0D47A1',
+      });
+    } else if (errorMessage) {
+      Swal.fire({ icon: 'error', title: 'Gagal', text: errorMessage, confirmButtonColor: '#0D47A1' });
+    } else if (statusMessage) {
+      Swal.fire({ icon: 'success', title: 'Berhasil', text: statusMessage, confirmButtonColor: '#0D47A1' });
+    }
+
+    document.querySelectorAll('form').forEach((form) => {
+      const method = form.querySelector('input[name="_method"]')?.value?.toUpperCase();
+
+      if (method !== 'DELETE') {
+        return;
+      }
+
+      form.addEventListener('submit', async (event) => {
+        if (form.dataset.sweetAlertConfirmed === 'true') {
+          return;
+        }
+
+        event.preventDefault();
+        const result = await Swal.fire({
+          icon: 'warning',
+          title: 'Hapus data ini?',
+          text: 'Data yang sudah dihapus tidak dapat dikembalikan.',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, hapus',
+          cancelButtonText: 'Batal',
+          confirmButtonColor: '#c0392b',
+          cancelButtonColor: '#6e6e73',
+          reverseButtons: true,
+        });
+
+        if (result.isConfirmed) {
+          form.dataset.sweetAlertConfirmed = 'true';
+          form.requestSubmit();
+        }
+      });
+    });
+
+    document.querySelectorAll('input[type="file"][data-max-kb]').forEach((input) => {
+      input.addEventListener('change', () => {
+        const maximumKilobytes = Number(input.dataset.maxKb);
+        const oversizedFile = [...input.files].find((file) => file.size > maximumKilobytes * 1024);
+
+        if (!oversizedFile) {
+          return;
+        }
+
+        const label = input.dataset.fileLabel || 'File';
+        input.value = '';
+        Swal.fire({
+          icon: 'error',
+          title: 'Ukuran file terlalu besar',
+          text: `${label} maksimal ${maximumKilobytes} KB. Silakan kompres atau pilih file lain.`,
+          confirmButtonColor: '#0D47A1',
+        });
+      });
+    });
+  });
+</script>
 </body>
 </html>

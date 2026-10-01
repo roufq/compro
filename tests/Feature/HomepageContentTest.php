@@ -214,6 +214,51 @@ test('uploaded photo rejects oversized or non-image files', function () {
         ])->assertSessionHasErrors('photo');
 });
 
+test('homepage media uploads enforce web optimized file size limits', function (
+    string $method,
+    string $routeName,
+    string $field,
+    int $sizeInKilobytes,
+    array $payload,
+    string $message,
+) {
+    Storage::fake('public');
+
+    $payload[$field] = UploadedFile::fake()->image($field.'.png')->size($sizeInKilobytes);
+    $response = $this->actingAs(User::factory()->create())
+        ->{$method}(route($routeName), $payload);
+
+    $response->assertSessionHasErrors([
+        $field => $message,
+    ]);
+})->with([
+    'site logo over 80 KB' => ['put', 'admin.pengaturan.update', 'logo', 81, ['company_name' => 'Studio'], 'Ukuran logo utama maksimal 80 KB.'],
+    'hero image over 500 KB' => ['put', 'admin.pengaturan.update', 'hero_image', 501, ['company_name' => 'Studio'], 'Ukuran gambar hero maksimal 500 KB.'],
+    'client logo over 60 KB' => ['post', 'admin.klien.store', 'logo', 61, ['name' => 'Klien'], 'Ukuran logo klien maksimal 60 KB.'],
+    'team photo over 150 KB' => ['post', 'admin.tim.store', 'photo', 151, ['name' => 'Anggota', 'role' => 'Desainer'], 'Ukuran foto anggota tim maksimal 150 KB.'],
+    'original IP cover over 250 KB' => ['post', 'admin.original-ip.store', 'cover', 251, ['name' => 'IP Baru'], 'Ukuran cover Original IP maksimal 250 KB.'],
+    'testimonial photo over 150 KB' => ['post', 'admin.testimoni.store', 'avatar', 151, [
+        'name' => 'Pelanggan',
+        'quote' => 'Pelayanan sangat baik.',
+    ], 'Ukuran foto testimoni maksimal 150 KB.'],
+    'portfolio thumbnail over 250 KB' => ['post', 'admin.portofolio.store', 'image', 251, [
+        'title' => 'Karya',
+        'category' => 'branding',
+        'youtube_url' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    ], 'Ukuran thumbnail portofolio maksimal 250 KB.'],
+]);
+
+test('admin notifications and delete confirmations use SweetAlert', function () {
+    $this->actingAs(User::factory()->create())
+        ->withSession(['status' => 'Data berhasil disimpan.'])
+        ->get(route('admin.klien.index'))
+        ->assertSuccessful()
+        ->assertSee('https://cdn.jsdelivr.net/npm/sweetalert2@11', escape: false)
+        ->assertSee("title: 'Berhasil'", escape: false)
+        ->assertSee("title: 'Hapus data ini?'", escape: false)
+        ->assertDontSee("return confirm('Hapus klien ini?')", escape: false);
+});
+
 test('homepage escapes collection content and handles empty content', function () {
     Client::create(['name' => '<script>alert(1)</script>']);
     $this->get('/')->assertSuccessful()

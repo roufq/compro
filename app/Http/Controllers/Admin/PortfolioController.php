@@ -66,7 +66,7 @@ class PortfolioController extends Controller
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
-                'max:2048',
+                'max:250',
             ],
             'youtube_url' => [
                 'required',
@@ -78,6 +78,8 @@ class PortfolioController extends Controller
                 },
             ],
             'order' => ['sometimes', 'integer', 'min:0'],
+        ], [
+            'image.max' => 'Ukuran thumbnail portofolio maksimal 250 KB.',
         ]);
     }
 }

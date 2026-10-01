@@ -36,7 +36,7 @@
               <div class="row-actions">
                 <button type="button" class="icon-btn" aria-label="Detail {{ $item->title }}" onclick="openPortfolioModal('detail', {{ $item->id }})">👁</button>
                 <button type="button" class="icon-btn" data-test="edit-portfolio-{{ $item->id }}" aria-label="Edit {{ $item->title }}" onclick="openPortfolioModal('edit', {{ $item->id }})">✎</button>
-                <form method="POST" action="{{ route('admin.portofolio.destroy', $item) }}" onsubmit="return confirm('Hapus karya ini?');">
+                <form method="POST" action="{{ route('admin.portofolio.destroy', $item) }}">
                   @csrf @method('DELETE')
                   <button type="submit" class="icon-btn" aria-label="Hapus {{ $item->title }}">✕</button>
                 </form>
@@ -77,7 +77,7 @@
 
         <div class="field2">
           <label>Thumbnail <span style="color:#9a9ca2;font-weight:400;">(opsional)</span></label>
-          <input type="file" name="image" accept="image/*">
+          <input type="file" name="image" accept="image/jpeg,image/png,image/webp" data-max-kb="250" data-file-label="Thumbnail portofolio">
           <small>Jika kosong, thumbnail YouTube akan digunakan.</small>
         </div>
         <div class="field2">
@@ -137,7 +137,7 @@
           @endif
           <div class="field2">
             <label>Ganti Thumbnail <span style="color:#9a9ca2;font-weight:400;">(opsional)</span></label>
-            <input type="file" name="image" accept="image/*" onchange="previewPortfolioImage({{ $item->id }}, this)">
+            <input type="file" name="image" accept="image/jpeg,image/png,image/webp" data-max-kb="250" data-file-label="Thumbnail portofolio" onchange="previewPortfolioImage({{ $item->id }}, this)">
           </div>
           <div class="field2">
             <label>Link Video YouTube</label>

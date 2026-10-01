@@ -60,7 +60,9 @@ class TestimonialController extends Controller
             'role' => ['nullable', 'string', 'max:255'],
             'quote' => ['required', 'string'],
             'rating' => ['sometimes', 'integer', 'between:1,5'],
-            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:150'],
+        ], [
+            'avatar.max' => 'Ukuran foto testimoni maksimal 150 KB.',
         ]);
     }
 }

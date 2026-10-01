@@ -28,7 +28,7 @@
               <div class="row-actions">
                 <button type="button" class="icon-btn" aria-label="Detail {{ $t->name }}" onclick="document.getElementById('testimonial-detail-modal-{{ $t->id }}').showModal()">👁</button>
                 <button type="button" class="icon-btn" aria-label="Edit {{ $t->name }}" onclick="document.getElementById('testimonial-edit-modal-{{ $t->id }}').showModal()">✎</button>
-                <form method="POST" action="{{ route('admin.testimoni.destroy', $t) }}" onsubmit="return confirm('Hapus testimoni ini?');">
+                <form method="POST" action="{{ route('admin.testimoni.destroy', $t) }}">
                   @csrf @method('DELETE')
                   <button type="submit" class="icon-btn" aria-label="Hapus {{ $t->name }}">✕</button>
                 </form>
@@ -68,7 +68,7 @@
         </div>
         <div class="field2">
           <label>Foto (opsional)</label>
-          <input type="file" name="avatar" accept="image/jpeg,image/png,image/webp">
+          <input type="file" name="avatar" accept="image/jpeg,image/png,image/webp" data-max-kb="150" data-file-label="Foto testimoni">
         </div>
       </div>
       <div class="admin-modal-actions">
@@ -115,7 +115,7 @@
           @endif
           <div class="field2">
             <label>Ganti Foto <span style="color:#9a9ca2;font-weight:400;">(opsional)</span></label>
-            <input type="file" name="avatar" accept="image/jpeg,image/png,image/webp">
+            <input type="file" name="avatar" accept="image/jpeg,image/png,image/webp" data-max-kb="150" data-file-label="Foto testimoni">
           </div>
         </div>
         <div class="admin-modal-actions">

@@ -44,8 +44,10 @@ class ClientController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'image_url' => ['nullable', 'url:http,https', 'max:2048'],
-            'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:60'],
             'order' => ['sometimes', 'integer', 'min:0'],
+        ], [
+            'logo.max' => 'Ukuran logo klien maksimal 60 KB.',
         ]);
 
         if ($request->hasFile('logo')) {

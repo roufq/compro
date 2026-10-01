@@ -32,7 +32,7 @@
               <div class="row-actions">
                 <button type="button" class="icon-btn" aria-label="Detail {{ $member->name }}" onclick="document.getElementById('member-detail-modal-{{ $member->id }}').showModal()">👁</button>
                 <button type="button" class="icon-btn" aria-label="Edit {{ $member->name }}" onclick="document.getElementById('member-edit-modal-{{ $member->id }}').showModal()">✎</button>
-                <form method="POST" action="{{ route('admin.tim.destroy', $member) }}" onsubmit="return confirm('Hapus anggota ini?');">
+                <form method="POST" action="{{ route('admin.tim.destroy', $member) }}">
                   @csrf @method('DELETE')
                   <button type="submit" class="icon-btn" aria-label="Hapus {{ $member->name }}">✕</button>
                 </form>
@@ -64,7 +64,7 @@
         </div>
         <div class="field2">
           <label>Upload Foto</label>
-          <input type="file" name="photo" accept="image/jpeg,image/png,image/webp">
+          <input type="file" name="photo" accept="image/jpeg,image/png,image/webp" data-max-kb="150" data-file-label="Foto anggota tim">
         </div>
         <div class="field2">
           <label>atau URL Foto</label>
@@ -107,7 +107,7 @@
           @endif
           <div class="field2">
             <label>Ganti Foto <span style="color:#9a9ca2;font-weight:400;">(opsional)</span></label>
-            <input type="file" name="photo" accept="image/jpeg,image/png,image/webp">
+            <input type="file" name="photo" accept="image/jpeg,image/png,image/webp" data-max-kb="150" data-file-label="Foto anggota tim">
           </div>
           <div class="field2">
             <label>atau URL Foto</label>

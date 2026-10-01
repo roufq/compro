@@ -45,8 +45,10 @@ class TeamMemberController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'role' => ['required', 'string', 'max:255'],
             'image_url' => ['nullable', 'url:http,https', 'max:2048'],
-            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:150'],
             'order' => ['sometimes', 'integer', 'min:0'],
+        ], [
+            'photo.max' => 'Ukuran foto anggota tim maksimal 150 KB.',
         ]);
 
         if ($request->hasFile('photo')) {
