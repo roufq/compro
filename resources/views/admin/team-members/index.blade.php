@@ -63,7 +63,7 @@
           <input type="text" name="role" required>
         </div>
         <div class="field2">
-          <label>Upload Foto</label>
+          <label>Upload Foto <span style="color:#9a9ca2;font-weight:400;">(maks. 150 KB)</span></label>
           <input type="file" name="photo" accept="image/jpeg,image/png,image/webp" data-max-kb="150" data-file-label="Foto anggota tim">
         </div>
         <div class="field2">
@@ -106,7 +106,7 @@
             </div>
           @endif
           <div class="field2">
-            <label>Ganti Foto <span style="color:#9a9ca2;font-weight:400;">(opsional)</span></label>
+            <label>Ganti Foto <span style="color:#9a9ca2;font-weight:400;">(opsional, maks. 150 KB)</span></label>
             <input type="file" name="photo" accept="image/jpeg,image/png,image/webp" data-max-kb="150" data-file-label="Foto anggota tim">
           </div>
           <div class="field2">

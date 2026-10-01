@@ -298,15 +298,34 @@
         const oversizedFile = [...input.files].find((file) => file.size > maximumKilobytes * 1024);
 
         if (!oversizedFile) {
+          delete input.dataset.fileRejected;
+
           return;
         }
 
         const label = input.dataset.fileLabel || 'File';
         input.value = '';
+        input.dataset.fileRejected = 'true';
         Swal.fire({
+          target: input.closest('dialog') || document.body,
           icon: 'error',
           title: 'Ukuran file terlalu besar',
           text: `${label} maksimal ${maximumKilobytes} KB. Silakan kompres atau pilih file lain.`,
+          confirmButtonColor: '#0D47A1',
+        });
+      });
+
+      input.form?.addEventListener('submit', (event) => {
+        if (input.dataset.fileRejected !== 'true') {
+          return;
+        }
+
+        event.preventDefault();
+        Swal.fire({
+          target: input.closest('dialog') || document.body,
+          icon: 'error',
+          title: 'Pilih file yang sesuai',
+          text: `${input.dataset.fileLabel || 'File'} sebelumnya ditolak karena terlalu besar. Pilih file baru sebelum menyimpan.`,
           confirmButtonColor: '#0D47A1',
         });
       });
